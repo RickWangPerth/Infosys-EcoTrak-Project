@@ -1,31 +1,35 @@
 import React from 'react';
-import './App.css';
-import { makeStyles } from '@mui/styles';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from '../pages/Home';
+import About from '../pages/About';
+import Electricity from '../pages/Electricity';
+import Waste from '../pages/Waste';
 import Header from '../components/header';
 import Footer from '../components/footer';
-import CalInfo from '../components/calinfo';
+import { makeStyles } from '@mui/styles';
+
 
 const useStyles = makeStyles({
   appMain:{
-    width: '100%',
     backgroundColor: '#F1F2ED',
-    opacity: '1',
   }
 });
 
 function App() {
-   const classes = useStyles();
+  const classes = useStyles();
   return (
-    <React.Fragment>
-      <div className={classes.appMain}>
+    <div className={classes.appMain}>
+      <BrowserRouter>
         <Header />
-        <CalInfo />
-        <Footer />
-      </div>
-     
-      
-      </React.Fragment>
-   
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/electricity" element={<Electricity />} /> 
+            <Route path="/waste" element={<Waste />} />
+          </Routes>
+          <Footer />
+      </BrowserRouter>
+    </div>
   );
 }
 

@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import ETLogo from "../img/ecotracklogo.png";
+import { Link } from 'react-router-dom';
 
 const pages = ['Resource', 'Reports', 'About Us'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -39,15 +40,17 @@ function ResponsiveAppBar() {
     <AppBar position="sticky" style={{ background: '#F1F2ED'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters style={{ height: '10%' }}>
+            <a href='/'>
             <Box
                 component="img"
                 sx={{
                 maxWidth: 160,
                 display: { xs: 'none', md: 'flex' }, mr: 1
                 }}
-                alt="Your logo."
-                src={ETLogo}
+                alt="Eco Track Logo"
+                src={ETLogo}           
             />
+            </a>
           <Typography
             variant="h6"
             noWrap
@@ -96,7 +99,9 @@ function ResponsiveAppBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography textAlign="center">
+                    <Link to={'/'}>{page}</Link>
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -163,7 +168,9 @@ function ResponsiveAppBar() {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                    <Typography textAlign="center">
+                        <Link to="/about">{setting}</Link>
+                    </Typography>
                 </MenuItem>
               ))}
             </Menu>
