@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 
 
@@ -43,10 +43,12 @@ const stateName = [
     {label:'National', value:'08'},
   ]
 
+
+
 export default function elecal() {
     const classes = calStyle();
+
   return (
-    
     <>
     <div className={classes.cal}>
         <Grid container spacing={2}>
@@ -58,7 +60,7 @@ export default function elecal() {
                 options={stateName}
                 sx={{ width: 300 , mt: 2}}
                 renderInput={(params) => <TextField {...params} label="state" />}
-                onChange={(event,statevalue) => console.log(statevalue)} 
+                onChange={(event,statevalue) => console.log(statevalue.value)} 
                 />
             </Grid>
             <Grid item xs={12}md={6}>

@@ -7,6 +7,7 @@ import Waste from '../pages/Waste';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import { makeStyles } from '@mui/styles';
+import { useEffect, useState } from 'react';
 
 
 const useStyles = makeStyles({
@@ -16,7 +17,20 @@ const useStyles = makeStyles({
 });
 
 function App() {
+
   const classes = useStyles();
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch('/members').then(
+      res => res.json()
+    ).then(data => {
+      setData(data);
+      console.log(data);
+    })
+  }, []);
+
   return (
     <div className={classes.appMain}>
       <BrowserRouter>
