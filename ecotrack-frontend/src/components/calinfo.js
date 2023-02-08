@@ -6,6 +6,7 @@ import { Autocomplete } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
+import Elecal from '../components/elecal';
 
 const calStyle = makeStyles({
    cal: {
@@ -67,6 +68,7 @@ export default function SelectLabels() {
             <Link to="/electricity">Next</Link>
           </Button>
         </Grid>
+        <Elecal />
       </Grid>
     </div>
   );

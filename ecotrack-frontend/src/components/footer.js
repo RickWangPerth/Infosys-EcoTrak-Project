@@ -50,15 +50,13 @@ function Copyright(props) {
     );
   }
 
-export default function footer() {
+export default function Footer() {
     const classes = footerStyle();
   return (
     <>
         <div className={classes.footer}>
             <div className={classes.logodiv}>   
-                <a herf="https://infosys.com/">
                     <img src={ISLogo} alt='infoysyslogo' className={classes.logo}/>
-                </a>
             </div>
             <div>
                 <Copyright className={classes.copyright} sx={{ mt: 5 }}/>
