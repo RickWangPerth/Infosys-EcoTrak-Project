@@ -30,12 +30,15 @@ const calStyle = makeStyles({
 })
 
 const AUStateName = [
-    {label:'New South Wales and ACT'},
+    {label:'New South Wales and Australian Capital Territory'},
     {label:'Victoria'},
     {label:'Queensland'},
     {label:'South Australia'},
     {label:'Western Australia'},
     {label:'Tasmania'},
+    {label:'South West Interconnected System (SWIS)'},
+    {label:'Darwin Katherine Interconnected System (DKIS)'},
+    {label:'Western Australia - North Western Interconnected System (NWIS)'},
     {label:'Northern Territory'},
     {label:'National'},
   ]
@@ -127,7 +130,7 @@ export default function Info() {
                     state: statevalue,
                     type: typevalue,
                     unit: unitvalue,
-                    elec: elecvalue,
+                    elec: elecvalue
                 }),
             }).then(resp => resp.json())
             .then(resp => console.log(resp))
@@ -140,7 +143,7 @@ export default function Info() {
     }else if(countryvalue === 'USA'){
          stateName = USAStateName;
     }
-    console.log(countryvalue);
+    console.log(stateName);
 
   return (
     <div className={classes.cal}>
@@ -161,7 +164,7 @@ export default function Info() {
                 id="state"
                 options={stateName}
                 sx={{ width: 300 , mt: 2}}
-                renderInput={(params) => <TextField {...params} label="state" />}
+                renderInput={(params) => <TextField {...params} label="State" />}
                 onChange={(event) => {setStateValue(event.target.textContent)}} 
                 />
             </Grid>

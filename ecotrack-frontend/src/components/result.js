@@ -17,7 +17,7 @@ useEffect(() => {
   .catch(err => console.log(err)) 
   
 }, []);
-    const result = JSON.parse(JSON.stringify(data))
+    const result = JSON.parse(JSON.stringify(data).result)
 
   return (
     <div>
