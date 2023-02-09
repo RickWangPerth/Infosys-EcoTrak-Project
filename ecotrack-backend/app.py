@@ -20,7 +20,7 @@ class ElecData(db.Model):
     unit = db.Column(db.String(80), unique=False, nullable=False)
     date = db.Column(db.String(80), unique=False, nullable=False, default= datetime.datetime.now)
 
-    def __init__(self, state, elec, unit):
+    def __init__(self, state, elec,unit):
         self.state = state
         self.elec = elec
         self.unit = unit
@@ -37,8 +37,9 @@ def add_elecdata():
     state = request.json['state']
     elec = request.json['elec']
     unit = request.json['unit']
+    
 
-    elecdata = ElecData(state, elec, unit)
+    elecdata = ElecData(state, elec,unit)
     db.session.add(elecdata)
     db.session.commit()
     return elecdata_schema.jsonify(elecdata)
