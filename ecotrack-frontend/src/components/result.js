@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 export default function Results() {
 
 const [data, setData] = useState({});
 useEffect(() => {
-  axios.get('http://localhost:5000/data')
-    .then(response => {
-      setData(response.data);
-    })
-    .catch(error => {
-      console.error(error);
-    });
+  fetch('http://localhost:5000/data',{
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Origin':'http://localhost:3000',
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+    }
+  }).then(resp => resp.json())
+  .then(resp => setData(resp))
+  .catch(err => console.log(err)) 
+  
 }, []);
-    const result = JSON.parse(JSON.stringify(data)).elec
+    const result = JSON.parse(JSON.stringify(data))
 
   return (
     <div>

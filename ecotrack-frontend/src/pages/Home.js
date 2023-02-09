@@ -1,13 +1,11 @@
 import React from 'react'
-import CalInfo from '../components/calinfo';
-import Elecal from '../components/elecal';
+import Info from '../components/info';
 
 export default function Home() {
 
   return (
     <React.Fragment>
-      <CalInfo />
-      
+      <Info />
     </React.Fragment>
   )
 }
