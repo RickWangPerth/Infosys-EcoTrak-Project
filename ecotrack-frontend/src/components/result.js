@@ -17,11 +17,10 @@ useEffect(() => {
   .catch(err => console.log(err)) 
   
 }, []);
-    const result = JSON.parse(JSON.stringify(data).result)
 
   return (
     <div>
-      <p>Your utilization of electricity has resulted in a emission of {result} kilograms of greenhouse gases.</p>
+      <p>Your utilization of electricity has resulted in a emission of {data.result} kilograms of greenhouse gases.</p>
     </div>
   );
 }

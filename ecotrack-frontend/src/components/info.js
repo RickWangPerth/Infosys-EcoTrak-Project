@@ -4,13 +4,13 @@ import Grid from '@mui/material/Grid';
 import { Autocomplete } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-
+import Results from './result';
 
 
 const calStyle = makeStyles({
@@ -38,7 +38,6 @@ const AUStateName = [
     {label:'Tasmania'},
     {label:'South West Interconnected System (SWIS)'},
     {label:'Darwin Katherine Interconnected System (DKIS)'},
-    {label:'Western Australia - North Western Interconnected System (NWIS)'},
     {label:'Northern Territory'},
     {label:'National'},
   ]
@@ -109,14 +108,16 @@ const calType = [
 
 export default function Info() {
     const classes = calStyle();
+    const resultDisplay = 'none'
 
     const [countryvalue, setCountryValue] = useState([]);
     const [statevalue, setStateValue] = useState([]);
     const [elecvalue, setElecValue] = useState([]);
     const [typevalue, setTypeValue] = useState([]);
     const [unitvalue, setUnitValue] = useState([]);
+    const [elecresult, setElecResult] = useState([]);
   
-    const handleSubmit = () => {
+    function handleSubmit() {
             fetch('http://localhost:5000/elecdata',{
               method: 'POST',
               headers: {
@@ -135,8 +136,23 @@ export default function Info() {
             }).then(resp => resp.json())
             .then(resp => console.log(resp))
             .catch(err => console.log(err)) 
-            
+
+            fetch('http://localhost:5000/data',{
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json',
+                  'Origin':'http://localhost:3000',
+                  'Access-Control-Allow-Origin': 'http://localhost:3000',
+                }
+              }).then(resp => resp.json())
+              .then(resp =>  setElecResult(resp))
+              .catch(err => console.log(err)) 
+
+              var x = document.getElementById("resultP")
+                x.style.display = "block";
           };
+
     let stateName = [];
     if(countryvalue === 'Australia'){
          stateName = AUStateName;
@@ -164,7 +180,7 @@ export default function Info() {
                 id="state"
                 options={stateName}
                 sx={{ width: 300 , mt: 2}}
-                renderInput={(params) => <TextField {...params} label="State" />}
+                renderInput={(params) => <TextField {...params} label="State, Territory or Grid " />}
                 onChange={(event) => {setStateValue(event.target.textContent)}} 
                 />
             </Grid>
@@ -208,13 +224,16 @@ export default function Info() {
                     <Button variant="contained"
                         type='submit'
                         sx={{ width: 300 , background:'#7ECA58'}}
-                        onClick={ handleSubmit }
+                        onClick={ () => {
+                            handleSubmit();
+                          } }
                         >
-                        Claculate
+                        Calculate
                     </Button>
+                    <p id='resultP' style={{display:'none'}}>"Total Greenhouse Gas Emissions from electricty (t CO2e): " {elecresult.result}</p>
                 </Grid>
                 </>
-            : 'coming soon'
+            : ''
             }
             
         </Grid>

@@ -23,9 +23,4 @@ def elecal(state,unit,Q_elec):
                 EF_3 = electricity_parameters.iloc[i][4]
                 print(state)
     elec_e =  float(Q_elec) * (EF_2 + EF_3) / 1000
-    print( elec_e )
     return elec_e 
-
-#elec_e = elecal(state,unit,Q_elec)
-
-# print("Total Greenhouse Gas Emissions from electricty (t CO2e): ", elec_e)
