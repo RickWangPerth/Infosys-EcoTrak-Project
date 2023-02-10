@@ -3,7 +3,7 @@
 
 ## How to launch the web application
 
-Clone this application to local directory <code> git clone https://github.com/RickWangPerth/EcoTrackFront-End.git </code> <br>
+Clone this application to local directory <code> git clone https://github.com/RickWangPerth/EcoTrackFront-End.git</code> <br>
 
  <br>
 
