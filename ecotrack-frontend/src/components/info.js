@@ -14,7 +14,7 @@ import Results from './result';
 
 
 const calStyle = makeStyles({
-    cal: {
+  cal: {
        display: 'absolute',
        position: 'absolute',
        width: '100%',
@@ -23,8 +23,8 @@ const calStyle = makeStyles({
    },
    text:{
     position: 'relative',
-    top: '50%',
-    left: '10%',
+    top: '10px',
+    left: '30px',
    },
 
 })
@@ -166,6 +166,7 @@ export default function Info() {
         <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
             <Autocomplete
+                className={classes.text}
                 disablePortal
                 id="country"
                 options={countryName}
@@ -176,6 +177,7 @@ export default function Info() {
             </Grid>
             <Grid item xs={12} md={4}>
             <Autocomplete
+                className={classes.text}
                 disablePortal
                 id="state"
                 options={stateName}
@@ -186,6 +188,7 @@ export default function Info() {
             </Grid>
             <Grid item xs={12} md={4}>
             <Autocomplete
+                className={classes.text}
                 disablePortal
                 id="type"
                 options={calType}
@@ -200,7 +203,8 @@ export default function Info() {
                 <>
                 <Grid item xs={12} md={6}> 
                 <TextField
-                    sx={{ width: 150, mt: 2 }}
+                    className={classes.text}
+                    sx={{ width: 300, mt: 2 }}
                     required
                     id="outlined-required"
                     label="electricity"
@@ -209,9 +213,10 @@ export default function Info() {
                 </Grid>
                 <Grid item xs={12} md={6}>
                 <FormControl>
-                    <FormLabel id="elecunit-radio-buttons-group">Unit</FormLabel>
+                    <FormLabel id="elecunit-radio-buttons-group" className={classes.text} >Unit</FormLabel>
                     <RadioGroup
-                        aria-labelledby="elecunit-radio-buttons-group"
+                        className={classes.text}
+                        aria-labelledby="elecunit-radio-buttons-group"    
                         name="elecunit-radio-buttons-group"
                         onChange={(event) => setUnitValue(event.target.value)}
                     >
@@ -222,6 +227,7 @@ export default function Info() {
                 </Grid>
                 <Grid item xs={12} md={12}>
                     <Button variant="contained"
+                        className={classes.text}
                         type='submit'
                         sx={{ width: 300 , background:'#7ECA58'}}
                         onClick={ () => {
@@ -230,7 +236,13 @@ export default function Info() {
                         >
                         Calculate
                     </Button>
-                    <p id='resultP' style={{display:'none'}}>"Total Greenhouse Gas Emissions from electricty (t CO2e): " {elecresult.result}</p>
+                    <p 
+                    className={classes.text}
+                    id='resultP' 
+                    style={{display:'none'}}>
+                      
+                      "Total Greenhouse Gas Emissions from electricty (t CO2e): " {elecresult.result}
+                    </p>
                 </Grid>
                 </>
             : ''
