@@ -10,25 +10,40 @@ liquid_fuel_t_parameters = parameters.get('Liquid Fuel t')
 Q = 700
 # INPUT FROM FRONT END - Type of fuel
 type = 'Diesel oil'
+mass_unit = 'kL'
 unit = 'kL'
 
 
 def liquid(Q, type, unit):
     for i in range(20):
+        if mass_unit == 'kL':
+            if liquid_fuel_kL_parameters.iloc[i][0] == type:
+                if unit == 'GJ':
+                    EC = 1
+                else:
+                    EC = liquid_fuel_kL_parameters.iloc[i][1]
 
-        if liquid_fuel_kL_parameters.iloc[i][0] == type:
-            if unit == 'GJ':
-                EC = 1
-            else:
-                EC = liquid_fuel_kL_parameters.iloc[i][1]
+                # Scope 1 Emission Factors for CO2, CH4 and N2O
+                EF_1_CO2 = liquid_fuel_kL_parameters.iloc[i][2]
+                EF_1_CH4 = liquid_fuel_kL_parameters.iloc[i][3]
+                EF_1_N2O = liquid_fuel_kL_parameters.iloc[i][4]
+                total_EF_1 = EF_1_CO2 + EF_1_CH4 + EF_1_N2O
+                # Scope 3 Emission Factor
+                EF_3 = liquid_fuel_kL_parameters.iloc[i][6]
+        else:
+            if liquid_fuel_t_parameters.iloc[i][0] == type:
+                if unit == 'GJ':
+                    EC = 1
+                else:
+                    EC = liquid_fuel_t_parameters.iloc[i][1]
 
-            # Scope 1 Emission Factors for CO2, CH4 and N2O
-            EF_1_CO2 = liquid_fuel_kL_parameters.iloc[i][2]
-            EF_1_CH4 = liquid_fuel_kL_parameters.iloc[i][3]
-            EF_1_N2O = liquid_fuel_kL_parameters.iloc[i][4]
-            total_EF_1 = EF_1_CO2 + EF_1_CH4 + EF_1_N2O
-            # Scope 3 Emission Factor
-            EF_3 = liquid_fuel_kL_parameters.iloc[i][6]
+                # Scope 1 Emission Factors for CO2, CH4 and N2O
+                EF_1_CO2 = liquid_fuel_t_parameters.iloc[i][2]
+                EF_1_CH4 = liquid_fuel_t_parameters.iloc[i][3]
+                EF_1_N2O = liquid_fuel_t_parameters.iloc[i][4]
+                total_EF_1 = EF_1_CO2 + EF_1_CH4 + EF_1_N2O
+                # Scope 3 Emission Factor
+                EF_3 = liquid_fuel_t_parameters.iloc[i][6]
 
     # Scope 1 Emission
     CO2_e = float(Q) * EC * (EF_1_CO2) / 1000
