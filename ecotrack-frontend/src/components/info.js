@@ -245,8 +245,16 @@ export default function Info() {
                     </p>
                 </Grid>
                 </>
-            : ''
-            }
+                : typevalue==='Waste' ?
+                <>
+                <p>Waste</p>
+                </>
+                : typevalue==='Fuel' ?
+                <>
+                <p>fuel</p>
+                </>
+                : null
+            } 
             
         </Grid>
     </div>
