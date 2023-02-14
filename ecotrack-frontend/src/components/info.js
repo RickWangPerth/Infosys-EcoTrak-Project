@@ -106,16 +106,90 @@ const calType = [
     {label:'Fuel'},
   ]
 
+const typeFuel = [
+    {label:'Gaseous Fuel'},
+    {label:'Liquid Fuel'},
+    {label:'Solid Fuel'},
+  ]
+const typeGasFuel = [
+    {label:'Natural gas distributed in a pipeline'},
+    {label:'Coal seam methane that is captured for combustion'},
+    {label:'Coal mine waste gas that is captured for combustion'},
+    {label:'Compressed natural gas (reverting to standard conditions)'},
+    {label:'Unprocessed natural gas'},
+    {label:'Ethane'},
+    {label:'Coke oven gas'},
+    {label:'Town gas'},
+    {label:'Liquefied natural gas'},
+    {label:'Gaseous fossil fuels other than those mentioned in the items above'},
+    {label:'Landfill biogas that is captured for combustion (methane only)'},
+    {label:'Sludge biogas that is captured for combustion (methane only)'},
+    {label:'A biogas that is captured for combustion, other than those mentioned in the items above'},
+    {label:'Biomethane'},
+  ]
+
+const typeLiquidFuel = [
+    {label:'Petroleum based oils (other than petroleum based oil used as fuel), e.g. lubricants'},
+    {label:'Petroleum based greases'},
+    {label:'Crude oil including crude oil condensates'},
+    {label:'Automotive gasoline/petrol (other than for use as fuel in an aircraft)'},
+    {label:'Kerosene (other than for use as fuel in an aircraft)'},
+    {label:'Aviation gasoline'},
+    {label:'Aviation turbine fuel/kerosene '},
+    {label:'Heating oil'},
+    {label:'Diesel oil'},
+    {label:'Fuel oil'},
+    {label:'Liquefied aromatic hydrocarbons'},
+    {label:'Solvents: mineral turpentine or white spirits'},
+    {label:'Liquefied petroleum gas (LPG)'},
+    {label:'Naphtha'},
+    {label:'Petroleum coke'},
+    {label:'Refinery gas and liquids'},
+    {label:'Refinery coke'},
+    {label:'Petroleum based products other than mentioned in the items above'},
+    {label:'Biodiesel'},
+    {label:'Ethanol for use as a fuel in an internal combustion engine'},
+    {label:'Biofuels other than those mentioned in the items above'},
+  ]
+
+const typeSolidFuel = [
+    {label:'Coal'},
+    {label:'Peat'},
+    {label:'Wood and wood waste'},
+    {label:'Biomass and biogenic waste'},
+    {label:'Other solid fuels'},
+  ]
+
+
 export default function Info() {
     const classes = calStyle();
     const resultDisplay = 'none'
 
     const [countryvalue, setCountryValue] = useState([]);
     const [statevalue, setStateValue] = useState([]);
-    const [elecvalue, setElecValue] = useState([]);
     const [typevalue, setTypeValue] = useState([]);
+
+
+    // Electricity value
+    const [elecvalue, setElecValue] = useState([]);
     const [unitvalue, setUnitValue] = useState([]);
     const [elecresult, setElecResult] = useState([]);
+
+    // Waste value
+    const [wastevalue, setWasteValue] = useState([]);
+    const [solidwastevalue, setSolidWasteValue] = useState([]);
+    const [liquidwastevalue, setLiquidWasteValue] = useState([]);
+    const [gaswastevalue, setGasWasteValue] = useState([]);
+    const [wasteresult, setWasteResult] = useState([]);
+    const [wastetypevalue, setWasteTypeValue] = useState([]);
+
+    // Fuel value
+    const [fuelvalue, setFuelValue] = useState([]);
+    const [solidfuelvalue, setSolidFuelValue] = useState([]);
+    const [liquidfuelvalue, setLiquidFuelValue] = useState([]);
+    const [gasfuelvalue, setGasFuelValue] = useState([]);
+    const [fuelresult, setFuelResult] = useState([]);
+    const [fueltypevalue, setFuelTypeValue] = useState([]);
   
     function handleSubmit() {
             fetch('http://localhost:5000/elecdata',{
@@ -137,7 +211,7 @@ export default function Info() {
             .then(resp => console.log(resp))
             .catch(err => console.log(err)) 
 
-            fetch('http://localhost:5000/data',{
+            fetch('http://localhost:5000/elecresult',{
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
@@ -197,7 +271,6 @@ export default function Info() {
                 onChange={(event) => {setTypeValue(event.target.textContent)}} 
                 />
             </Grid>
-            
             {
             typevalue==='Electricity' ? 
                 <>
@@ -247,11 +320,132 @@ export default function Info() {
                 </>
                 : typevalue==='Waste' ?
                 <>
-                <p>Waste</p>
+                <Grid item xs={12} md={4}>
+                  <Autocomplete
+                    className={classes.text}
+                    disablePortal
+                    id="type"
+                    options={calType}
+                    sx={{ width: 300, mt: 2 }}
+                    renderInput={(params) => <TextField {...params} label="Type of Waste" />}
+                    onChange={(event) => { setWasteTypeValue(event.target.textContent); } } />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    className={classes.text}
+                    sx={{ width: 300, mt: 2 }}
+                    required
+                    id="outlined-required"
+                    label="Amount of Waste"
+                    defaultValue="0"
+                    onChange={(event) => { setWasteValue(event.target.value); } } />
+                </Grid><Grid item xs={12} md={12}>
+                  <Button variant="contained"
+                    className={classes.text}
+                    type='submit'
+                    sx={{ width: 300, background: '#7ECA58' }}
+                    onClick={() => {
+                      handleSubmit();
+                    } }
+                  >
+                    Calculate
+                  </Button>
+                  <p
+                    className={classes.text}
+                    id='resultP'
+                    style={{ display: 'none' }}>
+
+                    "Total Greenhouse Gas Emissions from electricty (t CO2e): " {elecresult.result}
+                  </p>
+                </Grid>
                 </>
                 : typevalue==='Fuel' ?
                 <>
-                <p>fuel</p>
+                <Grid item xs={12} md={4}>
+                <Autocomplete
+                    className={classes.text}
+                    disablePortal
+                    id="type of fuel"
+                    options={typeFuel}
+                    sx={{ width: 300, mt: 2 }}
+                    renderInput={(params) => <TextField {...params} label="Tpye of Fuel" />}
+                    onChange={(event) => {setFuelTypeValue(event.target.textContent)}} 
+                    />
+                </Grid>
+                {
+                  fueltypevalue==='Solid Fuel' ?
+                  <>
+                  <Grid item xs={12} md={4}>
+                  <Autocomplete
+                    className={classes.text}
+                    disablePortal
+                    id="type of fuel"
+                    options={typeSolidFuel}
+                    sx={{ width: 300, mt: 2 }}
+                    renderInput={(params) => <TextField {...params} label="Tpye of Solid Fuel" />}
+                    onChange={(event) => {setSolidFuelValue(event.target.textContent)}} 
+                    />
+                  </Grid>
+                  </>
+                  : fueltypevalue==='Liquid Fuel' ?
+                  <>
+                  <Grid item xs={12} md={4}>
+                  <Autocomplete
+                    className={classes.text}
+                    disablePortal
+                    id="type of liquid fuel"
+                    options={typeLiquidFuel}
+                    sx={{ width: 300, mt: 2 }}
+                    renderInput={(params) => <TextField {...params} label="Tpye of Liquid Fuel" />}
+                    onChange={(event) => {setLiquidFuelValue(event.target.textContent)}} 
+                    />
+                  </Grid>
+                  </>
+                  : fueltypevalue==='Gaseous Fuel' ?
+                  <>
+                  <Grid item xs={12} md={4}>
+                  <Autocomplete
+                    className={classes.text}
+                    disablePortal
+                    id="type of gaseous fuel"
+                    options={typeGasFuel}
+                    sx={{ width: 300, mt: 2 }}
+                    renderInput={(params) => <TextField {...params} label="Tpye of Gas Fuel" />}
+                    onChange={(event) => {setGasFuelValue(event.target.textContent)}} 
+                    />
+                  </Grid>
+                  </>
+                  : null
+                }
+                <Grid item xs={12} md={6}> 
+                <TextField
+                    className={classes.text}
+                    sx={{ width: 300, mt: 2 }}
+                    required
+                    id="outlined-required"
+                    label="Amount of Fuel"
+                    defaultValue="0"
+                    onChange={(event) => { setFuelValue(event.target.value); } } />
+                </Grid>
+                <Grid item xs={12} md={12}>
+                    <Button variant="contained"
+                        className={classes.text}
+                        type='submit'
+                        sx={{ width: 300 , background:'#7ECA58'}}
+                        onClick={ () => {
+                            handleSubmit();
+                          } }
+                        >
+                        Calculate
+                    </Button>
+                    <p 
+                    className={classes.text}
+                    id='resultP' 
+                    style={{display:'none'}}>
+                      
+                      "Total Greenhouse Gas Emissions from electricty (t CO2e): " {elecresult.result}
+                    </p>
+                </Grid>
                 </>
                 : null
             } 

@@ -31,8 +31,9 @@ def add_elecdata():
     db.session.commit()
     return elecdata_schema.jsonify(elecdata)
 
-@app.route('/data', methods=['GET'])
+@app.route('/elecresult', methods=['GET'])
 def send_data():
     data = ElecData.query.order_by(ElecData.id.desc()).first()
     result = elecdata_schema.dump(data)
     return jsonify(result)
+
