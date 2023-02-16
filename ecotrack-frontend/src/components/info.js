@@ -10,8 +10,6 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import Results from './result';
-
 
 const calStyle = makeStyles({
   cal: {
@@ -29,70 +27,70 @@ const calStyle = makeStyles({
 
 })
 
-const AUStateName = [
-    {label:'New South Wales and Australian Capital Territory'},
-    {label:'Victoria'},
-    {label:'Queensland'},
-    {label:'South Australia'},
-    {label:'Western Australia'},
-    {label:'Tasmania'},
-    {label:'South West Interconnected System (SWIS)'},
-    {label:'Darwin Katherine Interconnected System (DKIS)'},
-    {label:'Northern Territory'},
-    {label:'National'},
-  ]
-const USAStateName = [
-    {label:'Alabama'},
-    {label:'Alaska'},
-    {label:'Arizona'},
-    {label:'Arkansas'},
-    {label:'California'},
-    {label:'Colorado'},
-    {label:'Connecticut'},
-    {label:'Delaware'},
-    {label:'Florida'},
-    {label:'Georgia'},
-    {label:'Hawaii'},
-    {label:'Idaho'},
-    {label:'Illinois'},
-    {label:'Indiana'},
-    {label:'Iowa'},
-    {label:'Kansas'},
-    {label:'Kentucky'},
-    {label:'Louisiana'},
-    {label:'Maine'},
-    {label:'Maryland'},
-    {label:'Massachusetts'},
-    {label:'Michigan'},
-    {label:'Minnesota'},
-    {label:'Mississippi'},
-    {label:'Missouri'},
-    {label:'Montana'},
-    {label:'Nebraska'},
-    {label:'Nevada'},
-    {label:'New Hampshire'},
-    {label:'New Jersey'},
-    {label:'New Mexico'},
-    {label:'New York'},
-    {label:'North Carolina'},
-    {label:'North Dakota'},
-    {label:'Ohio'},
-    {label:'Oklahoma'},
-    {label:'Oregon'},
-    {label:'Pennsylvania'},
-    {label:'Rhode Island'},
-    {label:'South Carolina'},
-    {label:'South Dakota'},
-    {label:'Tennessee'},
-    {label:'Texas'},
-    {label:'Utah'},
-    {label:'Vermont'},
-    {label:'Virginia'},
-    {label:'Washington'},
-    {label:'West Virginia'},
-    {label:'Wisconsin'},
-    {label:'Wyoming'},
-    ]
+// const AUStateName = [
+//     {label:'New South Wales and Australian Capital Territory'},
+//     {label:'Victoria'},
+//     {label:'Queensland'},
+//     {label:'South Australia'},
+//     {label:'Western Australia'},
+//     {label:'Tasmania'},
+//     {label:'South West Interconnected System (SWIS)'},
+//     {label:'Darwin Katherine Interconnected System (DKIS)'},
+//     {label:'Northern Territory'},
+//     {label:'National'},
+//   ]
+// const USAStateName = [
+//     {label:'Alabama'},
+//     {label:'Alaska'},
+//     {label:'Arizona'},
+//     {label:'Arkansas'},
+//     {label:'California'},
+//     {label:'Colorado'},
+//     {label:'Connecticut'},
+//     {label:'Delaware'},
+//     {label:'Florida'},
+//     {label:'Georgia'},
+//     {label:'Hawaii'},
+//     {label:'Idaho'},
+//     {label:'Illinois'},
+//     {label:'Indiana'},
+//     {label:'Iowa'},
+//     {label:'Kansas'},
+//     {label:'Kentucky'},
+//     {label:'Louisiana'},
+//     {label:'Maine'},
+//     {label:'Maryland'},
+//     {label:'Massachusetts'},
+//     {label:'Michigan'},
+//     {label:'Minnesota'},
+//     {label:'Mississippi'},
+//     {label:'Missouri'},
+//     {label:'Montana'},
+//     {label:'Nebraska'},
+//     {label:'Nevada'},
+//     {label:'New Hampshire'},
+//     {label:'New Jersey'},
+//     {label:'New Mexico'},
+//     {label:'New York'},
+//     {label:'North Carolina'},
+//     {label:'North Dakota'},
+//     {label:'Ohio'},
+//     {label:'Oklahoma'},
+//     {label:'Oregon'},
+//     {label:'Pennsylvania'},
+//     {label:'Rhode Island'},
+//     {label:'South Carolina'},
+//     {label:'South Dakota'},
+//     {label:'Tennessee'},
+//     {label:'Texas'},
+//     {label:'Utah'},
+//     {label:'Vermont'},
+//     {label:'Virginia'},
+//     {label:'Washington'},
+//     {label:'West Virginia'},
+//     {label:'Wisconsin'},
+//     {label:'Wyoming'},
+//     ]
 const countryName = [
     {label:'Australia'},
     {label:'USA'},
@@ -160,15 +158,40 @@ const typeSolidFuel = [
     {label:'Other solid fuels'},
   ]
 
+const typeWaste = [
+    {label:'Food'},
+    {label:'Paper and cardboard'},
+    {label:'Garden and green'},
+    {label:'Textiles'},
+    {label:'Wood'},
+    {label:'Sludge'},
+    {label:'Nappies'},
+    {label:'Rubber and leather'},
+    {label:'Inert waste (including concrete/metal/plastics/glass)'},
+    {label:'Municipal solid waste'},
+    {label:'Commercial and industrial waste'},
+    {label:'Construction and demolition waste'},
+
+  ]
 
 export default function Info() {
     const classes = calStyle();
     const resultDisplay = 'none'
 
+    // Static data
+  
+    const [state, setState] = useState([]);
+
+    useEffect(() => {
+      fetch('http://127.0.0.1:5000/statedata')
+        .then(response => response.json())
+        .then(data => setState(data))
+        .catch(error => console.log(error));
+    }, []);
+
     const [countryvalue, setCountryValue] = useState([]);
     const [statevalue, setStateValue] = useState([]);
     const [typevalue, setTypeValue] = useState([]);
-
 
     // Electricity value
     const [elecvalue, setElecValue] = useState([]);
@@ -185,55 +208,89 @@ export default function Info() {
 
     // Fuel value
     const [fuelvalue, setFuelValue] = useState([]);
-    const [solidfuelvalue, setSolidFuelValue] = useState([]);
-    const [liquidfuelvalue, setLiquidFuelValue] = useState([]);
-    const [gasfuelvalue, setGasFuelValue] = useState([]);
+    const [fuelsubtypevalue, setFuelSubTypeValue] = useState([]);
     const [fuelresult, setFuelResult] = useState([]);
     const [fueltypevalue, setFuelTypeValue] = useState([]);
   
-    function handleSubmit() {
-            fetch('http://localhost:5000/elecdata',{
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Origin':'http://localhost:3000',
-                'Access-Control-Allow-Origin': 'http://localhost:3000',
-              },
-                body: JSON.stringify({
-                    country: countryvalue,
-                    state: statevalue,
-                    type: typevalue,
-                    unit: unitvalue,
-                    elec: elecvalue
-                }),
-            }).then(resp => resp.json())
-            .then(resp => console.log(resp))
-            .catch(err => console.log(err)) 
+    function handleElecSubmit() {
+      fetch('http://localhost:5000/elecdata',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Origin':'http://localhost:3000',
+          'Access-Control-Allow-Origin': 'http://localhost:3000',
+        },
+          body: JSON.stringify({
+              country: countryvalue,
+              state: statevalue,
+              type: fueltypevalue,
+              unit: unitvalue,
+              elec: elecvalue
+          }),
+      }).then(resp => resp.json())
+      .then(resp => console.log(resp))
+      .catch(err => console.log(err)) 
 
-            fetch('http://localhost:5000/elecresult',{
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json',
-                  'Origin':'http://localhost:3000',
-                  'Access-Control-Allow-Origin': 'http://localhost:3000',
-                }
-              }).then(resp => resp.json())
-              .then(resp =>  setElecResult(resp))
-              .catch(err => console.log(err)) 
+      fetch('http://localhost:5000/elecresult',{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Origin':'http://localhost:3000',
+            'Access-Control-Allow-Origin': 'http://localhost:3000',
+          }
+        }).then(resp => resp.json())
+        .then(resp =>  setElecResult(resp))
+        .catch(err => console.log(err)) 
 
-              var x = document.getElementById("resultP")
-                x.style.display = "block";
-          };
+        var x = document.getElementById("resultP")
+          x.style.display = "block";
+    };
+    function handleFuelSubmit() {
+      fetch('http://localhost:5000/fueldata',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Origin':'http://localhost:3000',
+          'Access-Control-Allow-Origin': 'http://localhost:3000',
+        },
+          body: JSON.stringify({
+              country: countryvalue,
+              state: statevalue,
+              fueltype: typevalue,
+              fuelsubtype: fuelsubtypevalue,
+              unit: unitvalue,
+              fuel: fuelvalue
+          }),
+      }).then(resp => resp.json())
+      .then(resp => console.log(resp))
+      .catch(err => console.log(err)) 
 
-    let stateName = [];
-    if(countryvalue === 'Australia'){
-         stateName = AUStateName;
-    }else if(countryvalue === 'USA'){
-         stateName = USAStateName;
-    }
-    console.log(stateName);
+      fetch('http://localhost:5000/fuelresult',{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Origin':'http://localhost:3000',
+            'Access-Control-Allow-Origin': 'http://localhost:3000',
+          }
+        }).then(resp => resp.json())
+        .then(resp =>  setElecResult(resp))
+        .catch(err => console.log(err)) 
+
+        var x = document.getElementById("resultP")
+          x.style.display = "block";
+    };
+
+    // let stateName = [];
+    // if(countryvalue === 'Australia'){
+    //      stateName = AUStateName;
+    // }else if(countryvalue === 'USA'){
+    //      stateName = USAStateName;
+    // }
+    // console.log(stateName);
 
   return (
     <div className={classes.cal}>
@@ -249,17 +306,7 @@ export default function Info() {
                 onChange={(event) => {setCountryValue(event.target.textContent)}} 
                 />
             </Grid>
-            <Grid item xs={12} md={4}>
-            <Autocomplete
-                className={classes.text}
-                disablePortal
-                id="state"
-                options={stateName}
-                sx={{ width: 300 , mt: 2}}
-                renderInput={(params) => <TextField {...params} label="State, Territory or Grid " />}
-                onChange={(event) => {setStateValue(event.target.textContent)}} 
-                />
-            </Grid>
+
             <Grid item xs={12} md={4}>
             <Autocomplete
                 className={classes.text}
@@ -274,6 +321,17 @@ export default function Info() {
             {
             typevalue==='Electricity' ? 
                 <>
+                <Grid item xs={12} md={4}>
+                <Autocomplete
+                    className={classes.text}
+                    disablePortal
+                    id="state"
+                    options={state}
+                    sx={{ width: 300 , mt: 2}}
+                    renderInput={(params) => <TextField {...params} label="State, Territory or Grid " />}
+                    onChange={(event) => {setStateValue(event.target.textContent)}} 
+                    />
+                </Grid>
                 <Grid item xs={12} md={6}> 
                 <TextField
                     className={classes.text}
@@ -304,7 +362,7 @@ export default function Info() {
                         type='submit'
                         sx={{ width: 300 , background:'#7ECA58'}}
                         onClick={ () => {
-                            handleSubmit();
+                            handleElecSubmit();
                           } }
                         >
                         Calculate
@@ -325,7 +383,7 @@ export default function Info() {
                     className={classes.text}
                     disablePortal
                     id="type"
-                    options={calType}
+                    options={typeWaste}
                     sx={{ width: 300, mt: 2 }}
                     renderInput={(params) => <TextField {...params} label="Type of Waste" />}
                     onChange={(event) => { setWasteTypeValue(event.target.textContent); } } />
@@ -345,7 +403,7 @@ export default function Info() {
                     type='submit'
                     sx={{ width: 300, background: '#7ECA58' }}
                     onClick={() => {
-                      handleSubmit();
+                      handleElecSubmit();
                     } }
                   >
                     Calculate
@@ -354,7 +412,6 @@ export default function Info() {
                     className={classes.text}
                     id='resultP'
                     style={{ display: 'none' }}>
-
                     "Total Greenhouse Gas Emissions from electricty (t CO2e): " {elecresult.result}
                   </p>
                 </Grid>
@@ -383,7 +440,7 @@ export default function Info() {
                     options={typeSolidFuel}
                     sx={{ width: 300, mt: 2 }}
                     renderInput={(params) => <TextField {...params} label="Tpye of Solid Fuel" />}
-                    onChange={(event) => {setSolidFuelValue(event.target.textContent)}} 
+                    onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 
                     />
                   </Grid>
                   </>
@@ -397,7 +454,7 @@ export default function Info() {
                     options={typeLiquidFuel}
                     sx={{ width: 300, mt: 2 }}
                     renderInput={(params) => <TextField {...params} label="Tpye of Liquid Fuel" />}
-                    onChange={(event) => {setLiquidFuelValue(event.target.textContent)}} 
+                    onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 
                     />
                   </Grid>
                   </>
@@ -411,7 +468,7 @@ export default function Info() {
                     options={typeGasFuel}
                     sx={{ width: 300, mt: 2 }}
                     renderInput={(params) => <TextField {...params} label="Tpye of Gas Fuel" />}
-                    onChange={(event) => {setGasFuelValue(event.target.textContent)}} 
+                    onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 
                     />
                   </Grid>
                   </>
@@ -433,7 +490,7 @@ export default function Info() {
                         type='submit'
                         sx={{ width: 300 , background:'#7ECA58'}}
                         onClick={ () => {
-                            handleSubmit();
+                            handleFuelSubmit();
                           } }
                         >
                         Calculate

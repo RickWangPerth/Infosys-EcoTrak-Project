@@ -1,7 +1,8 @@
 import pandas as pd
 
 parameters = pd.read_excel('./Documentation/Emission_Source_Parameters_Data.xlsx',
-                           sheet_name=['Electricity', 'Solid Fuel', 'Gaseous Fuel', 'Liquid Fuel', 'Solid Waste', 'Wastewater Treatment', 'Waste Incineration', 'Biological Treatment'])
+                           sheet_name=['Electricity', 'Solid Fuel', 'Gaseous Fuel', 'Natural Gas Data', 'Liquid Fuel kL', 'Liquid Fuel t', 'Solid Waste', 'Wastewater Treatment', 'Waste Incineration', 'Biological Treatment'])
+
 
 solid_fuel_parameters = parameters.get('Solid Fuel')
 
@@ -11,7 +12,7 @@ Q = 20000
 type = 'Brown coal (lignite)'
 
 
-def solid(Q, type):
+def solidfuelcal(Q, type):
     for i in range(20):
 
         if solid_fuel_parameters.iloc[i][0] == type:
@@ -34,7 +35,8 @@ def solid(Q, type):
     # Total Combined Emissions
     total_e = float(Q) * EC * (total_EF_1 + EF_3) / 1000
 
-    return total_e, CO2_e, CH4_e, N2O_e, scope_3_e
+    # return total_e, CO2_e, CH4_e, N2O_e, scope_3_e
+    return total_e
 
 
 # total = solid(Q, 'Brown coal (lignite)')

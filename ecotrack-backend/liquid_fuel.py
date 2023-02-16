@@ -14,7 +14,7 @@ mass_unit = 'kL'
 unit = 'kL'
 
 
-def liquid(Q, type, unit):
+def liquidfuelcal(Q, type, unit):
     for i in range(20):
         if mass_unit == 'kL':
             if liquid_fuel_kL_parameters.iloc[i][0] == type:
@@ -57,5 +57,5 @@ def liquid(Q, type, unit):
     return total_e, CO2_e, CH4_e, N2O_e, scope_3_e
 
 
-total = liquid(Q, type, unit)
+total = liquidfuelcal(Q, type, unit)
 print(total)
