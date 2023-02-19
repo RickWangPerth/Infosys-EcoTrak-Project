@@ -16,6 +16,18 @@ unit = 'GJ'
 
 
 def gaseous(Q, type, state, unit):
+    if unit == 'kL':  # Liquified Natural Gas SPECIAL CASE
+        EF_1_CO2 = gaseous_fuel_parameters.iloc[10][2]
+        EF_1_CH4 = gaseous_fuel_parameters.iloc[10][3]
+        EF_1_N2O = gaseous_fuel_parameters.iloc[10][4]
+        total_EF_1 = gaseous_fuel_parameters.iloc[10][5]
+
+    if type == 'Natural gas distributed in a pipeline':  # Natural Gas SPECIAL CASE
+        EF_1_CO2 = gaseous_fuel_parameters.iloc[1][2]
+        EF_1_CH4 = gaseous_fuel_parameters.iloc[1][3]
+        EF_1_N2O = gaseous_fuel_parameters.iloc[1][4]
+        total_EF_1 = gaseous_fuel_parameters.iloc[1][5]
+
     for i in range(16):
 
         if gaseous_fuel_parameters.iloc[i][0] == type:

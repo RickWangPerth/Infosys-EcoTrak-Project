@@ -1,7 +1,7 @@
 import pandas as pd
 
 parameters = pd.read_excel('./Documentation/Emission_Source_Parameters_Data.xlsx',
-                           sheet_name=['Electricity', 'Solid Fuel', 'Gaseous Fuel', 'Liquid Fuel', 'Solid Waste', 'Wastewater Treatment', 'Waste Incineration', 'Biological Treatment'])
+                           sheet_name=['Electricity', 'Solid Fuel', 'Gaseous Fuel', 'Natural Gas Data', 'Liquid Fuel', 'Solid Waste', 'Wastewater Treatment', 'Waste Incineration', 'Biological Treatment'])
 
 solid_fuel_parameters = parameters.get('Solid Fuel')
 

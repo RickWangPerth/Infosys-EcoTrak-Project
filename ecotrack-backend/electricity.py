@@ -10,7 +10,8 @@ electricity_parameters = parameters.get('Electricity')
 # state = 'National'       # INPUT FROM FRONT END - STATE
 # unit = 'kWh'
 
-def elecal(state,unit,Q_elec):
+
+def elecal(state, unit, Q_elec):
     for i in range(12):
         if unit == 'kWh':
             if electricity_parameters.iloc[i][0] == state:
@@ -22,5 +23,5 @@ def elecal(state,unit,Q_elec):
                 EF_2 = electricity_parameters.iloc[i][2]
                 EF_3 = electricity_parameters.iloc[i][4]
                 print(state)
-    elec_e =  float(Q_elec) * (EF_2 + EF_3) / 1000
-    return elec_e 
+    elec_e = float(Q_elec) * (EF_2 + EF_3) / 1000
+    return elec_e
