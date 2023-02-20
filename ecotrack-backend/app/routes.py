@@ -7,7 +7,7 @@ from electricity import elecal
 from solid_fuel import solidfuelcal
 from liquid_fuel import liquidfuelcal
 # from gaseous_fuel import gaseousfuelcal
-from app.models import ElecData, FuelData, Electricityef
+from app.models import ElecData, FuelData, Electricityef, Fuelsef, Wasteef
 import json
 
 ma = Marshmallow(app)  
@@ -29,6 +29,12 @@ class ElectricityefSchema(ma.Schema):
 Electricityef_schema = ElectricityefSchema()
 Electricityef_schemas = ElectricityefSchema(many=True)
 
+class FuelsefSchema(ma.Schema):
+    class Meta:
+        fields = ('id','sector', 'subsector', 'type', 'ratio', 'unit', 'sc1_co2', 'sc1_ch4', 'sc1_n20', 'sc1_sum', 'sc3_ef')
+Fuelsef_schema = FuelsefSchema()
+Fuelsef_schemas = FuelsefSchema(many=True)
+
 # class WasteDataSchema(ma.Schema):
 #     class Meta:
 #         fields = ('id','state', 'waste','unit','result')
@@ -39,7 +45,6 @@ Electricityef_schemas = ElectricityefSchema(many=True)
 
 
 @app.route('/statedata', methods=['GET'])
-
 def send_statedata():
     """
     This is an example route that takes a JSON object and returns a string.
@@ -84,7 +89,54 @@ def send_elecresult():
     result = elecdata_schema.dump(data)
     return jsonify(result)
 
+@app.route('/fueltype', methods=['GET'])
+def send_fueltype():
+    data = Fuelsef.query.with_entities(Fuelsef.subsector).distinct().all()
+    data_list = [item[0] for item in data]
+    json_data = json.dumps(data_list)
+    return  json_data
 
+@app.route('/solidfueltype', methods=['GET'])
+def send_solidfueltype():
+    data = Fuelsef.query.with_entities(Fuelsef.type).filter_by(subsector='Soild Fuel').all()
+    data_list = [item[0] for item in data]
+    json_data = json.dumps(data_list)
+    return  json_data
+
+@app.route('/liquidfueltype', methods=['GET'])
+def send_liquidfueltype():
+    data = Fuelsef.query.with_entities(Fuelsef.type).filter_by(subsector='Liquid Fuel').all()
+    data_list = [item[0] for item in data]
+    json_data = json.dumps(data_list)
+    return  json_data
+
+@app.route('/gaseousfueltype', methods=['GET'])
+def send_gaseousfueltype():
+    data = Fuelsef.query.with_entities(Fuelsef.type).filter_by(subsector='Gaseous Fuel').all()
+    data_list = [item[0] for item in data]
+    json_data = json.dumps(data_list)
+    return  json_data
+
+@app.route('/wastetype', methods=['GET'])
+def send_wastetype():
+    data = Wasteef.query.with_entities(Wasteef.type).distinct().all()
+    data_list = [item[0] for item in data]
+    json_data = json.dumps(data_list)
+    return  json_data
+
+@app.route('/solidwastetype', methods=['GET'])
+def send_solidwastetype():
+    data = Wasteef.query.with_entities(Wasteef.name).filter_by(type='Solid Waste').distinct().all()
+    data_list = [item[0] for item in data]
+    json_data = json.dumps(data_list)
+    return  json_data
+
+@app.route('/combinedwastetype', methods=['GET'])
+def send_combinedwastetype():
+    data = Wasteef.query.with_entities(Wasteef.name).filter_by(type='combined Waste').distinct().all()
+    data_list = [item[0] for item in data]
+    json_data = json.dumps(data_list)
+    return  json_data
 # @app.route('/wastedata', methods=['POST'])
 # def add_wastedata():
 #     state = request.json['state']

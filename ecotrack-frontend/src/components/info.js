@@ -104,59 +104,59 @@ const calType = [
     {label:'Fuel'},
   ]
 
-const typeFuel = [
-    {label:'Gaseous Fuel'},
-    {label:'Liquid Fuel'},
-    {label:'Solid Fuel'},
-  ]
-const typeGasFuel = [
-    {label:'Natural gas distributed in a pipeline'},
-    {label:'Coal seam methane that is captured for combustion'},
-    {label:'Coal mine waste gas that is captured for combustion'},
-    {label:'Compressed natural gas (reverting to standard conditions)'},
-    {label:'Unprocessed natural gas'},
-    {label:'Ethane'},
-    {label:'Coke oven gas'},
-    {label:'Town gas'},
-    {label:'Liquefied natural gas'},
-    {label:'Gaseous fossil fuels other than those mentioned in the items above'},
-    {label:'Landfill biogas that is captured for combustion (methane only)'},
-    {label:'Sludge biogas that is captured for combustion (methane only)'},
-    {label:'A biogas that is captured for combustion, other than those mentioned in the items above'},
-    {label:'Biomethane'},
-  ]
+// const typeFuel = [
+//     {label:'Gaseous Fuel'},
+//     {label:'Liquid Fuel'},
+//     {label:'Solid Fuel'},
+//   ]
+// const typeGasFuel = [
+//     {label:'Natural gas distributed in a pipeline'},
+//     {label:'Coal seam methane that is captured for combustion'},
+//     {label:'Coal mine waste gas that is captured for combustion'},
+//     {label:'Compressed natural gas (reverting to standard conditions)'},
+//     {label:'Unprocessed natural gas'},
+//     {label:'Ethane'},
+//     {label:'Coke oven gas'},
+//     {label:'Town gas'},
+//     {label:'Liquefied natural gas'},
+//     {label:'Gaseous fossil fuels other than those mentioned in the items above'},
+//     {label:'Landfill biogas that is captured for combustion (methane only)'},
+//     {label:'Sludge biogas that is captured for combustion (methane only)'},
+//     {label:'A biogas that is captured for combustion, other than those mentioned in the items above'},
+//     {label:'Biomethane'},
+//   ]
 
-const typeLiquidFuel = [
-    {label:'Petroleum based oils (other than petroleum based oil used as fuel), e.g. lubricants'},
-    {label:'Petroleum based greases'},
-    {label:'Crude oil including crude oil condensates'},
-    {label:'Automotive gasoline/petrol (other than for use as fuel in an aircraft)'},
-    {label:'Kerosene (other than for use as fuel in an aircraft)'},
-    {label:'Aviation gasoline'},
-    {label:'Aviation turbine fuel/kerosene '},
-    {label:'Heating oil'},
-    {label:'Diesel oil'},
-    {label:'Fuel oil'},
-    {label:'Liquefied aromatic hydrocarbons'},
-    {label:'Solvents: mineral turpentine or white spirits'},
-    {label:'Liquefied petroleum gas (LPG)'},
-    {label:'Naphtha'},
-    {label:'Petroleum coke'},
-    {label:'Refinery gas and liquids'},
-    {label:'Refinery coke'},
-    {label:'Petroleum based products other than mentioned in the items above'},
-    {label:'Biodiesel'},
-    {label:'Ethanol for use as a fuel in an internal combustion engine'},
-    {label:'Biofuels other than those mentioned in the items above'},
-  ]
+// const typeLiquidFuel = [
+//     {label:'Petroleum based oils (other than petroleum based oil used as fuel), e.g. lubricants'},
+//     {label:'Petroleum based greases'},
+//     {label:'Crude oil including crude oil condensates'},
+//     {label:'Automotive gasoline/petrol (other than for use as fuel in an aircraft)'},
+//     {label:'Kerosene (other than for use as fuel in an aircraft)'},
+//     {label:'Aviation gasoline'},
+//     {label:'Aviation turbine fuel/kerosene '},
+//     {label:'Heating oil'},
+//     {label:'Diesel oil'},
+//     {label:'Fuel oil'},
+//     {label:'Liquefied aromatic hydrocarbons'},
+//     {label:'Solvents: mineral turpentine or white spirits'},
+//     {label:'Liquefied petroleum gas (LPG)'},
+//     {label:'Naphtha'},
+//     {label:'Petroleum coke'},
+//     {label:'Refinery gas and liquids'},
+//     {label:'Refinery coke'},
+//     {label:'Petroleum based products other than mentioned in the items above'},
+//     {label:'Biodiesel'},
+//     {label:'Ethanol for use as a fuel in an internal combustion engine'},
+//     {label:'Biofuels other than those mentioned in the items above'},
+//   ]
 
-const typeSolidFuel = [
-    {label:'Coal'},
-    {label:'Peat'},
-    {label:'Wood and wood waste'},
-    {label:'Biomass and biogenic waste'},
-    {label:'Other solid fuels'},
-  ]
+// const typeSolidFuel = [
+//     {label:'Coal'},
+//     {label:'Peat'},
+//     {label:'Wood and wood waste'},
+//     {label:'Biomass and biogenic waste'},
+//     {label:'Other solid fuels'},
+//   ]
 
 const typeWaste = [
     {label:'Food'},
@@ -189,6 +189,71 @@ export default function Info() {
         .catch(error => console.log(error));
     }, []);
 
+    //fuel type
+
+    const [solidfueltype, setSolidfueltype] = useState([]);
+    const [liquidfueltype, setLiquidfueltype] = useState([]);
+    const [gaseousfueltype, setGaseousfueltype] = useState([]);
+    const [fueltype, setFueltype] = useState([]);
+
+    useEffect(() => {
+      fetch('http://127.0.0.1:5000/solidfueltype')
+        .then(response => response.json())
+        .then(data => setSolidfueltype(data))
+        .catch(error => console.log(error));
+    }, []);
+
+    useEffect(() => {
+      fetch('http://127.0.0.1:5000/liquidfueltype')
+        .then(response => response.json())
+        .then(data => setLiquidfueltype(data))
+        .catch(error => console.log(error));
+    }, []);    
+    
+    useEffect(() => {
+      fetch('http://127.0.0.1:5000/gaseousfueltype')
+        .then(response => response.json())
+        .then(data => setGaseousfueltype(data))
+        .catch(error => console.log(error));
+    }, []);
+
+    useEffect(() => {
+      fetch('http://127.0.0.1:5000/fueltype')
+        .then(response => response.json())
+        .then(data => setFueltype(data))
+        .catch(error => console.log(error));
+    }, []);
+    
+
+    // Waste type
+
+    const [wastetype, setWastetype] = useState([]);
+    const [solidwastetype, setSolidwastetype] = useState([]);
+    const [combinedwastetype, setCombinedwastetype] = useState([]);
+    
+    useEffect(() => {
+      fetch('http://127.0.0.1:5000/wastetype')
+        .then(response => response.json())
+        .then(data => setWastetype(data))
+        .catch(error => console.log(error));
+    }, []);
+
+    useEffect(() => {
+      fetch('http://127.0.0.1:5000/solidwastetype')
+        .then(response => response.json())
+        .then(data => setSolidwastetype(data))
+        .catch(error => console.log(error));
+    }, []);
+
+    useEffect(() => {
+      fetch('http://127.0.0.1:5000/combinedwastetype')
+        .then(response => response.json())
+        .then(data => setCombinedwastetype(data))
+        .catch(error => console.log(error));
+    }, []);
+    
+   
+
     const [countryvalue, setCountryValue] = useState([]);
     const [statevalue, setStateValue] = useState([]);
     const [typevalue, setTypeValue] = useState([]);
@@ -205,6 +270,8 @@ export default function Info() {
     const [gaswastevalue, setGasWasteValue] = useState([]);
     const [wasteresult, setWasteResult] = useState([]);
     const [wastetypevalue, setWasteTypeValue] = useState([]);
+    const [solidwastetypevalue, setSolidWasteTypeValue] = useState([]);
+    const [combinedastetypevalue, setCombinedWasteTypeValue] = useState([]);
 
     // Fuel value
     const [fuelvalue, setFuelValue] = useState([]);
@@ -383,11 +450,40 @@ export default function Info() {
                     className={classes.text}
                     disablePortal
                     id="type"
-                    options={typeWaste}
+                    options={wastetype}
                     sx={{ width: 300, mt: 2 }}
                     renderInput={(params) => <TextField {...params} label="Type of Waste" />}
                     onChange={(event) => { setWasteTypeValue(event.target.textContent); } } />
                 </Grid>
+                {
+                  wastetypevalue==='Solid Waste' ?
+                  <>
+                    <Grid item xs={12} md={4}>
+                    <Autocomplete
+                    className={classes.text}
+                    disablePortal
+                    id="type"
+                    options={solidwastetype}
+                    sx={{ width: 300, mt: 2 }}
+                    renderInput={(params) => <TextField {...params} label="Type of Solid Waste" />}
+                    onChange={(event) => { setSolidWasteTypeValue(event.target.textContent); } } />
+                    </Grid>
+                  </>
+                    : wastetypevalue==='Combined Waste' ?
+                    <>
+                      <Grid item xs={12} md={4}>
+                      <Autocomplete
+                      className={classes.text}
+                      disablePortal
+                      id="type"
+                      options={combinedwastetype}
+                      sx={{ width: 300, mt: 2 }}
+                      renderInput={(params) => <TextField {...params} label="Type of Combined Waste" />}
+                      onChange={(event) => { setCombinedWasteTypeValue(event.target.textContent); } } />
+                      </Grid>
+                    </>
+                    : null
+                }
                 <Grid item xs={12} md={6}>
                   <TextField
                     className={classes.text}
@@ -397,7 +493,8 @@ export default function Info() {
                     label="Amount of Waste"
                     defaultValue="0"
                     onChange={(event) => { setWasteValue(event.target.value); } } />
-                </Grid><Grid item xs={12} md={12}>
+                </Grid>
+                <Grid item xs={12} md={12}>
                   <Button variant="contained"
                     className={classes.text}
                     type='submit'
@@ -423,7 +520,7 @@ export default function Info() {
                     className={classes.text}
                     disablePortal
                     id="type of fuel"
-                    options={typeFuel}
+                    options={fueltype}
                     sx={{ width: 300, mt: 2 }}
                     renderInput={(params) => <TextField {...params} label="Tpye of Fuel" />}
                     onChange={(event) => {setFuelTypeValue(event.target.textContent)}} 
@@ -437,7 +534,7 @@ export default function Info() {
                     className={classes.text}
                     disablePortal
                     id="type of fuel"
-                    options={typeSolidFuel}
+                    options={solidfueltype}
                     sx={{ width: 300, mt: 2 }}
                     renderInput={(params) => <TextField {...params} label="Tpye of Solid Fuel" />}
                     onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 
@@ -451,7 +548,7 @@ export default function Info() {
                     className={classes.text}
                     disablePortal
                     id="type of liquid fuel"
-                    options={typeLiquidFuel}
+                    options={liquidfueltype}
                     sx={{ width: 300, mt: 2 }}
                     renderInput={(params) => <TextField {...params} label="Tpye of Liquid Fuel" />}
                     onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 
@@ -465,7 +562,7 @@ export default function Info() {
                     className={classes.text}
                     disablePortal
                     id="type of gaseous fuel"
-                    options={typeGasFuel}
+                    options={gaseousfueltype}
                     sx={{ width: 300, mt: 2 }}
                     renderInput={(params) => <TextField {...params} label="Tpye of Gas Fuel" />}
                     onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 

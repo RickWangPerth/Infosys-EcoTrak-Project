@@ -61,21 +61,19 @@ df.head()
 
 
 def elecal(state, unit, Q_elec):
-    for i in range(12):
-        if unit == 'kWh':
-            if electricity_parameters.iloc[i][0] == state:
-                EF_2 = electricity_parameters.iloc[i][1]
-                EF_3 = electricity_parameters.iloc[i][3]
-                print(state)
-        if unit == 'GJ':
-            if electricity_parameters.iloc[i][0] == state:
-                EF_2 = electricity_parameters.iloc[i][2]
-                EF_3 = electricity_parameters.iloc[i][4]
-                print(state)
-    elec_e = float(Q_elec) * (EF_2 + EF_3) / 1000
+
+    if unit == 'kWh':
+        kWh_df = df.loc[df['unit'] == 'kWh']
+        EF2 = kWh_df.loc[kWh_df['state'] == state, 'sc2'].iloc[0]
+        EF3 = kWh_df.loc[kWh_df['state'] == state, 'sc3'].iloc[0]
+    if unit == 'GJ':
+        GJ_df = df.loc[df['unit'] == 'GJ']
+        EF2 = GJ_df.loc[GJ_df['state'] == state, 'sc2'].iloc[0]
+        EF3 = GJ_df.loc[GJ_df['state'] == state, 'sc3'].iloc[0]
+
+    elec_e = float(Q_elec) * (EF2 + EF3) / 1000
+    print(elec_e)
     return elec_e
-
-
  
 
 

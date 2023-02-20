@@ -21,6 +21,61 @@ class Electricityef(db.Model):
     def __repr__(self):
         return '[ID:{}, Sector:{}, State:{}, SC2:{}, SC3:{}, Unit:{}]'.format(self.id, self.sector, self.state, self.sc2, self.sc3, self.unit)
 
+class Fuelsef(db.Model):
+    __tablename__ = "fuels_ef"
+    id = db.Column(db.String(200), primary_key=True)
+    sector = db.Column(db.String(200), unique=False, nullable=True)
+    subsector = db.Column(db.String(200), unique=False, nullable=True)
+    type = db.Column(db.String(200), unique=False, nullable=True)
+    ratio = db.Column(db.Float, unique=False, nullable=True)
+    unit = db.Column(db.String(200), unique=False, nullable=True) 
+    sc1_co2 = db.Column(db.Float, unique=False, nullable=True)
+    sc1_ch4  = db.Column(db.Float, unique=False, nullable=True)
+    sc1_n20  = db.Column(db.Float, unique=False, nullable=True)
+    sc1_sum = db.Column(db.Float, unique=False, nullable=True)
+    sc3_ef = db.Column(db.Float, unique=False, nullable=True)
+
+    def __init__(self, id, sector, subsector, type, ratio, unit, sc1_co2, sc1_ch4, sc1_n20, sc1_sum, sc3_ef):
+        self.id = id
+        self.sector = sector
+        self.subsector = subsector
+        self.type = type
+        self.ratio = ratio
+        self.unit = unit
+        self.sc1_co2 = sc1_co2
+        self.sc1_ch4 = sc1_ch4
+        self.sc1_n20 = sc1_n20
+        self.sc1_sum = sc1_sum
+        self.sc3_ef = sc3_ef
+    
+    def __repr__(self):
+        return '[ID:{}, Sector:{}, Subsector:{}, Type:{}, Ratio:{}, Unit:{}, SC1_CO2:{}, SC1_CH4:{}, SC1_N20:{}, SC1_SUM:{}, SC3_EF:{}]'.format(self.id, self.sector, self.subsector, self.type, self.ratio, self.unit, self.sc1_co2, self.sc1_ch4, self.sc1_n20, self.sc1_sum, self.sc3_ef)
+
+class Wasteef(db.Model):
+    __tablename__ = "wastes_ef"
+    id = db.Column(db.String(200), primary_key=True)
+    name = db.Column(db.String(200), unique=False, nullable=True)
+    unit = db.Column(db.String(200), unique=False, nullable=True)
+    type = db.Column(db.String(200), unique=False, nullable=True)
+    value = db.Column(db.Float, unique=False, nullable=True)
+    scope = db.Column(db.Float, unique=False, nullable=True)
+    ratio = db.Column(db.Float, unique=False, nullable=True)
+    treatment = db.Column(db.String(200), unique=False, nullable=True)\
+    
+    def __init__(self, id, name, unit, type, value, scope, ratio, treatment):
+        self.id = id
+        self.name = name
+        self.unit = unit
+        self.type = type
+        self.value = value
+        self.scope = scope
+        self.ratio = ratio
+        self.treatment = treatment
+    
+    def __repr__(self):
+        return '[ID:{}, Name:{}, Unit:{}, Type:{}, Value:{}, Scope:{}, Ratio:{}, Treatment:{}]'.format(self.id, self.name, self.unit, self.type, self.value, self.scope, self.ratio, self.treatment)
+
+
 
 class ElecData(db.Model):
     __tablename__ = "elecdata"
