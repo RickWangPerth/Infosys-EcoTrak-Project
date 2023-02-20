@@ -1,15 +1,25 @@
 from app import db
 
+
 class Electricityef(db.Model):
     __tablename__ = "electricityef"
-    state = db.Column(db.String(80), unique=False, nullable=False, primary_key=True)
-    scope2_kgco2pkwh = db.Column(db.Float, unique=False, nullable=False)
-    scope2_kgco2pGJ = db.Column(db.Float, unique=False, nullable=False)
-    scope3_kgco2pkwh = db.Column(db.Float, unique=False, nullable=False)
-    scope3_kgco2pGJ = db.Column(db.Float, unique=False, nullable=False)
+    id = db.Column(db.String(200), unique=True, nullable=False, primary_key=True)
+    sector = db.Column(db.String(200), unique=False, nullable=False)
+    state = db.Column(db.String(200), unique=False, nullable=False)
+    sc2 = db.Column(db.Float, unique=False, nullable=False)
+    sc3 = db.Column(db.Float, unique=False, nullable=False)
+    unit = db.Column(db.String(200), unique=False, nullable=False)
 
+    def __init__(self, id, sector, state, sc2, sc3, unit):
+        self.id = id
+        self.sector = sector
+        self.state = state
+        self.sc2 = sc2
+        self.sc3 = sc3
+        self.unit = unit
+    
     def __repr__(self):
-        return '[State:{}, Scope2_kgco2pkwh:{}, Scope2_kgco2pGJ:{}, Scope3_kgco2pkwh:{}, Scope3_kgco2pGJ:{}]'.format(self.state, self.scope2_kgco2pkwh, self.scope2_kgco2pGJ, self.scope3_kgco2pkwh, self.scope3_kgco2pGJ)
+        return '[ID:{}, Sector:{}, State:{}, SC2:{}, SC3:{}, Unit:{}]'.format(self.id, self.sector, self.state, self.sc2, self.sc3, self.unit)
 
 
 class ElecData(db.Model):

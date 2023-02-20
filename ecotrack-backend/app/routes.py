@@ -1,5 +1,3 @@
-
-
 from app import app, db
 from flask import Flask, request,jsonify
 from flask_cors import CORS
@@ -27,7 +25,7 @@ fueldata_schemas = FuelDataSchema(many=True)
 
 class ElectricityefSchema(ma.Schema):
     class Meta:
-        fields = ('state', 'scope2_kgco2pkwh', 'scope2_kgco2pGJ', 'scope3_kgco2pkwh', 'scope3_kgco2pGJ')
+        fields = ('id','state', 'sc2', 'sc3', 'unit')
 Electricityef_schema = ElectricityefSchema()
 Electricityef_schemas = ElectricityefSchema(many=True)
 
@@ -38,19 +36,7 @@ Electricityef_schemas = ElectricityefSchema(many=True)
 # wastedata_schemas = WasteDataSchema(many=True)
 
 @app.route('/')
-# @app.route('/index')
-# def index():
-#     #data = Electricityef.query.filter_by(state='National').first()
-#     #result = Electricityef_schema.dump(data)
 
-#     # data = Electricityef.query.all()
-#     # result = Electricityef_schemas.dump(data)
-#     data = Electricityef.query.with_entities(Electricityef.state).all()
-#     data_list = [item[0] for item in data]
-#     json_data = json.dumps(data_list)
-#     return  json_data
-#     #return jsonify(result)
-#     #return data
 
 @app.route('/statedata', methods=['GET'])
 
@@ -70,27 +56,27 @@ def send_statedata():
               type: string
     responses:
       200:
-        description: The response string
+        description: The response JSON string 
         schema:
-          type: string
+          type: array of strings
     """
-    data = Electricityef.query.with_entities(Electricityef.state).all()
+    data = Electricityef.query.with_entities(Electricityef.state).filter_by(unit='kWh').all()
     data_list = [item[0] for item in data]
     json_data = json.dumps(data_list)
     return  json_data
 
 
-# @app.route('/elecdata', methods=['POST'])
-# def add_elecdata():
-#     state = request.json['state']
-#     elec = request.json['elec']
-#     unit = request.json['unit']
-#     result = elecal(state,unit,elec)
+@app.route('/elecdata', methods=['POST'])
+def add_elecdata():
+    state = request.json['state']
+    elec = request.json['elec']
+    unit = request.json['unit']
+    result = elecal(state,unit,elec)
 
-#     elecdata = ElecData(state, elec,unit,result)
-#     db.session.add(elecdata)
-#     db.session.commit()
-#     return elecdata_schema.jsonify(elecdata)
+    elecdata = ElecData(state, elec,unit,result)
+    db.session.add(elecdata)
+    db.session.commit()
+    return elecdata_schema.jsonify(elecdata)
 
 @app.route('/elecresult', methods=['GET'])
 def send_elecresult():

@@ -2,11 +2,11 @@ import psycopg2
 import pandas as pd
 
 host = 'localhost'
-database = 'ecotrakbackend'
+database = 'ecotrak'
 user = 'postgres'
 password = 'postgres'
-column_names = ["state", "scope2_kgco2pkwh", "scope2_kgco2pGJ", "scope3_kgco2pkwh", "scope3_kgco2pGJ"]
-
+table_name = 'electricityef'
+column_names = ['id', 'sector', 'state', 'sc2', 'sc3', 'unit']
 
 # Connection parameters
 param_dic = {
@@ -56,30 +56,32 @@ conn = connect(param_dic)
 column_names = column_names
 # Execute the "SELECT *" query
 df = postgresql_to_dataframe(
-    conn, "select * from electricityef", column_names)
+    conn, "select * from "+ table_name, column_names)
 df.head()
 
 
 def elecal(state, unit, Q_elec):
-    for i in range(11):
+    for i in range(12):
         if unit == 'kWh':
-            if df.iloc[i][0] == state:
-                EF_2 = df.iloc[i][1]
-                EF_3 = df.iloc[i][3]
+            if electricity_parameters.iloc[i][0] == state:
+                EF_2 = electricity_parameters.iloc[i][1]
+                EF_3 = electricity_parameters.iloc[i][3]
                 print(state)
         if unit == 'GJ':
-            if df.iloc[i][0] == state:
-                EF_2 = df.iloc[i][2]
-                EF_3 = df.iloc[i][4]
+            if electricity_parameters.iloc[i][0] == state:
+                EF_2 = electricity_parameters.iloc[i][2]
+                EF_3 = electricity_parameters.iloc[i][4]
                 print(state)
     elec_e = float(Q_elec) * (EF_2 + EF_3) / 1000
     return elec_e
-    print(df.iloc[1][0])
+
+
+ 
 
 
 Q_elec = 11300000  # INPUT FROM FRONT END - ENERGY USAGE
 state = 'National'       # INPUT FROM FRONT END - STATE
 unit = 'kWh'
 
-emissions = elecal(state, unit, Q_elec)
-print(emissions)
+#emissions = elecal(state, unit, Q_elec)
+#print(emissions)
