@@ -231,8 +231,8 @@ E-SWIS-1	Electricity	South West Interconnected System (SWIS)	\N	\N	kWh
 E-TAS-1	Electricity	Tasmania	0.17	0.01	kWh
 E-NT-1	Electricity	Northern Territory	0.54	0.07	kWh
 E-DKIS-1	Electricity	Darwin Katherine Interconnected System (DKIS)	\N	\N	kWh
-E-NWIS-1	Electricity	Western Australia - North Western Interconnected System (NWIS)	0.58	\N	kwh
-E-NAT-1	Electricity	National	0.68	0.09	kwh
+E-NWIS-1	Electricity	Western Australia - North Western Interconnected System (NWIS)	0.58	\N	kWh
+E-NAT-1	Electricity	National	0.68	0.09	kWh
 E-NSW-2	Electricity	New South Wales 	202	15	GJ
 E-ACT-2	Electricity	Australian Capital Territory	202	15	GJ
 E-VIC-2	Electricity	Victoria	238	20	GJ
