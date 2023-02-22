@@ -4,7 +4,7 @@ import pandas as pd
 host = 'localhost'
 database = 'ecotrak'
 user = 'postgres'
-password = ''
+password = 'pB1@ckburn'
 table_name = 'fuels_ef'
 column_names = ['id', 'sector', 'subsector', 'type', 'ratio',
                 'unit', 'sc1_co2', 'sc1_ch4', 'sc1_n20', 'sc1_sum', 'sc3_ef']
@@ -44,23 +44,21 @@ def postgresql_to_dataframe(conn, select_query, column_names):
         cursor.close()
         return 1
 
-    # Naturally we get a list of tupples
     tupples = cursor.fetchall()
     cursor.close()
 
-    # We just need to turn it into a pandas dataframe
     df = pd.DataFrame(tupples, columns=column_names)
     return df
 
 
 conn = connect(param_dic)
 column_names = column_names
-# Execute the "SELECT *" query
+# Create Dataframe
 df = postgresql_to_dataframe(
     conn, "select * from " + table_name, column_names)
 df.head()
 
-# SOLID FUEL
+# Solid Fuel Calculation
 solid_df = df.loc[df['subsector'] == 'Solid Fuel']
 
 
@@ -87,7 +85,7 @@ def solidfuelcal(Q, type):
     return total_e, CO2_e, CH4_e, N2O_e
 
 
-# LIQUID FUEL
+# Liquid Fuel Calculation
 liquid_df = df.loc[df['subsector'] == 'Liquid Fuel']
 
 
@@ -114,3 +112,39 @@ def liquidfuelcal(Q, type, unit):
         total_e = float(Q) * EC * (sc1_sum + sc3_ef) / 1000
 
     return total_e, CO2_e, CH4_e, N2O_e
+
+
+# Gaseous Fuel Calculation
+gaseous_df = df.loc[df['subsector'] == 'Gaseous Fuel']
+
+Q = 100000
+type = 'Natural gas distributed in a pipeline'
+unit = 'GJ'
+
+
+def gaseousfuelcal(Q, type):
+    if unit == 'GJ':
+        EC = 1
+    else:
+        EC = gaseous_df.loc[gaseous_df['type']
+                            == type, 'ratio'].iloc[0]
+
+    sc1_co2 = gaseous_df.loc[gaseous_df['type']
+                             == type, 'sc1_co2'].iloc[0]
+    sc1_ch4 = gaseous_df.loc[gaseous_df['type']
+                             == type, 'sc1_ch4'].iloc[0]
+    sc1_n20 = gaseous_df.loc[gaseous_df['type']
+                             == type, 'sc1_n20'].iloc[0]
+    sc1_sum = gaseous_df.loc[gaseous_df['type']
+                             == type, 'sc1_sum'].iloc[0]
+
+    CO2_e = float(Q) * EC * (sc1_co2) / 1000
+    CH4_e = float(Q) * EC * (sc1_ch4) / 1000
+    N2O_e = float(Q) * EC * (sc1_n20) / 1000
+    total_e = float(Q) * EC * (sc1_sum) / 1000
+
+    return total_e, CO2_e, CH4_e, N2O_e
+
+
+emissions = gaseousfuelcal(Q, type)
+print(emissions)

@@ -4,7 +4,7 @@ import pandas as pd
 host = 'localhost'
 database = 'ecotrak'
 user = 'postgres'
-password = 'postgres'
+password = 'pB1@ckburn'
 table_name = 'electricityef'
 column_names = ['id', 'sector', 'state', 'sc2', 'sc3', 'unit']
 
@@ -56,11 +56,15 @@ conn = connect(param_dic)
 column_names = column_names
 # Execute the "SELECT *" query
 df = postgresql_to_dataframe(
-    conn, "select * from "+ table_name, column_names)
+    conn, "select * from " + table_name, column_names)
 df.head()
 
+Q = 11300000  # INPUT FROM FRONT END - ENERGY USAGE
+state = 'National'       # INPUT FROM FRONT END - STATE
+unit = 'GJ'
 
-def elecal(state, unit, Q_elec):
+
+def elecal(Q, state, unit):
 
     if unit == 'kWh':
         kWh_df = df.loc[df['unit'] == 'kWh']
@@ -71,15 +75,10 @@ def elecal(state, unit, Q_elec):
         sc2 = GJ_df.loc[GJ_df['state'] == state, 'sc2'].iloc[0]
         sc3 = GJ_df.loc[GJ_df['state'] == state, 'sc3'].iloc[0]
 
-    elec_e = float(Q_elec) * (sc2 + sc3) / 1000
+    elec_e = float(Q) * (sc2 + sc3) / 1000
     print(elec_e)
     return elec_e
- 
 
 
-Q_elec = 11300000  # INPUT FROM FRONT END - ENERGY USAGE
-state = 'National'       # INPUT FROM FRONT END - STATE
-unit = 'kWh'
-
-#emissions = elecal(state, unit, Q_elec)
-#print(emissions)
+emissions = elecal(Q, state, unit)
+print(emissions)
