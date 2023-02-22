@@ -4,7 +4,7 @@ import pandas as pd
 host = 'localhost'
 database = 'ecotrak'
 user = 'postgres'
-password = 'pB1@ckburn'
+password = ''
 table_name = 'fuels_ef'
 column_names = ['id', 'sector', 'subsector', 'type', 'ratio',
                 'unit', 'sc1_co2', 'sc1_ch4', 'sc1_n20', 'sc1_sum', 'sc3_ef']
@@ -60,13 +60,7 @@ df = postgresql_to_dataframe(
     conn, "select * from " + table_name, column_names)
 df.head()
 
-
-# INPUT FROM FRONT END - Quantity of Fuel Type in tonnes
-Q = 20000
-# INPUT FROM FRONT END - Type of fuel
-type = 'Brown coal (lignite)'
-subsector = 'Solid Fuel'
-
+# SOLID FUEL
 solid_df = df.loc[df['subsector'] == 'Solid Fuel']
 
 
@@ -93,5 +87,30 @@ def solidfuelcal(Q, type):
     return total_e, CO2_e, CH4_e, N2O_e
 
 
-total = solidfuelcal(Q, type)
-print(total)
+# LIQUID FUEL
+liquid_df = df.loc[df['subsector'] == 'Liquid Fuel']
+
+
+def liquidfuelcal(Q, type, unit):
+    if unit == 'kL':
+        kL_df = df.loc[df['unit'] == 'kL']
+
+        EC = liquid_df.loc[liquid_df['type']
+                           == type, 'ratio'].iloc[0]
+        sc1_co2 = liquid_df.loc[liquid_df['type']
+                                == type, 'sc1_co2'].iloc[0]
+        sc1_ch4 = liquid_df.loc[liquid_df['type']
+                                == type, 'sc1_ch4'].iloc[0]
+        sc1_n20 = liquid_df.loc[liquid_df['type']
+                                == type, 'sc1_n20'].iloc[0]
+        sc1_sum = liquid_df.loc[liquid_df['type']
+                                == type, 'sc1_sum'].iloc[0]
+        sc3_ef = liquid_df.loc[liquid_df['type']
+                               == type, 'sc3_ef'].iloc[0]
+
+        CO2_e = float(Q) * EC * (sc1_co2) / 1000
+        CH4_e = float(Q) * EC * (sc1_ch4) / 1000
+        N2O_e = float(Q) * EC * (sc1_n20) / 1000
+        total_e = float(Q) * EC * (sc1_sum + sc3_ef) / 1000
+
+    return total_e, CO2_e, CH4_e, N2O_e
