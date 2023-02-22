@@ -1,36 +1,90 @@
-# Calculator of Waste Energy emissions based on Australian National Greenhouse Account Factors 2022
+import psycopg2
+import pandas as pd
+
+host = 'localhost'
+database = 'ecotrak'
+user = 'postgres'
+password = 'pB1@ckburn'
+table_name = 'fuels_ef'
+column_names = ['id', 'sector', 'subsector', 'type', 'ratio',
+                'unit', 'sc1_co2', 'sc1_ch4', 'sc1_n20', 'sc1_sum', 'sc3_ef']
+
+# Connection parameters
+param_dic = {
+    "host": host,
+    "database": database,
+    "user": user,
+    "password": password
+}
 
 
-# Solid Waste - weight known
-def solid(Q, EF):
+def connect(params_dic):
+    """ Connect to the PostgreSQL database server """
+    conn = None
+    try:
+        # connect to the PostgreSQL server
+        print('Connecting to the PostgreSQL database...')
+        conn = psycopg2.connect(**params_dic)
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        sys.exit(1)
+    print("Connection successful")
+    return conn
+
+
+def postgresql_to_dataframe(conn, select_query, column_names):
+    """
+    Tranform a SELECT query into a pandas dataframe
+    """
+    cursor = conn.cursor()
+    try:
+        cursor.execute(select_query)
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error: %s" % error)
+        cursor.close()
+        return 1
+
+    tupples = cursor.fetchall()
+    cursor.close()
+
+    df = pd.DataFrame(tupples, columns=column_names)
+    return df
+
+
+conn = connect(param_dic)
+column_names = column_names
+# Create Dataframe
+df = postgresql_to_dataframe(
+    conn, "select * from " + table_name, column_names)
+df.head()
+
+name = 'Food'
+# Solid Waste
+solid_df = df.loc[df['subsector'] == 'Solid Waste']
+
+
+def solid_known(Q, EF):
+    EC = solid_df.loc[solid_df['name']
+                      == name, 'value'].iloc[0]
     solid_e = Q * EF
     return solid_e
 
+
 # Solid Waste - weight unknown
+n = 24
+m = 3
 
 
 def solid_unknown(n, m, CF, EF):
+    CF = solid_df.loc[solid_df['name']
+                      == name, 'ratio'].iloc[0]
+    EC = solid_df.loc[solid_df['name']
+                      == name, 'value'].iloc[0]
     solid_e = n * m * CF * EF
     return solid_e
 
 
-# Example 8 - 140t Food, 50t Paper, 10t Garden and 40t Inert Waste
-Q = [140, 50, 10, 40]
-EF = [2.1, 3.3, 1.6, 0.0]
-Q_EF = [Q[i] * EF[i] for i in range(len(Q))]  # Multiply each element
-
-print("Total Greenhouse Gas Emissions from Example 8 (t CO2e): ", sum(Q_EF))
-
-# Example 9 - Commercial and industrial waste
-ex_9 = solid(1000, 1.3)
-print("Total Greenhouse Gas Emissions from Example 9 (t CO2e): ", ex_9)
-
-# Example 10 - 24 collections of 3m3
-ex_10 = solid_unknown(24, 3, 0.5, 2.1)
-print("Total Greenhouse Gas Emissions from Example 10 (t CO2e): ", ex_10)
-
 # Waste water treatment
-
 
 def wastewater(P, EF):
     waste_e = P * EF
@@ -44,6 +98,8 @@ print("Total Greenhouse Gas Emissions from Example 11 (t CO2e): ", ex_11)
 
 
 def incineration(Q, EF):
+    EF = solid_df.loc[solid_df['name']
+                      == name, 'value'].iloc[0]
     waste_e = Q * EF
     return waste_e
 
