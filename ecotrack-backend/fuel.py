@@ -4,7 +4,7 @@ import pandas as pd
 host = 'localhost'
 database = 'ecotrak'
 user = 'postgres'
-password = 'pB1@ckburn'
+password = 'p'
 table_name = 'fuels_ef'
 column_names = ['id', 'sector', 'subsector', 'type', 'ratio',
                 'unit', 'sc1_co2', 'sc1_ch4', 'sc1_n20', 'sc1_sum', 'sc3_ef']
@@ -117,9 +117,9 @@ def liquidfuelcal(Q, type, unit):
 # Gaseous Fuel Calculation
 gaseous_df = df.loc[df['subsector'] == 'Gaseous Fuel']
 
-Q = 100000
-type = 'Natural gas distributed in a pipeline'
-unit = 'GJ'
+Q = 1150
+type = 'Liquefied natural gas'
+unit = 'kL'
 
 
 def gaseousfuelcal(Q, type):
@@ -144,7 +144,3 @@ def gaseousfuelcal(Q, type):
     total_e = float(Q) * EC * (sc1_sum) / 1000
 
     return total_e, CO2_e, CH4_e, N2O_e
-
-
-emissions = gaseousfuelcal(Q, type)
-print(emissions)
