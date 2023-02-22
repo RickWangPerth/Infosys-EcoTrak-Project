@@ -290,7 +290,7 @@ GF-6	Fuel	Gaseous Fuel	Ethane	0.06	m3	56.5	0.03	0.03	56.56	\N
 GF-7	Fuel	Gaseous Fuel	Coke oven gas	0.02	m3	37	0.03	0.05	37.08	\N
 GF-8	Fuel	Gaseous Fuel	Blast furnace gas	0	m3	234	0.03	0.02	234.05	\N
 GF-9	Fuel	Gaseous Fuel	Town gas	0.04	m3	60.2	0.04	0.03	60.27	\N
-GF-10	Fuel	Gaseous Fuel	Liquefied natural gas	25.3	m3	51.4	0.1	0.03	51.53	\N
+GF-10	Fuel	Gaseous Fuel	Liquefied natural gas	25.3	kL	51.4	0.1	0.03	51.53	\N
 GF-11	Fuel	Gaseous Fuel	Gaseous fossil fuels other than those mentioned in the items above	0.04	m3	51.4	0.1	0.03	51.53	\N
 GF-12	Fuel	Gaseous Fuel	Landfill biogas that is captured for combustion (methane only)	0.04	m3	0	6.4	0.03	6.43	\N
 GF-13	Fuel	Gaseous Fuel	Sludge biogas that is captured for combustion (methane only)	0.04	m3	0	6.4	0.03	6.43	\N
