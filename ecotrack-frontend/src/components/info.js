@@ -10,6 +10,9 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import ETLogo from "../img/ecotracklogo.png";
+import ElecEq from "../img/equations/elecEq.png";
+
 
 const calStyle = makeStyles({
   cal: {
@@ -158,21 +161,21 @@ const calType = [
 //     {label:'Other solid fuels'},
 //   ]
 
-const typeWaste = [
-    {label:'Food'},
-    {label:'Paper and cardboard'},
-    {label:'Garden and green'},
-    {label:'Textiles'},
-    {label:'Wood'},
-    {label:'Sludge'},
-    {label:'Nappies'},
-    {label:'Rubber and leather'},
-    {label:'Inert waste (including concrete/metal/plastics/glass)'},
-    {label:'Municipal solid waste'},
-    {label:'Commercial and industrial waste'},
-    {label:'Construction and demolition waste'},
+// const typeWaste = [
+//     {label:'Food'},
+//     {label:'Paper and cardboard'},
+//     {label:'Garden and green'},
+//     {label:'Textiles'},
+//     {label:'Wood'},
+//     {label:'Sludge'},
+//     {label:'Nappies'},
+//     {label:'Rubber and leather'},
+//     {label:'Inert waste (including concrete/metal/plastics/glass)'},
+//     {label:'Municipal solid waste'},
+//     {label:'Commercial and industrial waste'},
+//     {label:'Construction and demolition waste'},
 
-  ]
+//   ]
 
 export default function Info() {
     const classes = calStyle();
@@ -230,6 +233,7 @@ export default function Info() {
     const [wastetype, setWastetype] = useState([]);
     const [solidwastetype, setSolidwastetype] = useState([]);
     const [combinedwastetype, setCombinedwastetype] = useState([]);
+  
     
     useEffect(() => {
       fetch('http://127.0.0.1:5000/wastetype')
@@ -251,8 +255,6 @@ export default function Info() {
         .then(data => setCombinedwastetype(data))
         .catch(error => console.log(error));
     }, []);
-    
-   
 
     const [countryvalue, setCountryValue] = useState([]);
     const [statevalue, setStateValue] = useState([]);
@@ -263,6 +265,9 @@ export default function Info() {
     const [unitvalue, setUnitValue] = useState([]);
     const [elecresult, setElecResult] = useState([]);
 
+
+
+
     // Waste value
     const [wastevalue, setWasteValue] = useState([]);
     const [solidwastevalue, setSolidWasteValue] = useState([]);
@@ -270,14 +275,14 @@ export default function Info() {
     const [gaswastevalue, setGasWasteValue] = useState([]);
     const [wasteresult, setWasteResult] = useState([]);
     const [wastetypevalue, setWasteTypeValue] = useState([]);
-    const [solidwastetypevalue, setSolidWasteTypeValue] = useState([]);
-    const [combinedastetypevalue, setCombinedWasteTypeValue] = useState([]);
+    const [wastesubtypevalue, setWasteSubTypeValue] = useState([]);
 
     // Fuel value
     const [fuelvalue, setFuelValue] = useState([]);
     const [fuelsubtypevalue, setFuelSubTypeValue] = useState([]);
     const [fuelresult, setFuelResult] = useState([]);
     const [fueltypevalue, setFuelTypeValue] = useState([]);
+    const [s2, setS2] = useState([]);
   
     function handleElecSubmit() {
       fetch('http://localhost:5000/elecdata',{
@@ -311,8 +316,21 @@ export default function Info() {
         .then(resp =>  setElecResult(resp))
         .catch(err => console.log(err)) 
 
-        var x = document.getElementById("resultP")
-          x.style.display = "block";
+        var result = document.getElementById("resultP")
+          result.style.display = "block";
+
+        fetch(`http://127.0.0.1:5000/sc2data/${statevalue}/${unitvalue}`,{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Origin':'http://localhost:3000',
+            'Access-Control-Allow-Origin': 'http://localhost:3000',
+          }
+        }).then(resp => resp.json())
+        .then(resp =>  setS2(resp))
+        .catch(err => console.log(err)) 
+
     };
     function handleFuelSubmit() {
       fetch('http://localhost:5000/fueldata',{
@@ -373,7 +391,6 @@ export default function Info() {
                 onChange={(event) => {setCountryValue(event.target.textContent)}} 
                 />
             </Grid>
-
             <Grid item xs={12} md={4}>
             <Autocomplete
                 className={classes.text}
@@ -382,12 +399,29 @@ export default function Info() {
                 options={calType}
                 sx={{ width: 300, mt: 2 }}
                 renderInput={(params) => <TextField {...params} label="Type" />}
-                onChange={(event) => {setTypeValue(event.target.textContent)}} 
+                onChange={(event) => {setTypeValue(event.target.textContent);setFuelTypeValue("");setWasteTypeValue("");setWasteSubTypeValue("");setFuelSubTypeValue("");setElecValue("");setFuelValue("");setSolidWasteValue("");setLiquidWasteValue("");setGasWasteValue("");setWasteValue("");setUnitValue("")}} 
                 />
             </Grid>
             {
-            typevalue==='Electricity' ? 
+            typevalue === 'Electricity' ? 
                 <>
+                <Grid item xs={12} md={12} className={classes.text}>
+                  <p>According to the guidance of the <a href='https://www.dcceew.gov.au/sites/default/files/documents/national-greenhouse-accounts-factors-2022.pdf' target='_blank' rel="noreferrer"> Australian National Greenhouse Accounts Factors </a></p>
+                  <p>
+                  The following method is used for estimating scope 2 and scope 3 emissions released from electricity purchased through the electricity grid and consumed:
+                  </p>
+                  <img src={ElecEq} alt='calculation method' width='300px'/>
+                  <p>
+                    <strong>Where:</strong> <br />
+                    <strong>t CO2 -e</strong> is the emissions measured in CO 2 -e tonnes.<br />
+
+                    <strong>Q</strong> is the quantity of electricity purchased from the electricity grid during the year and consumed from the operation of the facility measured in kilowatt hours. <br />
+
+                    <strong>EF2</strong> is the scope 2 emission factor, in kilograms of CO2 -e emissions per kilowatt hour. <br />
+                    
+                    <strong>EF3</strong> is the scope 3 emission factor, in kilograms of CO2-e emissions per kilowatt hour. <br />
+                  </p>
+                </Grid>
                 <Grid item xs={12} md={4}>
                 <Autocomplete
                     className={classes.text}
@@ -399,17 +433,19 @@ export default function Info() {
                     onChange={(event) => {setStateValue(event.target.textContent)}} 
                     />
                 </Grid>
-                <Grid item xs={12} md={6}> 
+                <Grid item xs={12} md={4}>
+                <FormControl>
                 <TextField
                     className={classes.text}
                     sx={{ width: 300, mt: 2 }}
                     required
                     id="outlined-required"
-                    label="electricity"
-                    defaultValue="0"
+                    label="Electricity"
+                    defaultValue='0'
                     onChange={(event) => { setElecValue(event.target.value); } } />
+                </FormControl>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                 <FormControl>
                     <FormLabel id="elecunit-radio-buttons-group" className={classes.text} >Unit</FormLabel>
                     <RadioGroup
@@ -423,6 +459,7 @@ export default function Info() {
                     </RadioGroup>
                 </FormControl>
                 </Grid>
+
                 <Grid item xs={12} md={12}>
                     <Button variant="contained"
                         className={classes.text}
@@ -439,11 +476,16 @@ export default function Info() {
                     id='resultP' 
                     style={{display:'none'}}>
                       
-                      "Total Greenhouse Gas Emissions from electricty (t CO2e): " {elecresult.result}
+                      "Total Greenhouse Gas Emissions from electricty (t CO2e): " {elecresult.result} <br />
+                       The scope 2 emission factor in {elecresult.state} is {s2} kg CO2-e/kWh <br />
+                       The scope 3 emission factor in {elecresult.state} is xxxxx kg CO2-e/kWh <br />
                     </p>
+
+                    
+
                 </Grid>
                 </>
-                : typevalue==='Waste' ?
+                : typevalue ==='Waste' ? 
                 <>
                 <Grid item xs={12} md={4}>
                   <Autocomplete
@@ -466,7 +508,7 @@ export default function Info() {
                     options={solidwastetype}
                     sx={{ width: 300, mt: 2 }}
                     renderInput={(params) => <TextField {...params} label="Type of Solid Waste" />}
-                    onChange={(event) => { setSolidWasteTypeValue(event.target.textContent); } } />
+                    onChange={(event) => { setWasteSubTypeValue(event.target.textContent); } } />
                     </Grid>
                   </>
                     : wastetypevalue==='Combined Waste' ?
@@ -479,20 +521,20 @@ export default function Info() {
                       options={combinedwastetype}
                       sx={{ width: 300, mt: 2 }}
                       renderInput={(params) => <TextField {...params} label="Type of Combined Waste" />}
-                      onChange={(event) => { setCombinedWasteTypeValue(event.target.textContent); } } />
+                      onChange={(event) => { setWasteSubTypeValue(event.target.textContent); } } />
                       </Grid>
                     </>
                     : null
                 }
                 <Grid item xs={12} md={6}>
-                  <TextField
-                    className={classes.text}
-                    sx={{ width: 300, mt: 2 }}
-                    required
-                    id="outlined-required"
-                    label="Amount of Waste"
-                    defaultValue="0"
-                    onChange={(event) => { setWasteValue(event.target.value); } } />
+                    <TextField
+                      className={classes.text}
+                      sx={{ width: 300, mt: 2 }}
+                      required
+                      id="outlined-required"
+                      label="Amount of Waste"
+                      defaultValue="0"
+                      onChange={(event) => { setWasteValue(event.target.value); } } />
                 </Grid>
                 <Grid item xs={12} md={12}>
                   <Button variant="contained"
@@ -513,9 +555,10 @@ export default function Info() {
                   </p>
                 </Grid>
                 </>
-                : typevalue==='Fuel' ?
+                : typevalue ==='Fuel' ?
                 <>
                 <Grid item xs={12} md={4}>
+                <FormControl>
                 <Autocomplete
                     className={classes.text}
                     disablePortal
@@ -525,6 +568,7 @@ export default function Info() {
                     renderInput={(params) => <TextField {...params} label="Tpye of Fuel" />}
                     onChange={(event) => {setFuelTypeValue(event.target.textContent)}} 
                     />
+                </FormControl>
                 </Grid>
                 {
                   fueltypevalue==='Solid Fuel' ?
@@ -571,7 +615,8 @@ export default function Info() {
                   </>
                   : null
                 }
-                <Grid item xs={12} md={6}> 
+                <Grid item xs={12} md={6}>
+
                 <TextField
                     className={classes.text}
                     sx={{ width: 300, mt: 2 }}
@@ -580,6 +625,7 @@ export default function Info() {
                     label="Amount of Fuel"
                     defaultValue="0"
                     onChange={(event) => { setFuelValue(event.target.value); } } />
+
                 </Grid>
                 <Grid item xs={12} md={12}>
                     <Button variant="contained"
