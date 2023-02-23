@@ -4,8 +4,8 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from electricity import elecal
-from solid_fuel import solidfuelcal
-from liquid_fuel import liquidfuelcal
+# from solid_fuel import solidfuelcal
+# from liquid_fuel import liquidfuelcal
 # from gaseous_fuel import gaseousfuelcal
 from app.models import ElecData, FuelData, Electricityef, Fuelsef, Wasteef
 import json
@@ -59,17 +59,20 @@ def send_statedata():
           properties:
             key:
               type: string
+              state:
+              unit:
     responses:
       200:
         description: The response JSON string 
         schema:
           type: array of strings
+      404:
+
     """
     data = Electricityef.query.with_entities(Electricityef.state).filter_by(unit='kWh').all()
     data_list = [item[0] for item in data]
     json_data = json.dumps(data_list)
     return  json_data
-
 
 @app.route('/elecdata', methods=['POST'])
 def add_elecdata():
@@ -77,11 +80,21 @@ def add_elecdata():
     elec = request.json['elec']
     unit = request.json['unit']
     result = elecal(state,unit,elec)
+    scpoe2 = Electricityef.query.with_entities(Electricityef.sc2).filter_by(state=state,unit=unit)
+    scpoe3 = Electricityef.query.with_entities(Electricityef.sc3).filter_by(state=state,unit=unit)
 
     elecdata = ElecData(state, elec,unit,result)
     db.session.add(elecdata)
     db.session.commit()
     return elecdata_schema.jsonify(elecdata)
+
+
+@app.route('/sc2data/<state>/<unit>', methods=['GET'])
+def add_sc2data(state,unit):
+    sc2 = Electricityef.query.with_entities(Electricityef.sc2).filter_by(state=state,unit=unit).all()
+    sc2_list = [item[0] for item in sc2]
+    json_data = json.dumps(sc2_list)
+    return  json_data
 
 @app.route('/elecresult', methods=['GET'])
 def send_elecresult():

@@ -1,8 +1,0 @@
-Backend :
-	- Python framework Django
-Package manager:
-	- Pip (python)
-Database:
-	- Postgres
-API:
-	- Graphql API
