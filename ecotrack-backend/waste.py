@@ -64,8 +64,8 @@ name = 'Food'
 solid_df = df.loc[df['subsector'] == 'Solid Waste']
 
 
-def solid_kg(Q, EF):
-    EC = solid_df.loc[solid_df['name']
+def solid_kg(Q):
+    EF = solid_df.loc[solid_df['name']
                       == name, 'value'].iloc[0]
     solid_e = Q * EF
     return solid_e
@@ -76,10 +76,10 @@ n = 24
 m = 3
 
 
-def solid_m3(Q, m, CF, EF):
+def solid_m3(Q):
     CF = solid_df.loc[solid_df['name']
                       == name, 'ratio'].iloc[0]
-    EC = solid_df.loc[solid_df['name']
+    EF = solid_df.loc[solid_df['name']
                       == name, 'value'].iloc[0]
     solid_e = n * m * CF * EF
     return solid_e
