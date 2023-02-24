@@ -180,11 +180,9 @@ def add_fueldata():
     fuelSubType = request.json['fuelsubtype']
     unit = request.json['unit']
     print(fuel,fuelType,fuelSubType,unit)
-    id=5
+    id=8
     total, CO2, CH4, N2O = fuelcal(fuel,fuelSubType,fuelType,unit)
-    # result = {}
-    # result={total:total, CO2:CO2, CH4:CH4, N2O:N2O}
-    # return jsonify(result)
+
 
     fueldata = FuelData(id,fuel, fuelType, fuelSubType, unit, total, CO2, CH4, N2O)
     
