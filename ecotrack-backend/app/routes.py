@@ -19,7 +19,7 @@ elecdata_schemas = ElecDataSchema(many=True)
 
 class FuelDataSchema(ma.Schema):
     class Meta:
-        fields = ('id','state', 'fuel', 'unit', 'result', 'fuelType')
+        fields = ('id','state', 'fuel', 'unit', 'total', 'fuelType','CO2', 'CH4', 'N2O')
 fueldata_schema = FuelDataSchema()
 fueldata_schemas = FuelDataSchema(many=True)
 
@@ -80,8 +80,6 @@ def add_elecdata():
     elec = request.json['elec']
     unit = request.json['unit']
     result = elecal(elec,state,unit)
-    scpoe2 = Electricityef.query.with_entities(Electricityef.sc2).filter_by(state=state,unit=unit)
-    scpoe3 = Electricityef.query.with_entities(Electricityef.sc3).filter_by(state=state,unit=unit)
 
     elecdata = ElecData(state, elec,unit,result)
     db.session.add(elecdata)
@@ -93,6 +91,13 @@ def add_sc2data(state,unit):
     sc2 = Electricityef.query.with_entities(Electricityef.sc2).filter_by(state=state,unit=unit).all()
     sc2_list = [item[0] for item in sc2]
     json_data = json.dumps(sc2_list)
+    return  json_data
+
+@app.route('/sc3data/<state>/<unit>', methods=['GET'])
+def add_sc3data(state,unit):
+    sc3 = Electricityef.query.with_entities(Electricityef.sc3).filter_by(state=state,unit=unit).all()
+    sc3_list = [item[0] for item in sc3]
+    json_data = json.dumps(sc3_list)
     return  json_data
 
 @app.route('/elecresult', methods=['GET'])
@@ -110,7 +115,7 @@ def send_fueltype():
 
 @app.route('/solidfueltype', methods=['GET'])
 def send_solidfueltype():
-    data = Fuelsef.query.with_entities(Fuelsef.type).filter_by(subsector='Soild Fuel').all()
+    data = Fuelsef.query.with_entities(Fuelsef.type).filter_by(subsector='Solid Fuel').all()
     data_list = [item[0] for item in data]
     json_data = json.dumps(data_list)
     return  json_data
@@ -174,7 +179,8 @@ def add_fueldata():
     fuelType = request.json['fueltype']
     fuelSubType = request.json['fuelsubtype']
     unit = request.json['unit']
-    id=1
+    print(fuel,fuelType,fuelSubType,unit)
+    id=4
     total, CO2, CH4, N2O = fuelcal(fuel,fuelSubType,fuelType,unit)
     # result = {}
     # result={total:total, CO2:CO2, CH4:CH4, N2O:N2O}

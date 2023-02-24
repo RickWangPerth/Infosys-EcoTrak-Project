@@ -81,7 +81,7 @@ def solid_m3(Q):
                       == name, 'ratio'].iloc[0]
     EF = solid_df.loc[solid_df['name']
                       == name, 'value'].iloc[0]
-    solid_e = n * m * CF * EF
+    solid_e = Q * m * CF * EF
     return solid_e
 
 
