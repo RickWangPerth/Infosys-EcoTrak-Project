@@ -265,6 +265,8 @@ export default function Info() {
     const [elecvalue, setElecValue] = useState([]);
     const [unitvalue, setUnitValue] = useState([]);
     const [elecresult, setElecResult] = useState([]);
+    const [s2, setS2] = useState([]);
+    const [s3, setS3] = useState([]);
 
 
     // Waste value
@@ -282,7 +284,7 @@ export default function Info() {
     const [fuelunitvalue, setFuelUnitValue] = useState([]);
     const [fuelresult, setFuelResult] = useState([]);
     const [fueltypevalue, setFuelTypeValue] = useState([]);
-    const [s2, setS2] = useState([]);
+   
   
     function handleElecSubmit() {
       fetch('http://localhost:5000/elecdata',{
@@ -329,6 +331,18 @@ export default function Info() {
           }
         }).then(resp => resp.json())
         .then(resp =>  setS2(resp))
+        .catch(err => console.log(err)) 
+
+        fetch(`http://127.0.0.1:5000/sc3data/${statevalue}/${unitvalue}`,{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Origin':'http://localhost:3000',
+            'Access-Control-Allow-Origin': 'http://localhost:3000',
+          }
+        }).then(resp => resp.json())
+        .then(resp =>  setS3(resp))
         .catch(err => console.log(err)) 
 
     };
@@ -476,14 +490,10 @@ export default function Info() {
                     className={classes.text}
                     id='resultP' 
                     style={{display:'none'}}>
-                      
                       "Total Greenhouse Gas Emissions from electricty (t CO2e): " {elecresult.result} <br />
                        The scope 2 emission factor in {elecresult.state} is {s2} kg CO2-e/kWh <br />
-                       The scope 3 emission factor in {elecresult.state} is xxxxx kg CO2-e/kWh <br />
+                       The scope 3 emission factor in {elecresult.state} is {s3} kg CO2-e/kWh <br />
                     </p>
-
-                    
-
                 </Grid>
                 </>
                 : typevalue ==='Waste' ? 
@@ -552,8 +562,9 @@ export default function Info() {
                     className={classes.text}
                     id='resultP'
                     style={{ display: 'none' }}>
-                    "Total Greenhouse Gas Emissions from electricty (t CO2e): " {elecresult.result}
+                    "Total Greenhouse Gas Emissions from fuel (t CO2e): " {fuelresult.total}
                   </p>
+                  {console.log(fuelresult)}
                 </Grid>
                 </>
                 : typevalue ==='Fuel' ?
@@ -567,7 +578,7 @@ export default function Info() {
                     options={fueltype}
                     sx={{ width: 300, mt: 2 }}
                     renderInput={(params) => <TextField {...params} label="Tpye of Fuel" />}
-                    onChange={(event) => {setFuelTypeValue(event.target.textContent)}} 
+                    onChange={(event) => {setFuelTypeValue(event.target.textContent);setFuelSubTypeValue('')}} 
                     />
                 </FormControl>
                 </Grid>
@@ -575,6 +586,7 @@ export default function Info() {
                   fueltypevalue==='Solid Fuel' ?
                   <>
                   <Grid item xs={12} md={4}>
+                  <FormControl>
                   <Autocomplete
                     className={classes.text}
                     disablePortal
@@ -584,6 +596,7 @@ export default function Info() {
                     renderInput={(params) => <TextField {...params} label="Tpye of Solid Fuel" />}
                     onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 
                     />
+                  </FormControl>
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <FormControl>
@@ -602,6 +615,7 @@ export default function Info() {
                   : fueltypevalue==='Liquid Fuel' ?
                   <>
                   <Grid item xs={12} md={4}>
+
                   <Autocomplete
                     className={classes.text}
                     disablePortal
@@ -611,6 +625,7 @@ export default function Info() {
                     renderInput={(params) => <TextField {...params} label="Tpye of Liquid Fuel" />}
                     onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 
                     />
+
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <FormControl>
@@ -630,16 +645,19 @@ export default function Info() {
                   : fueltypevalue==='Gaseous Fuel' ?
                   <>
                   <Grid item xs={12} md={4}>
-                  <Autocomplete
-                    className={classes.text}
-                    disablePortal
-                    id="type of gaseous fuel"
-                    options={gaseousfueltype}
-                    sx={{ width: 300, mt: 2 }}
-                    renderInput={(params) => <TextField {...params} label="Tpye of Gas Fuel" />}
-                    onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 
-                    />
+                    <FormControl>
+                    <Autocomplete
+                      className={classes.text}
+                      disablePortal
+                      id="type of gaseous fuel"
+                      options={gaseousfueltype}
+                      sx={{ width: 300, mt: 2 }}
+                      renderInput={(params) => <TextField {...params} label="Tpye of Gas Fuel" />}
+                      onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 
+                      />
+                    </FormControl>
                   </Grid>
+
                   <Grid item xs={12} md={4}>
                     <FormControl>
                       <FormLabel id="elecunit-radio-buttons-group" className={classes.text} >Unit</FormLabel>
@@ -684,9 +702,66 @@ export default function Info() {
                     id='resultP' 
                     style={{display:'none'}}>
                       
-                      "Total Greenhouse Gas Emissions from electricty (t CO2e): " {elecresult.result}
+                      "Total Greenhouse Gas Emissions from fuel (t CO2e): " {fuelresult.total} <br />
+                      "CO2 Emissions from fuel (t CO2e): " {fuelresult.CO2} <br />
+                      "CH4 Emissions from fuel (t CO2e): " {fuelresult.CH4} <br />
+                      "N2O Emissions from fuel (t CO2e): " {fuelresult.N2O} <br />
                     </p>
                 </Grid>
+                </>
+                : typevalue ==='Transport' ? 
+                <>
+                <Grid item xs={12} md={4}>
+                  <Autocomplete
+                    className={classes.text}
+                    disablePortal
+                    id="type"
+                    options={wastetype}
+                    sx={{ width: 300, mt: 2 }}
+                    renderInput={(params) => <TextField {...params} label="Type of Transport" />}
+                    onChange={(event) => { setWasteTypeValue(event.target.textContent); } } />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Autocomplete
+                    className={classes.text}
+                    disablePortal
+                    id="type"
+                    options={wastetype}
+                    sx={{ width: 300, mt: 2 }}
+                    renderInput={(params) => <TextField {...params} label="Type of Fuel" />}
+                    onChange={(event) => { setWasteTypeValue(event.target.textContent); } } />
+                </Grid>
+                <Grid item xs={12} md={6}>
+
+                <TextField
+                    className={classes.text}
+                    sx={{ width: 300, mt: 2 }}
+                    required
+                    id="outlined-required"
+                    label="Amount of Fuel"
+                    defaultValue="0"
+                    onChange={(event) => { setFuelValue(event.target.value); } } />
+
+                </Grid>
+
+                <Grid item xs={12} md={4}>
+                    <FormControl>
+                      <FormLabel id="elecunit-radio-buttons-group" className={classes.text} >Unit</FormLabel>
+                      <RadioGroup
+                          className={classes.text}
+                          aria-labelledby="elecunit-radio-buttons-group"    
+                          name="elecunit-radio-buttons-group"
+                          onChange={(event) => setFuelUnitValue(event.target.value)}
+                      >
+                          <FormControlLabel value="kL" control={<Radio />} label="kL" />
+                          <FormControlLabel value="GJ" control={<Radio />} label="GJ" />
+                          <FormControlLabel value="m3" control={<Radio />} label="m3" />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+
+                
+                          
                 </>
                 : null
             } 
