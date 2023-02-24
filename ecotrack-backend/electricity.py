@@ -75,9 +75,9 @@ def elecal(Q, state, unit):
         GJ_df = df.loc[df['unit'] == 'GJ']
         sc2 = GJ_df.loc[GJ_df['state'] == state, 'sc2'].iloc[0]
         sc3 = GJ_df.loc[GJ_df['state'] == state, 'sc3'].iloc[0]
-
+    print(Q)
     elec_e = float(Q) * (sc2 + sc3) / 1000
-    print(elec_e)
+
     return elec_e
 
 

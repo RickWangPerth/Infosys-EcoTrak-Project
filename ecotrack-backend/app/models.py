@@ -124,7 +124,7 @@ class FuelData(db.Model):
     CH4 = db.Column(db.Float, unique=False, nullable=False)
     N2O = db.Column(db.Float, unique=False, nullable=False)
 
-    def __init__(self, fuel, fuelTpye, fuelSubType, unit, total, CO2, CH4, N2O):
+    def __init__(self, id, fuel, fuelTpye, fuelSubType, unit, total, CO2, CH4, N2O):
         self.id = id
         self.fuel = fuel
         self.fuelTpye = fuelTpye
