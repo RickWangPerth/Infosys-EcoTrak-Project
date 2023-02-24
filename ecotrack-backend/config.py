@@ -14,6 +14,6 @@ from dotenv import load_dotenv
 class Config(object):
   SECRET_KEY = os.environ.get('SECRET_KEY') or 'sshh!'
 #   SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or prefix +os.path.join(basedir,'app.db')
-  SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost:5432/ecotrak'
+  SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@postgresdb:5432/ecotrak'
   SQLALCHEMY_TRACK_MODIFICATIONS = False
 
