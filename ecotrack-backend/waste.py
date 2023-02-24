@@ -1,10 +1,11 @@
 import psycopg2
 import pandas as pd
+import sys
 
 host = 'localhost'
 database = 'ecotrak'
 user = 'postgres'
-password = ''
+password = 'postgres'
 table_name = 'fuels_ef'
 column_names = ['id', 'sector', 'subsector', 'type', 'ratio',
                 'unit', 'sc1_co2', 'sc1_ch4', 'sc1_n20', 'sc1_sum', 'sc3_ef']
@@ -63,7 +64,7 @@ name = 'Food'
 solid_df = df.loc[df['subsector'] == 'Solid Waste']
 
 
-def solid_known(Q, EF):
+def solid_kg(Q, EF):
     EC = solid_df.loc[solid_df['name']
                       == name, 'value'].iloc[0]
     solid_e = Q * EF
@@ -75,7 +76,7 @@ n = 24
 m = 3
 
 
-def solid_unknown(n, m, CF, EF):
+def solid_m3(Q, m, CF, EF):
     CF = solid_df.loc[solid_df['name']
                       == name, 'ratio'].iloc[0]
     EC = solid_df.loc[solid_df['name']
@@ -86,15 +87,15 @@ def solid_unknown(n, m, CF, EF):
 
 # Waste water treatment
 
-def wastewater(P, EF):
-    waste_e = P * EF
-    return waste_e
+# def wastewater(P, EF):
+#     waste_e = P * EF
+#     return waste_e
 
 
-ex_11 = wastewater(20000, 0.3276)
-print("Total Greenhouse Gas Emissions from Example 11 (t CO2e): ", ex_11)
+# ex_11 = wastewater(20000, 0.3276)
+# print("Total Greenhouse Gas Emissions from Example 11 (t CO2e): ", ex_11)
 
-# Waste incineration
+# # Waste incineration
 
 
 def incineration(Q, EF):
@@ -104,9 +105,9 @@ def incineration(Q, EF):
     return waste_e
 
 
-def compost(Q, EF, R):
-    waste_e = Q * EF - R
-    return waste_e
+# def compost(Q, EF, R):
+#     waste_e = Q * EF - R
+#     return waste_e
 
 
 ex_13 = compost(0.13, 0.046, 0)

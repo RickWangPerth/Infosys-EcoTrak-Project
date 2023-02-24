@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from electricity import elecal
-# from solid_fuel import solidfuelcal
+from fuel import fuelcal
 # from liquid_fuel import liquidfuelcal
 # from gaseous_fuel import gaseousfuelcal
 from app.models import ElecData, FuelData, Electricityef, Fuelsef, Wasteef
@@ -88,7 +88,6 @@ def add_elecdata():
     db.session.commit()
     return elecdata_schema.jsonify(elecdata)
 
-
 @app.route('/sc2data/<state>/<unit>', methods=['GET'])
 def add_sc2data(state,unit):
     sc2 = Electricityef.query.with_entities(Electricityef.sc2).filter_by(state=state,unit=unit).all()
@@ -146,10 +145,11 @@ def send_solidwastetype():
 
 @app.route('/combinedwastetype', methods=['GET'])
 def send_combinedwastetype():
-    data = Wasteef.query.with_entities(Wasteef.name).filter_by(type='combined Waste').distinct().all()
+    data = Wasteef.query.with_entities(Wasteef.name).filter_by(type='Combined Waste').distinct().all()
     data_list = [item[0] for item in data]
     json_data = json.dumps(data_list)
     return  json_data
+
 # @app.route('/wastedata', methods=['POST'])
 # def add_wastedata():
 #     state = request.json['state']
@@ -168,27 +168,28 @@ def send_combinedwastetype():
 #     result = wastedata_schema.dump(data)
 #     return jsonify(result)
 
-# @app.route('/fueldata', methods=['POST'])
-# def add_fueldata():
-#     state = request.json['state']
-#     fuel = request.json['fuel']
-#     fuelType = request.json['fueltype']
-#     fuelSubType = request.json['fuelsubtype']
-#     unit = request.json['unit']
-#     if fuelType == 'solid':
-#         result = solidfuelcal(fuel,fuelSubType)
-#     # elif fuelType == 'liquid':
-#     #     result = liquidfuelcal(state,unit,fuel)
-#     # elif fuelType == 'gaseous':
-#     #     result = gaseousfuelcal(state,unit,fuel)
+@app.route('/fueldata', methods=['POST'])
+def add_fueldata():
+    fuel = request.json['fuel']
+    fuelType = request.json['fueltype']
+    fuelSubType = request.json['fuelsubtype']
+    unit = request.json['unit']
+    result = {}
+    total, CO2, CH4, N2O = fuelcal(fuel,fuelSubType,fuelType,unit)
+    result={total:total, CO2:CO2, CH4:CH4, N2O:N2O}
+    return jsonify(result)
+    # total = result[0]
+    # CO2 = result[1]
+    # CH4 = result[2]
+    # N2O = result[3]
+    # fueldata = FuelData(fuel, fuelType, fuelSubType, unit, total, CO2, CH4, N2O)
 
-#     fueldata = FuelData(state, fuel, fuelType, fuelSubType, unit, result)
-#     db.session.add(fueldata)
-#     db.session.commit()
-#     return fueldata_schema.jsonify(fueldata)
+    # db.session.add(fueldata)
+    # db.session.commit()
+    # return fueldata_schema.jsonify(fueldata)
 
-# @app.route('/fuelresult', methods=['GET'])
-# def send_fuelresult():
-#     data = FuelData.query.order_by(FuelData.id.desc()).first()
-#     result = fueldata_schema.dump(data)
-#     return jsonify(result)
+@app.route('/fuelresult', methods=['GET'])
+def send_fuelresult():
+    data = FuelData.query.order_by(FuelData.id.desc()).first()
+    result = fueldata_schema.dump(data)
+    return jsonify(result)

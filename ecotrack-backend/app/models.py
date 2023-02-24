@@ -113,22 +113,28 @@ class ElecData(db.Model):
 
 class FuelData(db.Model):
     __tablename__ = "fueldata"
+
     id = db.Column(db.Integer, primary_key=True)
-    state = db.Column(db.String(80), unique=False, nullable=False)
     fuel = db.Column(db.Float, unique=False, nullable=False)
     fuelTpye = db.Column(db.String(80), unique=False, nullable=False)
     fuelSubType = db.Column(db.String(80), unique=False, nullable=False)
     unit = db.Column(db.String(80), unique=False, nullable=False)
-    result = db.Column(db.Float, unique=False, nullable=False)
+    total = db.Column(db.Float, unique=False, nullable=False)
+    CO2 = db.Column(db.Float, unique=False, nullable=False)
+    CH4 = db.Column(db.Float, unique=False, nullable=False)
+    N2O = db.Column(db.Float, unique=False, nullable=False)
 
-    def __init__(self, state, fuel, fuelType ,fuelSubType, unit, result):
-        self.state = state
+    def __init__(self, fuel, fuelTpye, fuelSubType, unit, total, CO2, CH4, N2O):
+        self.id = id
         self.fuel = fuel
-        self.fuelType = fuelType
+        self.fuelTpye = fuelTpye
         self.fuelSubType = fuelSubType
         self.unit = unit
-        self.result = result
-       
+        self.total = total
+        self.CO2 = CO2
+        self.CH4 = CH4
+        self.N2O = N2O
 
     def __repr__(self):
-        return '[State:{}, Fuel:{}, FuelType:{}, FuelSubType:{}, Unit:{}, Result:{}]'.format(self.state, self.fuel,self.fuelType, self.fuelSubType, self.unit, self.result )
+        return '[Fuel:{}, FuelType:{}, FuelSubType:{}, Unit:{}, Total:{}, CO2:{}, CH4:{}, N2O:{}]'.format(self.fuel, self.fuelTpye, self.fuelSubType, self.unit, self.total, self.CO2, self.CH4, self.N2O)
+

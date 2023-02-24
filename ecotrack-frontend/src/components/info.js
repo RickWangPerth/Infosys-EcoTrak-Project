@@ -105,6 +105,7 @@ const calType = [
     {label:'Electricity'},
     {label:'Waste'},
     {label:'Fuel'},
+    {label:'Transport'},
   ]
 
 // const typeFuel = [
@@ -266,8 +267,6 @@ export default function Info() {
     const [elecresult, setElecResult] = useState([]);
 
 
-
-
     // Waste value
     const [wastevalue, setWasteValue] = useState([]);
     const [solidwastevalue, setSolidWasteValue] = useState([]);
@@ -280,6 +279,7 @@ export default function Info() {
     // Fuel value
     const [fuelvalue, setFuelValue] = useState([]);
     const [fuelsubtypevalue, setFuelSubTypeValue] = useState([]);
+    const [fuelunitvalue, setFuelUnitValue] = useState([]);
     const [fuelresult, setFuelResult] = useState([]);
     const [fueltypevalue, setFuelTypeValue] = useState([]);
     const [s2, setS2] = useState([]);
@@ -343,15 +343,16 @@ export default function Info() {
         },
           body: JSON.stringify({
               country: countryvalue,
-              state: statevalue,
-              fueltype: typevalue,
+              fueltype: fueltypevalue,
               fuelsubtype: fuelsubtypevalue,
-              unit: unitvalue,
+              unit: fuelunitvalue,
               fuel: fuelvalue
+
           }),
       }).then(resp => resp.json())
       .then(resp => console.log(resp))
       .catch(err => console.log(err)) 
+      console.log(fuelvalue, fuelsubtypevalue, fueltypevalue, fuelunitvalue);
 
       fetch('http://localhost:5000/fuelresult',{
           method: 'GET',
@@ -362,7 +363,7 @@ export default function Info() {
             'Access-Control-Allow-Origin': 'http://localhost:3000',
           }
         }).then(resp => resp.json())
-        .then(resp =>  setElecResult(resp))
+        .then(resp =>  setFuelResult(resp))
         .catch(err => console.log(err)) 
 
         var x = document.getElementById("resultP")
@@ -584,6 +585,19 @@ export default function Info() {
                     onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 
                     />
                   </Grid>
+                  <Grid item xs={12} md={4}>
+                    <FormControl>
+                      <FormLabel id="elecunit-radio-buttons-group" className={classes.text} >Unit</FormLabel>
+                      <RadioGroup
+                          className={classes.text}
+                          aria-labelledby="elecunit-radio-buttons-group"    
+                          name="elecunit-radio-buttons-group"
+                          onChange={(event) => setFuelUnitValue(event.target.value)}
+                      >
+                          <FormControlLabel value="t" control={<Radio />} label="t" />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
                   </>
                   : fueltypevalue==='Liquid Fuel' ?
                   <>
@@ -598,6 +612,20 @@ export default function Info() {
                     onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 
                     />
                   </Grid>
+                  <Grid item xs={12} md={4}>
+                    <FormControl>
+                      <FormLabel id="elecunit-radio-buttons-group" className={classes.text} >Unit</FormLabel>
+                      <RadioGroup
+                          className={classes.text}
+                          aria-labelledby="elecunit-radio-buttons-group"    
+                          name="elecunit-radio-buttons-group"
+                          onChange={(event) => setFuelUnitValue(event.target.value)}
+                      >
+                          <FormControlLabel value="kL" control={<Radio />} label="kL" />
+                          <FormControlLabel value="m3" control={<Radio />} label="m3" />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
                   </>
                   : fueltypevalue==='Gaseous Fuel' ?
                   <>
@@ -611,6 +639,19 @@ export default function Info() {
                     renderInput={(params) => <TextField {...params} label="Tpye of Gas Fuel" />}
                     onChange={(event) => {setFuelSubTypeValue(event.target.textContent)}} 
                     />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <FormControl>
+                      <FormLabel id="elecunit-radio-buttons-group" className={classes.text} >Unit</FormLabel>
+                      <RadioGroup
+                          className={classes.text}
+                          aria-labelledby="elecunit-radio-buttons-group"    
+                          name="elecunit-radio-buttons-group"
+                          onChange={(event) => setFuelUnitValue(event.target.value)}
+                      >
+                          <FormControlLabel value="m3" control={<Radio />} label="m3" />
+                      </RadioGroup>
+                    </FormControl>
                   </Grid>
                   </>
                   : null

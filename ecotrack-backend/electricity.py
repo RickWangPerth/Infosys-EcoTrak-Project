@@ -5,7 +5,7 @@ import sys
 host = 'localhost'
 database = 'ecotrak'
 user = 'postgres'
-password = 'pB1@ckburn'
+password = 'postgres'
 table_name = 'electricityef'
 column_names = ['id', 'sector', 'state', 'sc2', 'sc3', 'unit']
 
