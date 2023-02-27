@@ -164,3 +164,16 @@ def aviation(Q, fuel_type, unit):
     total_e = float(Q) * EC * (sc1_sum) / 1000
 
     return total_e, CO2_e, CH4_e, N2O_e
+
+
+def transportcal(transport_type, Q, fuel_type, unit):
+    if transport_type == 'Cars and light commercial vehicles':
+        waste_e = cars(Q, fuel_type, unit)
+    elif transport_type == 'Heavy duty vehicles':
+        waste_e = heavy(Q, fuel_type, unit)
+    elif transport_type == 'Light duty vehicles':
+        waste_e = light(Q, fuel_type, unit)
+    elif transport_type == 'Aviation':
+        waste_e = aviation(Q, fuel_type, unit)
+
+    return waste_e
