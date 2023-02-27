@@ -8,8 +8,6 @@ import Result from '../components/result';
 import Footer from '../components/footer';
 import { makeStyles } from '@mui/styles';
 
-
-
 const useStyles = makeStyles({
   appMain:{
     backgroundColor: '#F1F2ED',

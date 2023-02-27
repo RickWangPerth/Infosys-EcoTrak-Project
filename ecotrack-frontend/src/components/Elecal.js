@@ -6,17 +6,9 @@ import { useState, useEffect } from 'react';
 import { Grid, Button, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 const calStyle = makeStyles({
-    cal: {
-         display: 'absolute',
-         position: 'absolute',
-         width: '100%',
-         height: '100%',
-         backgroundColor: '#F1F2ED',          
-     },
+
      text:{
       position: 'relative',
-      top: '10px',
-      left: '30px',
      },
   })
 
@@ -33,11 +25,9 @@ export default function Elecal(countryvalue,typevalue) {
         .catch(error => console.log(error));
     }, []);
 
-    console.log(state)
 
-    // const [countryvalue, setCountryValue] = useState([]);
     const [statevalue, setStateValue] = useState([]);
-    // const [typevalue, setTypeValue] = useState([]);
+
 
     // Electricity value
       const [elecvalue, setElecValue] = useState([]);
@@ -81,7 +71,7 @@ export default function Elecal(countryvalue,typevalue) {
           var result = document.getElementById("resultP")
             result.style.display = "block";
   
-          fetch(`http://127.0.0.1:5000/sc2data/${statevalue}/${unitvalue}`,{
+        fetch(`http://127.0.0.1:5000/sc2data/${statevalue}/${unitvalue}`,{
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -93,7 +83,7 @@ export default function Elecal(countryvalue,typevalue) {
           .then(resp =>  setS2(resp))
           .catch(err => console.log(err))
   
-          fetch(`http://127.0.0.1:5000/sc3data/${statevalue}/${unitvalue}`,{
+        fetch(`http://127.0.0.1:5000/sc3data/${statevalue}/${unitvalue}`,{
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -109,7 +99,6 @@ export default function Elecal(countryvalue,typevalue) {
 
   return (
     <>
-
     <Grid item xs={12} md={12} className={classes.text}>
       <p>According to the guidance of the <a href='https://www.dcceew.gov.au/sites/default/files/documents/national-greenhouse-accounts-factors-2022.pdf' target='_blank' rel="noreferrer"> Australian National Greenhouse Accounts Factors </a></p>
       <p>

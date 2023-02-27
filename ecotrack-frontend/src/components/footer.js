@@ -1,37 +1,34 @@
 import React from 'react';
 import ISLogo from "../img/infosyslogo.png";
 import { makeStyles } from '@mui/styles';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+import { Link, Box, Typography } from '@mui/material';
 
 
 const footerStyle = makeStyles({
     footer: {
-        display: 'absolute',
-        position: 'fixed',
+        display: 'flex',
+        position: 'float',
         bottom: '0px',
         left: '0px',
         margin: 'auto',
         textAlign: 'center',
         backgroundColor: '#F1F2ED',
     },
-
     copyright: {
-        position: 'fixed',
+        position: 'felx',
         bottom: '0px',
         textAlign: 'center',
         width: '100%',
 
     },
     logodiv:{
-        position: 'fixed',
+        position: 'flex',
         bottom: '5px',
         textAlign: 'center',
         width: '100%',
-
     },
     logo:{
-        position: 'sticky',
+        position: 'flex',
         width: '100px',
         margin:'auto',
     }
@@ -42,7 +39,7 @@ function Copyright(props) {
       <Typography variant="body2" color="text.secondary" align="center" {...props}>
         {'Copyright © '}
         <Link color="inherit" href="https://infosys.com/">
-          Infosys Eco Track Project
+          Infosys EcoTrak Project
         </Link>{' '}
         {2023}
         {'.'}
@@ -60,8 +57,7 @@ export default function Footer() {
             </div>
             <div>
                 <Copyright className={classes.copyright} sx={{ mt: 5 }}/>
-            </div>
-            
+            </div> 
         </div>
     </>
   )
