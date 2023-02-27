@@ -1,13 +1,14 @@
 import psycopg2
 import pandas as pd
+import sys
 
 host = 'localhost'
 database = 'ecotrak'
 user = 'postgres'
-password = ''
-table_name = 'fuels_ef'
-column_names = ['id', 'sector', 'subsector', 'type', 'ratio',
-                'unit', 'sc1_co2', 'sc1_ch4', 'sc1_n20', 'sc1_sum', 'sc3_ef']
+password = 'postgres'
+table_name = 'wastes_ef'
+column_names = ['id', 'name', 'unit', 'type', 'value',
+                'scope', 'ratio', 'treatment']
 
 # Connection parameters
 param_dic = {
@@ -58,56 +59,67 @@ df = postgresql_to_dataframe(
     conn, "select * from " + table_name, column_names)
 df.head()
 
-name = 'Food'
+#name = 'Food'
 # Solid Waste
-solid_df = df.loc[df['subsector'] == 'Solid Waste']
+solid_df = df.loc[df['type'] == 'Solid Waste']
 
 
-def solid_known(Q, EF):
-    EC = solid_df.loc[solid_df['name']
+def solid_kg(Q, name):
+    EF = solid_df.loc[solid_df['name']
                       == name, 'value'].iloc[0]
     solid_e = Q * EF
     return solid_e
 
 
 # Solid Waste - weight unknown
-n = 24
-m = 3
+# n = 24
+# m = 3
 
 
-def solid_unknown(n, m, CF, EF):
+def solid_m3(Q, n, name):
     CF = solid_df.loc[solid_df['name']
                       == name, 'ratio'].iloc[0]
-    EC = solid_df.loc[solid_df['name']
+    EF = solid_df.loc[solid_df['name']
                       == name, 'value'].iloc[0]
-    solid_e = n * m * CF * EF
+    solid_e = Q * n * CF * EF
     return solid_e
 
 
 # Waste water treatment
 
-def wastewater(P, EF):
-    waste_e = P * EF
-    return waste_e
+# def wastewater(P, EF):
+#     waste_e = P * EF
+#     return waste_e
 
 
-ex_11 = wastewater(20000, 0.3276)
-print("Total Greenhouse Gas Emissions from Example 11 (t CO2e): ", ex_11)
+# ex_11 = wastewater(20000, 0.3276)
+# print("Total Greenhouse Gas Emissions from Example 11 (t CO2e): ", ex_11)
 
-# Waste incineration
+# # Waste incineration
 
 
-def incineration(Q, EF):
+def incineration(Q, name):
     EF = solid_df.loc[solid_df['name']
                       == name, 'value'].iloc[0]
     waste_e = Q * EF
     return waste_e
 
 
-def compost(Q, EF, R):
-    waste_e = Q * EF - R
+# def compost(Q, EF, R):
+#     waste_e = Q * EF - R
+#     return waste_e
+
+
+# ex_13 = compost(0.13, 0.046, 0)
+# print("Total Greenhouse Gas Emissions from Example 13    (t CO2e): ", ex_13)
+
+def wastecal(Q, n, unit, type, subtype):
+    if type == 'Solid Waste':
+        if unit == 'kg':
+            waste_e = solid_kg(Q, n, subtype)
+        elif unit == 'm3':
+            waste_e = solid_m3(Q, n, subtype)
+
+    elif type == 'Combined Waste':
+        waste_e = incineration(Q, subtype)
     return waste_e
-
-
-ex_13 = compost(0.13, 0.046, 0)
-print("Total Greenhouse Gas Emissions from Example 13    (t CO2e): ", ex_13)

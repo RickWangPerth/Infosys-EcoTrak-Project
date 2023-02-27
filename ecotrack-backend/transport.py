@@ -4,7 +4,7 @@ import pandas as pd
 host = 'localhost'
 database = 'ecotrakv2'
 user = 'postgres'
-password = 'pB1@ckburn'
+password = ''
 table_name = 'transport_ef'
 column_names = ['id', 'transport_type', 'fuel_type', 'unit', 'ratioGJperKL',
                 'sc1_co2', 'sc1_ch4', 'sc1_n20', 'sc1_sum', 'sc3_ef']

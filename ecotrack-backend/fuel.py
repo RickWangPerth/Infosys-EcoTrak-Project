@@ -1,10 +1,11 @@
 import psycopg2
 import pandas as pd
+import sys
 
 host = 'localhost'
 database = 'ecotrak'
 user = 'postgres'
-password = 'p'
+password = 'postgres'
 table_name = 'fuels_ef'
 column_names = ['id', 'sector', 'subsector', 'type', 'ratio',
                 'unit', 'sc1_co2', 'sc1_ch4', 'sc1_n20', 'sc1_sum', 'sc3_ef']
@@ -57,6 +58,14 @@ column_names = column_names
 df = postgresql_to_dataframe(
     conn, "select * from " + table_name, column_names)
 df.head()
+def fuelcal(Q,type, subsector, unit):
+    if subsector == 'Solid Fuel':
+        solidfuelcal(Q, type)
+    elif subsector == 'Liquid Fuel':
+        liquidfuelcal(Q, type, unit)
+    elif subsector == 'Gas Fuel':
+        gaseousfuelcal(Q, type, unit)
+   
 
 # Solid Fuel Calculation
 solid_df = df.loc[df['subsector'] == 'Solid Fuel']
@@ -110,6 +119,7 @@ def liquidfuelcal(Q, type, unit):
         CH4_e = float(Q) * EC * (sc1_ch4) / 1000
         N2O_e = float(Q) * EC * (sc1_n20) / 1000
         total_e = float(Q) * EC * (sc1_sum + sc3_ef) / 1000
+    print(total_e, CO2_e, CH4_e, N2O_e)    
 
     return total_e, CO2_e, CH4_e, N2O_e
 
@@ -121,8 +131,7 @@ Q = 1150
 type = 'Liquefied natural gas'
 unit = 'kL'
 
-
-def gaseousfuelcal(Q, type):
+def gaseousfuelcal(Q, type, unit):
     if unit == 'GJ':
         EC = 1
     else:
@@ -142,5 +151,17 @@ def gaseousfuelcal(Q, type):
     CH4_e = float(Q) * EC * (sc1_ch4) / 1000
     N2O_e = float(Q) * EC * (sc1_n20) / 1000
     total_e = float(Q) * EC * (sc1_sum) / 1000
+    print(total_e, CO2_e, CH4_e, N2O_e)
+
+    return total_e, CO2_e, CH4_e, N2O_e
+
+
+def fuelcal(Q, type, subsector, unit):
+    if subsector == 'Solid Fuel':
+        total_e, CO2_e, CH4_e, N2O_e = solidfuelcal(Q, type)
+    elif subsector == 'Liquid Fuel':
+        total_e, CO2_e, CH4_e, N2O_e = liquidfuelcal(Q, type, unit)
+    elif subsector == 'Gaseous Fuel':
+       total_e, CO2_e, CH4_e, N2O_e = gaseousfuelcal(Q, type, unit)
 
     return total_e, CO2_e, CH4_e, N2O_e
