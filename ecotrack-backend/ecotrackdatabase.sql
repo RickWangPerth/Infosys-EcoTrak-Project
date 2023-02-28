@@ -21,6 +21,43 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: US_Emissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."US_Emissions" (
+    id integer NOT NULL,
+    "eGRID_Subregion" character varying(80) NOT NULL,
+    sc_co2 double precision NOT NULL,
+    sc_ch4 double precision NOT NULL,
+    sc_n2o double precision NOT NULL
+);
+
+
+ALTER TABLE public."US_Emissions" OWNER TO postgres;
+
+--
+-- Name: US_Emissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public."US_Emissions_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."US_Emissions_id_seq" OWNER TO postgres;
+
+--
+-- Name: US_Emissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public."US_Emissions_id_seq" OWNED BY public."US_Emissions".id;
+
+
+--
 -- Name: elecdata; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -152,6 +189,43 @@ CREATE TABLE public.transport_ef (
 ALTER TABLE public.transport_ef OWNER TO postgres;
 
 --
+-- Name: us_emissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.us_emissions (
+    id integer NOT NULL,
+    "eGRID_Subregion" character varying(80) NOT NULL,
+    sc_co2 double precision NOT NULL,
+    sc_ch4 double precision NOT NULL,
+    sc_n2o double precision NOT NULL
+);
+
+
+ALTER TABLE public.us_emissions OWNER TO postgres;
+
+--
+-- Name: us_emissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.us_emissions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.us_emissions_id_seq OWNER TO postgres;
+
+--
+-- Name: us_emissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.us_emissions_id_seq OWNED BY public.us_emissions.id;
+
+
+--
 -- Name: wastedata; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -207,6 +281,13 @@ CREATE TABLE public.wastes_ef (
 ALTER TABLE public.wastes_ef OWNER TO postgres;
 
 --
+-- Name: US_Emissions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."US_Emissions" ALTER COLUMN id SET DEFAULT nextval('public."US_Emissions_id_seq"'::regclass);
+
+
+--
 -- Name: elecdata id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -221,10 +302,25 @@ ALTER TABLE ONLY public.fueldata ALTER COLUMN id SET DEFAULT nextval('public.fue
 
 
 --
+-- Name: us_emissions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.us_emissions ALTER COLUMN id SET DEFAULT nextval('public.us_emissions_id_seq'::regclass);
+
+
+--
 -- Name: wastedata id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.wastedata ALTER COLUMN id SET DEFAULT nextval('public.wastedata_id_seq'::regclass);
+
+
+--
+-- Data for Name: US_Emissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."US_Emissions" (id, "eGRID_Subregion", sc_co2, sc_ch4, sc_n2o) FROM stdin;
+\.
 
 
 --
@@ -234,6 +330,11 @@ ALTER TABLE ONLY public.wastedata ALTER COLUMN id SET DEFAULT nextval('public.wa
 COPY public.elecdata (id, state, elec, unit, result) FROM stdin;
 1	New South Wales and Australian Capital Territory	100	kWh	0.079
 2	New South Wales 	1999	kWh	1.57921
+3	New South Wales 	221	kWh	0.17459
+4	New South Wales 	21232	kWh	16.773280000000003
+5	New South Wales 	21232	kWh	16.773280000000003
+6	New South Wales 	21232	kWh	16.773280000000003
+7	New South Wales 	21232	kWh	16.773280000000003
 \.
 
 
@@ -367,6 +468,42 @@ COPY public.transport_ef (id, transport_type, fuel_type, unit, "ratioGJperKL", s
 
 
 --
+-- Data for Name: us_emissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.us_emissions (id, "eGRID_Subregion", sc_co2, sc_ch4, sc_n2o) FROM stdin;
+1	AKGD (ASCC Alaska Grid)	1097.6	0.1	0.014
+2	AKMS (ASCC Miscellaneous)	534.1	0.027	0.005
+3	AZNM (WECC Southwest)	846.6	0.054	0.007
+4	CAMX (WECC California)	513.5	0.032	0.004
+5	ERCT (ERCOT All)	818.6	0.052	0.007
+6	FRCC (FRCC All)	835.1	0.049	0.006
+7	HIMS (HICC Miscellaneous)	1143.2	0.11	0.017
+8	HIOA (HICC Oahu)	1653	0.178	0.027
+9	MROE (MRO East)	1526.4	0.139	0.02
+10	MROW (MRO West)	979.5	0.104	0.015
+11	NEWE (NPCC New England)	528.2	0.074	0.01
+12	NWPP (WECC Northwest)	600	0.056	0.008
+13	NYCW (NPCC NYC/Westchester)	634.6	0.022	0.003
+14	NYLI (NPCC Long Island)	1203.9	0.138	0.018
+15	NYUP (NPCC Upstate NY)	233.5	0.016	0.002
+16	PRMS (Puerto Rico Miscellaneous)	1602.2	0.085	0.014
+17	RFCE (RFC East)	652.5	0.045	0.006
+18	RFCM (RFC Michigan)	1153.1	0.101	0.014
+19	RFCW (RFC West)	985	0.086	0.012
+20	RMPA (WECC Rockies)	1144.8	0.101	0.014
+21	SPNO (SPP North)	954	0.1	0.014
+22	SPSO (SPP South)	931.8	0.06	0.009
+23	SRMV (SERC Mississippi Valley)	740.4	0.032	0.004
+24	SRMW (SERC Midwest)	1480.7	0.156	0.023
+25	SRSO (SERC South)	860.2	0.06	0.009
+26	SRTV (SERC Tennessee Valley)	834.2	0.075	0.011
+27	SRVC (SERC Virginia/Carolina)	623.1	0.05	0.007
+28	US Average	818.3	0.065	0.009
+\.
+
+
+--
 -- Data for Name: wastedata; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -412,10 +549,17 @@ CW-5	Municipal Solid Waste	t	Combined Waste	5.36	\N	1	incineration
 
 
 --
+-- Name: US_Emissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."US_Emissions_id_seq"', 1, false);
+
+
+--
 -- Name: elecdata_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.elecdata_id_seq', 2, true);
+SELECT pg_catalog.setval('public.elecdata_id_seq', 7, true);
 
 
 --
@@ -426,10 +570,25 @@ SELECT pg_catalog.setval('public.fueldata_id_seq', 1, false);
 
 
 --
+-- Name: us_emissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.us_emissions_id_seq', 1, false);
+
+
+--
 -- Name: wastedata_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.wastedata_id_seq', 1, false);
+
+
+--
+-- Name: US_Emissions US_Emissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."US_Emissions"
+    ADD CONSTRAINT "US_Emissions_pkey" PRIMARY KEY (id);
 
 
 --
@@ -470,6 +629,14 @@ ALTER TABLE ONLY public.fuels_ef
 
 ALTER TABLE ONLY public.transport_ef
     ADD CONSTRAINT transport_ef_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: us_emissions us_emissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.us_emissions
+    ADD CONSTRAINT us_emissions_pkey PRIMARY KEY (id);
 
 
 --
