@@ -5,16 +5,16 @@ import { useState, useEffect } from 'react';
 import { Grid, Button, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 import Fuelicon from '../img/fuel.png';
-
+import FuelEq from '../img/equations/fuelEq.png';
 const calStyle = makeStyles({
-
-     text:{
-      position: 'relative',
-      top: '10px',
-
-     },
-  
-  })
+  text:{
+  position: 'relative',
+  top: '10px',
+  },
+  p:{
+    lineHeight: '1.5',
+  }
+})
 
 export default function AUFuelcal(countryvalue,typevalue) {
     const classes = calStyle();
@@ -132,8 +132,39 @@ export default function AUFuelcal(countryvalue,typevalue) {
     <Grid item xs={12} md={12} mt={5}>
       <img  src={Fuelicon} alt="fuel icon" width='80px'/>
     </Grid>
+    <Grid item xs={12} md={6} padding={5}>
+      <h2>Combustion of Fuel</h2>
+  
+      <p className={classes.p}>
+        The National Greenhouse Gas Inventory (NGGI) produced by the Australian government reports that fuel combustion is a major contributor to greenhouse gas emissions in Australia. <br />
+        This encompasses the burning of fuels for energy production, transportation, and other purposes.  <br />
+        The combustion of fossil fuels, such as coal, oil, and gas, releases substantial quantities of carbon dioxide and other greenhouse gases into the atmosphere,  <br />
+        which exacerbate climate change. As such, reducing emissions from fuel combustion is crucial for mitigating climate change impacts in Australia.  <br />
+        This can be achieved through a variety of measures, such as promoting the use of renewable energy sources, enhancing energy efficiency,  <br />
+        and advocating for sustainable modes of transportation. <br />
+      </p>
+    </Grid>
+    <Grid item xs={12} md={12} className={classes.text}>
+    <p>According to the guidance of the <a href='https://www.dcceew.gov.au/sites/default/files/documents/national-greenhouse-accounts-factors-2022.pdf' target='_blank' rel="noreferrer"> Australian National Greenhouse Accounts Factors </a></p>
+      <p>
+      The following formula can be used to estimate greenhouse gas emissions from the combustion of fuel:
+      </p>
+      <img src={ FuelEq } alt='calculation method' width='300px'/>
+      <p className={classes.p}>
+        <strong>Where:</strong> <br />
+        <strong>t CO2-e</strong> is the emissions measured in CO2-e tonnes.<br />
 
-    <Grid item xs={12} md={12} mt={5}>
+        <strong>Q</strong> is the quantity of fuel type measured in tonnes or gigajoules. <br />
+
+        <strong>EC</strong> is the energy content factor of the fuel (gigajoules per tonne). <br />
+
+        <strong>EF1</strong> is the scope 1 emission factor, in kilograms of CO2-e per gigajoule. <br />
+        
+        <strong>EF3</strong> is the scope 3 emission factor, in kilograms of CO2-e per gigajoule. <br />
+      </p>
+    </Grid>
+
+    <Grid item xs={12} md={12} mt={5} >
     <FormControl>
     <Autocomplete
       className={classes.text}

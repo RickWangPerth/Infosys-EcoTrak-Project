@@ -1,17 +1,12 @@
 import React from 'react'
 import { useState } from 'react';
 import { Autocomplete, Grid, TextField } from '@mui/material';
-import AUElecal from './AUElecal';
-import AUWastecal from './AUWastecal';
-import AUFuelcal from './AUFuelcal';
-import AUTranscal from './AUTranscal';
+import USElecal from './USElecal';
+
 
 
 const calType = [
     {label:'Electricity'},
-    {label:'Waste'},
-    {label:'Fuel'},
-    {label:'Transport'},
   ]
 
 export default function AUcal(countryvalue) {
@@ -31,13 +26,7 @@ export default function AUcal(countryvalue) {
       </Grid>
         {
         typevalue === 'Electricity' ? 
-        <AUElecal countryvalue={countryvalue} typevalue={typevalue} />
-        : typevalue ==='Waste' ? 
-        <AUWastecal countryvalue={countryvalue} typevalue={typevalue} />
-        : typevalue ==='Fuel' ?
-        <AUFuelcal countryvalue={countryvalue} typevalue={typevalue} />
-          : typevalue ==='Transport' ? 
-        <AUTranscal countryvalue={countryvalue} typevalue={typevalue} />
+        <USElecal countryvalue={countryvalue} typevalue={typevalue} />
         : null
         } 
     </>

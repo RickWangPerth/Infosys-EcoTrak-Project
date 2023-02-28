@@ -18,7 +18,7 @@ const calStyle = makeStyles({
     }
   })
 
-export default function AUElecal(countryvalue,typevalue) {
+export default function USElecal(countryvalue,typevalue) {
     const classes = calStyle();
     const resultDisplay = 'none';
 

@@ -6,13 +6,14 @@ import AUFlag from '../img/australia.png';
 import USFlag from '../img/us.png';
 
 import AUcal from './AUcal';
+import UScal from './UScal';
 
 const calStyle = makeStyles({
   cal: {
     display: 'absolute',
     position: 'absolute',
     width: '100%',
-    height: '200vh',
+    height: '360vh',
     backgroundColor: '#F1F2ED',          
    },
    text:{
@@ -38,7 +39,8 @@ export default function Info() {
         direction="column"
         alignItems="center"
         justifyContent="center"
-
+        padding={5}
+        spacing={2}
         >
         <Grid item xs={12} md={12}>
           <p className={classes.text}>
@@ -71,6 +73,7 @@ export default function Info() {
             <Grid item xs={12} md={4} mt={2}>
               <img src={USFlag} alt='us' width='80px' />
             </Grid>
+            <UScal countryvalue={countryvalue} />
             </>
             : null
           }
