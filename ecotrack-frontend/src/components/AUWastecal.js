@@ -15,12 +15,12 @@ const calStyle = makeStyles({
      text:{
       position: 'relative',
       top: '10px',
-      left: '30px',
+
      },
   
   })
 
-export default function WasteCal(countryvalue,typevalue) {
+export default function AUWasteCal(countryvalue,typevalue) {
     const classes = calStyle();
       // Waste type
       const [wastetype, setWastetype] = useState([]);

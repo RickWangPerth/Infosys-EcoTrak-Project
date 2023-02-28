@@ -15,13 +15,12 @@ const calStyle = makeStyles({
      text:{
       position: 'relative',
       top: '10px',
-      left: '30px',
      },
   
   })
 
 
-export default function Transcal(countryvalue,typevalue) {
+export default function AUTranscal(countryvalue,typevalue) {
     const classes = calStyle();
     //trans type
     const [transtype, setTransType] = useState([]);

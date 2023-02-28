@@ -4,33 +4,27 @@ import { makeStyles } from '@mui/styles';
 import { Link, Box, Typography } from '@mui/material';
 
 
+
 const footerStyle = makeStyles({
     footer: {
-        display: 'flex',
-        position: 'float',
         bottom: '0px',
-        left: '0px',
         margin: 'auto',
         textAlign: 'center',
         backgroundColor: '#F1F2ED',
+        position: 'fixed',
+        width: '100%',
     },
+
     copyright: {
-        position: 'felx',
+        position: 'fixed',
         bottom: '0px',
         textAlign: 'center',
         width: '100%',
+        
 
     },
-    logodiv:{
-        position: 'flex',
-        bottom: '5px',
-        textAlign: 'center',
-        width: '100%',
-    },
     logo:{
-        position: 'flex',
-        width: '100px',
-        margin:'auto',
+      width: '100px',
     }
 })
 
@@ -51,14 +45,11 @@ export default function Footer() {
     const classes = footerStyle();
   return (
     <>
-        <div className={classes.footer}>
-            <div className={classes.logodiv}>   
-                    <img src={ISLogo} alt='infoysyslogo' className={classes.logo}/>
-            </div>
-            <div>
-                <Copyright className={classes.copyright} sx={{ mt: 5 }}/>
-            </div> 
-        </div>
+    <Typography variant="body2" align="center" className={classes.footer}>
+      <img src={ISLogo} alt='infoysyslogo' className={classes.logo}/>
+      <Copyright className={classes.copyright} sx={{ mt: 5 }}/>
+    </Typography>
+    
     </>
   )
 }

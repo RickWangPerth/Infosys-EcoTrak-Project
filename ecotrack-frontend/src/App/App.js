@@ -28,7 +28,7 @@ function App() {
             <Route path="/waste" element={<Waste />} />
             <Route path="/result" element={<Result />} />
           </Routes>
-          <Footer />
+        <Footer />
       </BrowserRouter>
     </div>
   );

@@ -1,21 +1,24 @@
 import * as React from 'react';
 import { makeStyles } from '@mui/styles';
-import { Autocomplete, Grid, TextField, Typography,Box } from '@mui/material';
+import { Autocomplete, Grid, TextField} from '@mui/material';
+import { useState} from 'react';
+import AUFlag from '../img/australia.png';
+import USFlag from '../img/us.png';
 
-import { useState,useEffect } from 'react';
-import Auscal from './Auscal';
+import AUcal from './AUcal';
 
 const calStyle = makeStyles({
   cal: {
     display: 'absolute',
     position: 'absolute',
+    width: '100%',
+    height: '200vh',
     backgroundColor: '#F1F2ED',          
    },
    text:{
     display: 'flex',
     position: 'relative',
-    margin: '10px, 100px, 100px, 100px',
-    padding: '10px, 10px, 10px, 10px',
+    width: '100%',
     textAlign: 'center',
    },
 
@@ -31,36 +34,47 @@ export default function Info() {
     const [countryvalue, setCountryValue] = useState([]);
   return (
     <div className={classes.cal} >
-        
-        <Grid container 
-          spacing={2}
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-          >
-            <Grid item xs={12} md={12}>
-              <p>
-                Welcome to EcoTrak, the powerful and easy-to-use greenhouse gas (GHG) calculator designed to help you calculate your carbon footprint in Australia and the United States. <br />
-                Whether you're an individual, a business, or a community, EcoTrak can help you identify and reduce your GHG emissions.
-              </p>
-            </Grid>
-            <Grid item xs={12} md={4}>
-                <Autocomplete
-                    disablePortal
-                    id="country"
-                    options={countryName}
-                    sx={{ width: 300, mt: 2 }}
-                    renderInput={(params) => <TextField {...params} label="Country" />}
-                    onChange={(event) => {setCountryValue(event.target.textContent)}} 
-                    />
-            </Grid>
-            {
-                countryvalue === 'Australia' ?
-                <Auscal countryvalue={countryvalue} />
-                : null
-            }
-        </Grid>
-    </div>
+      <Grid container 
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
 
+        >
+        <Grid item xs={12} md={12}>
+          <p className={classes.text}>
+            Welcome to EcoTrak, the powerful and easy-to-use greenhouse gas (GHG) calculator designed to help you calculate your carbon footprint in Australia and the United States.
+          </p>
+          <p className={classes.text}>
+            Whether you're an individual, a business, or a community, EcoTrak can help you identify and reduce your GHG emissions.
+          </p>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Autocomplete
+              disablePortal
+              id="country"
+              options={countryName}
+              sx={{ width: 300, mt: 2 }}
+              renderInput={(params) => <TextField {...params} label="Country" />}
+              onChange={(event) => {setCountryValue(event.target.textContent)}} 
+              />
+        </Grid>
+          {
+            countryvalue === 'Australia' ?
+            <>
+            <Grid item xs={12} md={4} mt={2}>
+              <img src={AUFlag} alt='aus' width='80px' />
+            </Grid>
+              <AUcal countryvalue={countryvalue} />
+            </>
+            : countryvalue === 'USA' ?
+            <>
+            <Grid item xs={12} md={4} mt={2}>
+              <img src={USFlag} alt='us' width='80px' />
+            </Grid>
+            </>
+            : null
+          }
+      </Grid>
+    </div>
   )
 }

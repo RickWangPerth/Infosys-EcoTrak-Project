@@ -4,23 +4,19 @@ import { makeStyles } from '@mui/styles';
 import { useState, useEffect } from 'react';
 import { Grid, Button, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
+import Fuelicon from '../img/fuel.png';
+
 const calStyle = makeStyles({
-    cal: {
-         display: 'absolute',
-         position: 'absolute',
-         width: '100%',
-         height: '100%',
-         backgroundColor: '#F1F2ED',          
-     },
+
      text:{
       position: 'relative',
       top: '10px',
-      left: '30px',
+
      },
   
   })
 
-export default function Fuelcal(countryvalue,typevalue) {
+export default function AUFuelcal(countryvalue,typevalue) {
     const classes = calStyle();
 
     //fuel type
@@ -133,23 +129,27 @@ export default function Fuelcal(countryvalue,typevalue) {
 
   return (
     <>
-    <Grid item xs={12} md={4}>
+    <Grid item xs={12} md={12} mt={5}>
+      <img  src={Fuelicon} alt="fuel icon" width='80px'/>
+    </Grid>
+
+    <Grid item xs={12} md={12} mt={5}>
     <FormControl>
     <Autocomplete
-        className={classes.text}
-        disablePortal
-        id="type of fuel"
-        options={fueltype}
-        sx={{ width: 300, mt: 2 }}
-        renderInput={(params) => <TextField {...params} label="Tpye of Fuel" />}
-        onChange={(event) => {setFuelTypeValue(event.target.textContent);setFuelSubTypeValue('')}} 
-        />
+      className={classes.text}
+      disablePortal
+      id="type of fuel"
+      options={fueltype}
+      sx={{ width: 300, mt: 2 }}
+      renderInput={(params) => <TextField {...params} label="Tpye of Fuel" />}
+      onChange={(event) => {setFuelTypeValue(event.target.textContent);setFuelSubTypeValue('')}} 
+      />
     </FormControl>
     </Grid>
     {
       fueltypevalue==='Solid Fuel' ?
       <>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={4} mt={5}>
       <FormControl>
       <Autocomplete
         className={classes.text}
@@ -162,7 +162,7 @@ export default function Fuelcal(countryvalue,typevalue) {
         />
       </FormControl>
       </Grid>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={4} mt={5}>
         <FormControl>
           <FormLabel id="elecunit-radio-buttons-group" className={classes.text} >Unit</FormLabel>
           <RadioGroup
@@ -178,7 +178,7 @@ export default function Fuelcal(countryvalue,typevalue) {
       </>
       : fueltypevalue==='Liquid Fuel' ?
       <>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={4} mt={5}>
 
       <Autocomplete
         className={classes.text}
@@ -191,24 +191,24 @@ export default function Fuelcal(countryvalue,typevalue) {
         />
 
       </Grid>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={4} mt={5}>
         <FormControl>
           <FormLabel id="elecunit-radio-buttons-group" className={classes.text} >Unit</FormLabel>
           <RadioGroup
-              className={classes.text}
-              aria-labelledby="elecunit-radio-buttons-group"    
-              name="elecunit-radio-buttons-group"
-              onChange={(event) => setFuelUnitValue(event.target.value)}
+            className={classes.text}
+            aria-labelledby="elecunit-radio-buttons-group"    
+            name="elecunit-radio-buttons-group"
+            onChange={(event) => setFuelUnitValue(event.target.value)}
           >
-              <FormControlLabel value="kL" control={<Radio />} label="kL" />
-              <FormControlLabel value="m3" control={<Radio />} label="m3" />
+            <FormControlLabel value="kL" control={<Radio />} label="kL" />
+            <FormControlLabel value="m3" control={<Radio />} label="m3" />
           </RadioGroup>
         </FormControl>
       </Grid>
       </>
       : fueltypevalue==='Gaseous Fuel' ?
       <>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={4} mt={5}>
         <FormControl>
         <Autocomplete
           className={classes.text}
@@ -222,14 +222,14 @@ export default function Fuelcal(countryvalue,typevalue) {
         </FormControl>
       </Grid>
 
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={4} mt={5}>
         <FormControl>
           <FormLabel id="elecunit-radio-buttons-group" className={classes.text} >Unit</FormLabel>
           <RadioGroup
-              className={classes.text}
-              aria-labelledby="elecunit-radio-buttons-group"    
-              name="elecunit-radio-buttons-group"
-              onChange={(event) => setFuelUnitValue(event.target.value)}
+            className={classes.text}
+            aria-labelledby="elecunit-radio-buttons-group"    
+            name="elecunit-radio-buttons-group"
+            onChange={(event) => setFuelUnitValue(event.target.value)}
           >
               <FormControlLabel value="m3" control={<Radio />} label="m3" />
           </RadioGroup>
@@ -238,39 +238,39 @@ export default function Fuelcal(countryvalue,typevalue) {
       </>
       : null
     }
-    <Grid item xs={12} md={6}>
-
-    <TextField
+    <Grid item xs={12} md={6} mt={5}>
+      <TextField
         className={classes.text}
         sx={{ width: 300, mt: 2 }}
         required
         id="outlined-required"
         label="Amount of Fuel"
         defaultValue="0"
-        onChange={(event) => { setFuelValue(event.target.value); } } />
-
+        onChange={(event) => { setFuelValue(event.target.value); } } 
+      />
+    </Grid>
+    <Grid item xs={12} md={12} mt={5}>
+      <Button variant="contained"
+          type='submit'
+          sx={{ width: 300 , background:'#7ECA58'}}
+          onClick={ () => {
+              handleFuelSubmit();
+            } }
+          >
+          Calculate
+      </Button>
     </Grid>
     <Grid item xs={12} md={12}>
-        <Button variant="contained"
-            className={classes.text}
-            type='submit'
-            sx={{ width: 300 , background:'#7ECA58'}}
-            onClick={ () => {
-                handleFuelSubmit();
-              } }
-            >
-            Calculate
-        </Button>
-        <p 
-        className={classes.text}
-        id='resultP' 
-        style={{display:'none'}}>
-          
-          "Total Greenhouse Gas Emissions from fuel (t CO2e): " {fuelresult.total} <br />
-          "CO2 Emissions from fuel (t CO2e): " {fuelresult.CO2} <br />
-          "CH4 Emissions from fuel (t CO2e): " {fuelresult.CH4} <br />
-          "N2O Emissions from fuel (t CO2e): " {fuelresult.N2O} <br />
-        </p>
+      <p 
+      className={classes.text}
+      id='resultP' 
+      style={{display:'none'}}>
+        
+        "Total Greenhouse Gas Emissions from fuel (t CO2e): " {fuelresult.total} <br />
+        "CO2 Emissions from fuel (t CO2e): " {fuelresult.CO2} <br />
+        "CH4 Emissions from fuel (t CO2e): " {fuelresult.CH4} <br />
+        "N2O Emissions from fuel (t CO2e): " {fuelresult.N2O} <br />
+      </p>
     </Grid>
     </>
   )
