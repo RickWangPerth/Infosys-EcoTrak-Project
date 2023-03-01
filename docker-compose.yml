@@ -1,0 +1,29 @@
+version: '2.15.1'
+services:
+  postgresdb:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: ecotrak
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./ecotrackdatabase.sql:/docker-entrypoint-initdb.d/ecotrackdatabase.sql
+
+  ecotrack-backend:
+    image: ecotrak-backend
+    depends_on:
+      - postgresdb
+    ports:
+      - '9888:5000'
+
+  ecotrack-frontend:
+    build: ./ecotrak-frontend
+    container_name: ecotrak-frontend
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
