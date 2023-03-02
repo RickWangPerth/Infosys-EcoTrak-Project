@@ -30,7 +30,6 @@ wastedata_schema = WasteDataSchema()
 wastedata_schemas = WasteDataSchema(many=True)
 
 
-
 class ElectricityefSchema(ma.Schema):
     class Meta:
         fields = ('id','state', 'sc2', 'sc3', 'unit')
@@ -196,12 +195,11 @@ def add_wastedata():
     type = request.json['type']
     subtype = request.json['subtype']
     unit = request.json['unit']
-    # waste = wastecal(waste, unit, type, subtype)
-    print(waste, unit, type, subtype)
+    result = wastecal(waste, unit, type, subtype)
 
-    # wastedata = WasteData(type, unit, waste)
-    # db.session.add(wastedata)
-    # db.session.commit()
+    wastedata = WasteData(waste,unit,result)
+    db.session.add(wastedata)
+    db.session.commit()
     return wastedata_schema.jsonify(wastedata)
 
 @app.route('/wasteresult', methods=['GET'])

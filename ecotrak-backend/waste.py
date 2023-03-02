@@ -62,12 +62,13 @@ df.head()
 #name = 'Food'
 # Solid Waste
 solid_df = df.loc[df['type'] == 'Solid Waste']
+combined_df = df.loc[df['type'] == 'Combined Waste']
 
 
 def solid_kg(Q, name):
     EF = solid_df.loc[solid_df['name']
                       == name, 'value'].iloc[0]
-    solid_e = Q * EF
+    solid_e = float(Q) * EF
     return solid_e
 
 
@@ -81,7 +82,7 @@ def solid_m3(Q, name):
                       == name, 'ratio'].iloc[0]
     EF = solid_df.loc[solid_df['name']
                       == name, 'value'].iloc[0]
-    solid_e = Q * CF * EF
+    solid_e = float(Q) * CF * EF
     return solid_e
 
 
@@ -99,9 +100,10 @@ def solid_m3(Q, name):
 
 
 def incineration(Q, name):
-    EF = solid_df.loc[solid_df['name']
+    EF = combined_df.loc[combined_df['name']
                       == name, 'value'].iloc[0]
-    waste_e = Q * EF
+
+    waste_e = float(Q) * EF
     return waste_e
 
 
@@ -114,6 +116,7 @@ def incineration(Q, name):
 # print("Total Greenhouse Gas Emissions from Example 13    (t CO2e): ", ex_13)
 
 def wastecal(Q, unit, type, subtype):
+  
     if type == 'Solid Waste':
         if unit == 'kg':
             waste_e = solid_kg(Q, subtype)
@@ -121,5 +124,6 @@ def wastecal(Q, unit, type, subtype):
             waste_e = solid_m3(Q, subtype)
 
     elif type == 'Combined Waste':
+        
         waste_e = incineration(Q, subtype)
     return waste_e

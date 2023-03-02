@@ -253,9 +253,9 @@ export default function AUWasteCal(countryvalue,typevalue) {
           className={classes.text}
           id='resultP'
           style={{ display: 'none' }}>
-          "Total Greenhouse Gas Emissions from fuel (t CO2e): " {wasteresult.total}
+          "Total Greenhouse Gas Emissions from fuel (t CO2e): " {wasteresult.result}
         </p>
-        {console.log(wasteresult)}
+        {console.log(wasteresult.result)}
       </Grid>
     </>
   )
