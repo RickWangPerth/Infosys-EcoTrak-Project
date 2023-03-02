@@ -28,8 +28,6 @@ class WasteDataSchema(ma.Schema):
 wastedata_schema = WasteDataSchema()
 wastedata_schemas = WasteDataSchema(many=True)
 
-
-
 class ElectricityefSchema(ma.Schema):
     class Meta:
         fields = ('id','state', 'sc2', 'sc3', 'unit')
