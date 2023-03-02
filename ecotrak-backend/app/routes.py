@@ -192,15 +192,16 @@ def send_combinedwastetype():
 
 @app.route('/wastedata', methods=['POST'])
 def add_wastedata():
+    waste = request.json['waste']
     type = request.json['type']
     subtype = request.json['subtype']
     unit = request.json['unit']
-    waste = request.json['waste']
-    waste = wastecal(waste, unit, type, subtype)
+    # waste = wastecal(waste, unit, type, subtype)
+    print(waste, unit, type, subtype)
 
-    wastedata = WasteData(type, unit, waste)
-    db.session.add(wastedata)
-    db.session.commit()
+    # wastedata = WasteData(type, unit, waste)
+    # db.session.add(wastedata)
+    # db.session.commit()
     return wastedata_schema.jsonify(wastedata)
 
 @app.route('/wasteresult', methods=['GET'])

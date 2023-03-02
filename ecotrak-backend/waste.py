@@ -114,6 +114,7 @@ def incineration(Q, name):
 # print("Total Greenhouse Gas Emissions from Example 13    (t CO2e): ", ex_13)
 
 def wastecal(Q, unit, type, subtype):
+    waste_e = 0
     if type == 'Solid Waste':
         if unit == 'kg':
             waste_e = solid_kg(Q, subtype)
