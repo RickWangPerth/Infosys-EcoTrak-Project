@@ -4,10 +4,11 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from electricity import elecal
+from waste import wastecal
 from fuel import fuelcal
 # from liquid_fuel import liquidfuelcal
 # from gaseous_fuel import gaseousfuelcal
-from app.models import ElecData, FuelData, Electricityef, Fuelsef, Wasteef
+from app.models import ElecData, FuelData, Electricityef, Fuelsef, Wasteef, WasteData 
 import json
 
 ma = Marshmallow(app)  
@@ -27,6 +28,8 @@ class WasteDataSchema(ma.Schema):
         fields = ('id', 'waste','unit','result')
 wastedata_schema = WasteDataSchema()
 wastedata_schemas = WasteDataSchema(many=True)
+
+
 
 class ElectricityefSchema(ma.Schema):
     class Meta:
@@ -187,21 +190,22 @@ def send_combinedwastetype():
     json_data = json.dumps(data_list)
     return  json_data
 
-# @app.route('/wastedata', methods=['POST'])
-# def add_wastedata():
-#     state = request.json['state']
-#     waste = request.json['waste']
-#     unit = request.json['unit']
-#     result = wastecal(state,unit,waste)
+@app.route('/wastedata', methods=['POST'])
+def add_wastedata():
+    waste = request.json['waste']
+    type = request.json['type']
+    subtype = request.json['subtype']
+    unit = request.json['unit']
+    # waste = wastecal(waste, unit, type, subtype)
+    print(waste, unit, type, subtype)
 
-#     wastedata = WasteData(state, waste,unit,result)
-#     db.session.add(wastedata)
-#     db.session.commit()
-#     return wastedata_schema.jsonify(wastedata)
+    # wastedata = WasteData(type, unit, waste)
+    # db.session.add(wastedata)
+    # db.session.commit()
+    return wastedata_schema.jsonify(wastedata)
 
-# @app.route('/wasteresult', methods=['GET'])
-# def send_wasteresult():
-#     data = WasteData.query.order_by(WasteData.id.desc()).first()
-#     result = wastedata_schema.dump(data)
-#     return jsonify(result)
-
+@app.route('/wasteresult', methods=['GET'])
+def send_wasteresult():
+    data = WasteData.query.order_by(WasteData.id.desc()).first()
+    result = wastedata_schema.dump(data)
+    return jsonify(result)

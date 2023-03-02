@@ -20,7 +20,7 @@ const calStyle = makeStyles({
 
 export default function AUWasteCal(countryvalue,typevalue) {
   const classes = calStyle();
-  const portNum = 9888;
+  const portNum = 5000;
 
   // Waste type
   const [wastetype, setWastetype] = useState([]);

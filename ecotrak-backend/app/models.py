@@ -117,14 +117,13 @@ class FuelData(db.Model):
 
     def __repr__(self):
         return '[Fuel:{}, FuelType:{}, FuelSubType:{}, Unit:{}, Total:{}, CO2:{}, CH4:{}, N2O:{}]'.format(self.fuel, self.fuelTpye, self.fuelSubType, self.unit, self.total, self.CO2, self.CH4, self.N2O)
-    class WasteData(db.Model):
-        __tablename__ = "wastedata"
-        id = db.Column(db.Integer, primary_key=True)
-        waste = db.Column(db.Float, unique=False, nullable=False)
-        unit = db.Column(db.String(80), unique=False, nullable=False)
-        result = db.Column(db.Float, unique=False, nullable=False)
-
-    def __init__(self,  waste,unit,result):
+class WasteData(db.Model):
+    __tablename__ = "wastedata"
+    id = db.Column(db.Integer, primary_key=True)
+    waste = db.Column(db.Float, unique=False, nullable=False)
+    unit = db.Column(db.String(80), unique=False, nullable=False)
+    result = db.Column(db.Float, unique=False, nullable=False)
+    def __init__(self,waste,unit,result):
 
         self.waste = waste
         self.unit = unit
@@ -132,5 +131,4 @@ class FuelData(db.Model):
 
     def __repr__(self):
         return '[ Waste:{}, Unit:{}, Result:{}]'.format( self.waste, self.unit, self.result)
-
 

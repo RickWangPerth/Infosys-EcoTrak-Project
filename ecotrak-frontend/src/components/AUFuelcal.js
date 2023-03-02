@@ -17,7 +17,7 @@ const calStyle = makeStyles({
 })
 
 export default function AUFuelcal(countryvalue,typevalue) {
-    const portNum = 9888;
+    const portNum = 5000;
     const classes = calStyle();
 
     //fuel type

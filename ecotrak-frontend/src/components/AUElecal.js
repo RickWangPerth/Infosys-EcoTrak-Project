@@ -19,7 +19,7 @@ const calStyle = makeStyles({
   })
 
 export default function AUElecal(countryvalue,typevalue) {
-  const portNum = 9888;
+  const portNum = 5000;
   const classes = calStyle();
   const resultDisplay = 'none';
 
