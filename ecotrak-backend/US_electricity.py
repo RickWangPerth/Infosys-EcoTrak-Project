@@ -1,8 +1,8 @@
 import psycopg2
 import pandas as pd
 
-host = 'localhost'
-database = 'ecotrakv2'
+host = 'postgresdb'
+database = 'ecotrak'
 user = 'postgres'
 password = ''
 table_name = 'US_electricity_ef'

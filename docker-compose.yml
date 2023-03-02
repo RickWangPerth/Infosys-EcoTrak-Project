@@ -13,14 +13,14 @@ services:
       - ./postgres-data:/var/lib/postgresql/data
       - ./ecotrackdatabase.sql:/docker-entrypoint-initdb.d/ecotrackdatabase.sql
 
-  ecotrack-backend:
+  ecotrak-backend:
     image: ecotrak-backend
     depends_on:
       - postgresdb
     ports:
       - '9888:5000'
 
-  ecotrack-frontend:
+  ecotrak-frontend:
     build: ./ecotrak-frontend
     container_name: ecotrak-frontend
     ports:

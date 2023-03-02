@@ -21,43 +21,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: US_Emissions; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."US_Emissions" (
-    id integer NOT NULL,
-    "eGRID_Subregion" character varying(80) NOT NULL,
-    sc_co2 double precision NOT NULL,
-    sc_ch4 double precision NOT NULL,
-    sc_n2o double precision NOT NULL
-);
-
-
-ALTER TABLE public."US_Emissions" OWNER TO postgres;
-
---
--- Name: US_Emissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public."US_Emissions_id_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public."US_Emissions_id_seq" OWNER TO postgres;
-
---
--- Name: US_Emissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public."US_Emissions_id_seq" OWNED BY public."US_Emissions".id;
-
-
---
 -- Name: elecdata; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -116,20 +79,24 @@ ALTER TABLE public.electricityef OWNER TO postgres;
 
 CREATE TABLE public.fueldata (
     id integer NOT NULL,
-    state character varying(80) NOT NULL,
     fuel double precision NOT NULL,
+    "fuelTpye" character varying(80) NOT NULL,
+    "fuelSubType" character varying(80) NOT NULL,
     unit character varying(80) NOT NULL,
-    result double precision NOT NULL
+    total double precision NOT NULL,
+    co2 double precision NOT NULL,
+    ch4 double precision NOT NULL,
+    n2o double precision NOT NULL
 );
 
 
 ALTER TABLE public.fueldata OWNER TO postgres;
 
 --
--- Name: fueldata_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: fuel_data_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.fueldata_id_seq
+CREATE SEQUENCE public.fuel_data_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -138,13 +105,13 @@ CREATE SEQUENCE public.fueldata_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.fueldata_id_seq OWNER TO postgres;
+ALTER TABLE public.fuel_data_id_seq OWNER TO postgres;
 
 --
--- Name: fueldata_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: fuel_data_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.fueldata_id_seq OWNED BY public.fueldata.id;
+ALTER SEQUENCE public.fuel_data_id_seq OWNED BY public.fueldata.id;
 
 
 --
@@ -226,12 +193,49 @@ ALTER SEQUENCE public.us_emissions_id_seq OWNED BY public.us_emissions.id;
 
 
 --
+-- Name: uselecdata; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.uselecdata (
+    id integer NOT NULL,
+    region character varying(80) NOT NULL,
+    total double precision NOT NULL,
+    co2_e double precision NOT NULL,
+    ch4_e double precision NOT NULL,
+    n2o_e double precision NOT NULL
+);
+
+
+ALTER TABLE public.uselecdata OWNER TO postgres;
+
+--
+-- Name: uselecdata_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.uselecdata_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.uselecdata_id_seq OWNER TO postgres;
+
+--
+-- Name: uselecdata_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.uselecdata_id_seq OWNED BY public.uselecdata.id;
+
+
+--
 -- Name: wastedata; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.wastedata (
     id integer NOT NULL,
-    state character varying(80) NOT NULL,
     waste double precision NOT NULL,
     unit character varying(80) NOT NULL,
     result double precision NOT NULL
@@ -281,13 +285,6 @@ CREATE TABLE public.wastes_ef (
 ALTER TABLE public.wastes_ef OWNER TO postgres;
 
 --
--- Name: US_Emissions id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."US_Emissions" ALTER COLUMN id SET DEFAULT nextval('public."US_Emissions_id_seq"'::regclass);
-
-
---
 -- Name: elecdata id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -298,7 +295,7 @@ ALTER TABLE ONLY public.elecdata ALTER COLUMN id SET DEFAULT nextval('public.ele
 -- Name: fueldata id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.fueldata ALTER COLUMN id SET DEFAULT nextval('public.fueldata_id_seq'::regclass);
+ALTER TABLE ONLY public.fueldata ALTER COLUMN id SET DEFAULT nextval('public.fuel_data_id_seq'::regclass);
 
 
 --
@@ -309,18 +306,17 @@ ALTER TABLE ONLY public.us_emissions ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
+-- Name: uselecdata id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.uselecdata ALTER COLUMN id SET DEFAULT nextval('public.uselecdata_id_seq'::regclass);
+
+
+--
 -- Name: wastedata id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.wastedata ALTER COLUMN id SET DEFAULT nextval('public.wastedata_id_seq'::regclass);
-
-
---
--- Data for Name: US_Emissions; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."US_Emissions" (id, "eGRID_Subregion", sc_co2, sc_ch4, sc_n2o) FROM stdin;
-\.
 
 
 --
@@ -374,7 +370,7 @@ E-NAT-2	Electricity	National	189	25	GJ
 -- Data for Name: fueldata; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.fueldata (id, state, fuel, unit, result) FROM stdin;
+COPY public.fueldata (id, fuel, "fuelTpye", "fuelSubType", unit, total, co2, ch4, n2o) FROM stdin;
 \.
 
 
@@ -504,10 +500,18 @@ COPY public.us_emissions (id, "eGRID_Subregion", sc_co2, sc_ch4, sc_n2o) FROM st
 
 
 --
+-- Data for Name: uselecdata; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.uselecdata (id, region, total, co2_e, ch4_e, n2o_e) FROM stdin;
+\.
+
+
+--
 -- Data for Name: wastedata; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.wastedata (id, state, waste, unit, result) FROM stdin;
+COPY public.wastedata (id, waste, unit, result) FROM stdin;
 \.
 
 
@@ -549,13 +553,6 @@ CW-5	Municipal Solid Waste	t	Combined Waste	5.36	\N	1	incineration
 
 
 --
--- Name: US_Emissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public."US_Emissions_id_seq"', 1, false);
-
-
---
 -- Name: elecdata_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -563,10 +560,10 @@ SELECT pg_catalog.setval('public.elecdata_id_seq', 7, true);
 
 
 --
--- Name: fueldata_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: fuel_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.fueldata_id_seq', 1, false);
+SELECT pg_catalog.setval('public.fuel_data_id_seq', 1, false);
 
 
 --
@@ -577,18 +574,17 @@ SELECT pg_catalog.setval('public.us_emissions_id_seq', 1, false);
 
 
 --
+-- Name: uselecdata_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.uselecdata_id_seq', 1, false);
+
+
+--
 -- Name: wastedata_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.wastedata_id_seq', 1, false);
-
-
---
--- Name: US_Emissions US_Emissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."US_Emissions"
-    ADD CONSTRAINT "US_Emissions_pkey" PRIMARY KEY (id);
 
 
 --
@@ -608,11 +604,11 @@ ALTER TABLE ONLY public.electricityef
 
 
 --
--- Name: fueldata fueldata_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fueldata fuel_data_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.fueldata
-    ADD CONSTRAINT fueldata_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT fuel_data_pkey PRIMARY KEY (id);
 
 
 --
@@ -637,6 +633,14 @@ ALTER TABLE ONLY public.transport_ef
 
 ALTER TABLE ONLY public.us_emissions
     ADD CONSTRAINT us_emissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: uselecdata uselecdata_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.uselecdata
+    ADD CONSTRAINT uselecdata_pkey PRIMARY KEY (id);
 
 
 --
