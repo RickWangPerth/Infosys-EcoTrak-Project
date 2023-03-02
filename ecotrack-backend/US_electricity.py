@@ -5,8 +5,8 @@ host = 'localhost'
 database = 'ecotrakv2'
 user = 'postgres'
 password = ''
-table_name = 'US_electricity_ef'
-column_names = ['eGRID Subregion', 'sc_co2', 'sc_ch4', 'sc_n2o']
+table_name = 'US_Emissions'
+column_names = ['id', 'eGRID Subregion', 'sc_co2', 'sc_ch4', 'sc_n2o']
 
 # Connection parameters
 param_dic = {
