@@ -20,12 +20,13 @@ const calStyle = makeStyles({
 
 export default function USElecal(countryvalue,typevalue) {
     const classes = calStyle();
-    const resultDisplay = 'none';
+    const portNum = 5000;
 
-    const [state, setState] = useState([])
+    const [region, setRegion] = useState([]);
+    const [regionvalue, setRegionValue] = useState([]);
     // Static data
     useEffect(() => {
-    fetch('http://127.0.0.1:5000/statedata',{        
+    fetch(`http://127.0.0.1:${portNum}/usregion`,{        
       headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -33,18 +34,14 @@ export default function USElecal(countryvalue,typevalue) {
       'Access-Control-Allow-Origin': 'http://localhost:3000',
   },})
         .then(response => response.json())
-        .then(data => setState(data))
+        .then(data => setRegion(data))
         .catch(error => console.log(error));
     }, []);
-    const [statevalue, setStateValue] = useState([]);
 
-
+  
     // Electricity value
       const [elecvalue, setElecValue] = useState([]);
-      const [unitvalue, setUnitValue] = useState([]);
       const [elecresult, setElecResult] = useState([]);
-      const [s2, setS2] = useState([]);
-      const [s3, setS3] = useState([]);
       
       async function handleClick() {
         await handleElecSubmit(); // wait for handleElecSubmit to complete
@@ -54,7 +51,7 @@ export default function USElecal(countryvalue,typevalue) {
       }
       
       function handleElecSubmit() {
-        return fetch('http://localhost:5000/elecdata', {
+        return fetch(`http://localhost:${portNum}/uselecdata`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -64,9 +61,8 @@ export default function USElecal(countryvalue,typevalue) {
           },
           body: JSON.stringify({
             country: countryvalue,
-            state: statevalue,
+            region: regionvalue,
             type: typevalue,
-            unit: unitvalue,
             elec: elecvalue,
           }),
         })
@@ -76,7 +72,7 @@ export default function USElecal(countryvalue,typevalue) {
       }
       
       function GetResult() {
-        fetch('http://localhost:5000/elecresult', {
+        fetch(`http://localhost:${portNum}/uselecresult`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -91,35 +87,8 @@ export default function USElecal(countryvalue,typevalue) {
       
         var result = document.getElementById('resultP');
         result.style.display = 'block';
-      
-        fetch(`http://127.0.0.1:5000/sc2data/${statevalue}/${unitvalue}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Origin': 'http://localhost:3000',
-            'Access-Control-Allow-Origin': 'http://localhost:3000',
-          },
-        })
-          .then((resp) => resp.json())
-          .then((resp) => setS2(resp))
-          .catch((err) => console.log(err));
-      
-        fetch(`http://127.0.0.1:5000/sc3data/${statevalue}/${unitvalue}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Origin': 'http://localhost:3000',
-            'Access-Control-Allow-Origin': 'http://localhost:3000',
-          },
-        })
-          .then((resp) => resp.json())
-          .then((resp) => setS3(resp))
-          .catch((err) => console.log(err));
       }
       
-
   return (
     <>
     <Grid item xs={12} md={2} mt={5}>
@@ -166,15 +135,22 @@ export default function USElecal(countryvalue,typevalue) {
     justifyContent="center"
     alignItems="center"  
     >
-    <Grid item xs={12} md={4} mt={5}>
+    <Grid item xs={12} md={12} className={classes.text} mt={5}>
+    <p> You can the grid for your region in 
+      <a href='https://www.epa.gov/system/files/images/2022-01/egrid2020_subregion_map.png'>representational maps </a>
+      provided by <a href='https://www.epa.gov/egrid'>United State Enviornmental Protection Agency (EPA) </a>
+    </p>
+    </Grid>
+    <Grid item xs={12} md={4} mt={1}>
+
     <Autocomplete
         className={classes.text}
         disablePortal
-        id="state"
-        options={state}
+        id="region"
+        options={region}
         sx={{ width: 300 , mt: 2}}
-        renderInput={(params) => <TextField {...params} label="State, Territory or Grid " />}
-        onChange={(event) => {setStateValue(event.target.textContent)}} 
+        renderInput={(params) => <TextField {...params} label="eGRID Subregion" />}
+        onChange={(event) => {setRegionValue(event.target.textContent)}} 
         />
     </Grid>
     <Grid item xs={12} md={4} mt={5}>
@@ -185,23 +161,9 @@ export default function USElecal(countryvalue,typevalue) {
         sx={{ width: 300, mt: 2 }}
         required
         id="outlined-required"
-        label="Electricity"
+        label="Electricity(kWh)"
         defaultValue='0'
         onChange={(event) => { setElecValue(event.target.value); } } />
-    </FormControl>
-    </Grid>
-    <Grid item xs={12} md={4} mt={5}>
-    <FormControl>
-        <FormLabel id="elecunit-radio-buttons-group" className={classes.text} >Unit</FormLabel>
-        <RadioGroup
-            className={classes.text}
-            aria-labelledby="elecunit-radio-buttons-group"    
-            name="elecunit-radio-buttons-group"
-            onChange={(event) => setUnitValue(event.target.value)}
-        >
-            <FormControlLabel value="kWh" control={<Radio />} label="kWh" />
-            <FormControlLabel value="GJ" control={<Radio />} label="GJ" />
-        </RadioGroup>
     </FormControl>
     </Grid>
     </Grid>
@@ -222,9 +184,9 @@ export default function USElecal(countryvalue,typevalue) {
         className={classes.text}
         id='resultP' 
         style={{display:'none'}}>
-          "Total Greenhouse Gas Emissions from electricity (t CO2e): " {elecresult.result} <br />
-           The scope 2 emission factor in {elecresult.state} is {s2} kg CO2-e/{elecresult.unit} <br />
-           The scope 3 emission factor in {elecresult.state} is {s3} kg CO2-e/{elecresult.unit} <br />
+          Carbon dioxide (CO2) Emissions from electricity (t CO2e):  {elecresult.sc_co2} <br />
+          Mrthane (CH4) Emissions from electricity (t CO2e):  {elecresult.sc_ch4} <br />
+          Nitrous oxide (N2O) Emissions from electricity (t CO2e):  {elecresult.sc_n2o} <br />
         </p>
     </Grid>
     </>

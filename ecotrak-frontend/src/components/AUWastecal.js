@@ -238,17 +238,20 @@ export default function AUWasteCal(countryvalue,typevalue) {
             defaultValue="0"
             onChange={(event) => { setWasteValue(event.target.value); } } />
       </Grid>
+
       <Grid item xs={12} md={12} mt={5}>
         <Button variant="contained"
-          className={classes.text}
-          type='submit'
-          sx={{ width: 300, background: '#7ECA58' }}
-          onClick={() => {
-            handleClick();
-          } }
-        >
-          Calculate
+            className={classes.text}
+            type='submit'
+            sx={{ width: 300 , background:'#7ECA58'}}
+            onClick={ () => {
+                handleClick();
+              } }
+            >
+            Calculate
         </Button>
+      </Grid>
+      <Grid item xs={12} md={12} mt={5}>
         <p
           className={classes.text}
           id='resultP'

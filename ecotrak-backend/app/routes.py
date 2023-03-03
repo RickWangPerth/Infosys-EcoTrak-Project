@@ -6,9 +6,8 @@ from flask_marshmallow import Marshmallow
 from electricity import elecal
 from waste import wastecal
 from fuel import fuelcal
-# from liquid_fuel import liquidfuelcal
-# from gaseous_fuel import gaseousfuelcal
-from app.models import ElecData, FuelData, Electricityef, Fuelsef, Wasteef, WasteData 
+from US_electricity import uselecal
+from app.models import ElecData, FuelData, Electricityef, Fuelsef, Wasteef, WasteData, USElectricityef, USElecData
 import json
 
 ma = Marshmallow(app)  
@@ -19,7 +18,7 @@ elecdata_schema = ElecDataSchema()
 elecdata_schemas = ElecDataSchema(many=True)
 class FuelDataSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'fuel', 'unit', 'total', 'fuelType','CO2', 'CH4', 'N2O')
+        fields = ('id', 'fuel', 'fuelTpye', 'fuelSubType', 'unit', 'total', 'CO2', 'CH4', 'N2O')
 fueldata_schema = FuelDataSchema()
 fueldata_schemas = FuelDataSchema(many=True)
 
@@ -29,6 +28,18 @@ class WasteDataSchema(ma.Schema):
 wastedata_schema = WasteDataSchema()
 wastedata_schemas = WasteDataSchema(many=True)
 
+class USElecDataSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'eGRID_Subregion', 'sc_co2', 'sc_ch4', 'sc_n2o')
+uselecdata_schema = USElecDataSchema()
+uselecdata_schemas = USElecDataSchema(many=True)
+
+
+class USElectricityefSchema(ma.Schema):
+    class Meta:
+        fields = ('id','eGRID_Subregion', 'sc_co2', 'sc_ch4', 'sc_n20')
+USElectricityef_schema = USElectricityefSchema()
+USElectricityef_schemas = USElectricityefSchema(many=True)
 
 class ElectricityefSchema(ma.Schema):
     class Meta:
@@ -151,11 +162,8 @@ def add_fueldata():
     fuelSubType = request.json['fuelsubtype']
     unit = request.json['unit']
     print(fuel,fuelType,fuelSubType,unit)
-    id=8
     total, CO2, CH4, N2O = fuelcal(fuel,fuelSubType,fuelType,unit)
-
-
-    fueldata = FuelData(id,fuel, fuelType, fuelSubType, unit, total, CO2, CH4, N2O)
+    fueldata = FuelData(id, fuel, fuelType, fuelSubType, unit, total, CO2, CH4, N2O)
     
     db.session.add(fueldata)
     db.session.commit()
@@ -207,3 +215,33 @@ def send_wasteresult():
     data = WasteData.query.order_by(WasteData.id.desc()).first()
     result = wastedata_schema.dump(data)
     return jsonify(result)
+
+# transport calculator
+
+
+# US electricity calculator
+@app.route('/usregion', methods=['GET'])
+def send_usregion():
+    data = USElectricityef.query.with_entities(USElectricityef.eGRID_Subregion).distinct().all()
+    data_list = [item[0] for item in data]
+    json_data = json.dumps(data_list)
+    return  json_data
+
+@app.route('/uselecdata', methods=['POST'])
+def add_uselecdata():
+    region = request.json['region']
+    elec = request.json['elec']
+    total, CO2, CH4, N2O = uselecal(elec,region)
+
+    uselecdata = USElecData(region, CO2, CH4, N2O)
+    db.session.add(uselecdata)
+    db.session.commit()
+    return uselecdata_schema.jsonify(uselecdata)
+
+@app.route('/uselecresult', methods=['GET'])
+def send_uselecresult():
+    data = USElecData.query.order_by(USElecData.id.desc()).first()
+    result = uselecdata_schema.dump(data)
+    return jsonify(result)
+
+

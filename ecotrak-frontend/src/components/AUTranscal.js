@@ -18,9 +18,12 @@ const calStyle = makeStyles({
       }
   })
 
-
 export default function AUTranscal(countryvalue,typevalue) {
     const classes = calStyle();
+
+    const portNum = 5000;
+
+    
     //trans type
     const [transtype, setTransType] = useState([]);
 
@@ -32,7 +35,7 @@ export default function AUTranscal(countryvalue,typevalue) {
     const [transresult, setTransResult] = useState([]);
 
 
-    const portNum = 5000;
+
 
     useEffect(() => {
     fetch(`http://127.0.0.1:${portNum}/transtype`,{        

@@ -1,8 +1,9 @@
 import psycopg2
 import pandas as pd
+import sys
 
 host = 'localhost'
-database = 'ecotrakv2'
+database = 'ecotrak'
 user = 'postgres'
 password = ''
 table_name = 'US_Emissions'
@@ -61,7 +62,7 @@ Q = 1000
 subregion = 'CAMX (WECC California)'
 
 
-def electricitycal(Q, subregion):
+def uselecal(Q, subregion):
     sc_co2 = df.loc[df['eGRID Subregion'] == subregion, 'sc_co2'].iloc[0]
     sc_ch4 = df.loc[df['eGRID Subregion'] == subregion, 'sc_ch4'].iloc[0]
     sc_n2o = df.loc[df['eGRID Subregion'] == subregion, 'sc_n2o'].iloc[0]

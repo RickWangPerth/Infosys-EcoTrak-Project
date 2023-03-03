@@ -1,8 +1,25 @@
 from app import db
 
+class USElectricityef(db.Model):
+    __tablename__ = "us_emissions"
+    id = db.Column(db.String(200), primary_key=True)
+    eGRID_Subregion = db.Column(db.String(200), unique=False, nullable=False)
+    sc_co2 = db.Column(db.Float, unique=False, nullable=False)
+    sc_ch4 = db.Column(db.Float, unique=False, nullable=False)
+    sc_n2o = db.Column(db.Float, unique=False, nullable=False)
+
+    def __init__(self, id, eGRID_Subregion, sc_co2, sc_ch4, sc_n2o):
+        self.id = id
+        self.eGRID_Subregion = eGRID_Subregion
+        self.sc_co2 = sc_co2
+        self.sc_ch4 = sc_ch4
+        self.sc_n2o = sc_n2o
+
+    def __repr__(self):
+        return '[ID: {}, eGRID Subregion: {}, sc_co2: {}, sc_ch4: {}, sc_n2o: {}]'.format(self.id, self.eGRID_Subregion, self.sc_co2, self.sc_ch4, self.sc_n2o)
 class Electricityef(db.Model):
     __tablename__ = "electricityef"
-    id = db.Column(db.String(200), unique=True, nullable=False, primary_key=True)
+    id = db.Column(db.String(200), primary_key=True)
     sector = db.Column(db.String(200), unique=False, nullable=False)
     state = db.Column(db.String(200), unique=False, nullable=False)
     sc2 = db.Column(db.Float, unique=False, nullable=False)
@@ -131,4 +148,21 @@ class WasteData(db.Model):
 
     def __repr__(self):
         return '[ Waste:{}, Unit:{}, Result:{}]'.format( self.waste, self.unit, self.result)
+    
+class USElecData(db.Model):
+    __tablename__ = "US_Emissions"
+    id = db.Column(db.Integer, primary_key=True)
+    eGRID_Subregion = db.Column(db.String(80), unique=False, nullable=False)
+    sc_co2 = db.Column(db.Float, unique=False, nullable=False)
+    sc_ch4 = db.Column(db.Float, unique=False, nullable=False)
+    sc_n2o = db.Column(db.Float, unique=False, nullable=False)
+
+    def __init__(self, eGRID_Subregion, sc_co2, sc_ch4, sc_n2o):
+        self.eGRID_Subregion = eGRID_Subregion
+        self.sc_co2 = sc_co2
+        self.sc_ch4 = sc_ch4
+        self.sc_n2o = sc_n2o
+
+    def __repr__(self):
+        return '[eGRID_Subregion:{}, SC_CO2:{}, SC_CH4:{}, SC_N2O:{}]'.format(self.eGRID_Subregion, self.sc_co2, self.sc_ch4, self.sc_n2o)
 
