@@ -47,11 +47,11 @@ class Fuelsef(db.Model):
     unit = db.Column(db.String(200), unique=False, nullable=True) 
     sc1_co2 = db.Column(db.Float, unique=False, nullable=True)
     sc1_ch4  = db.Column(db.Float, unique=False, nullable=True)
-    sc1_n20  = db.Column(db.Float, unique=False, nullable=True)
+    sc1_n2o  = db.Column(db.Float, unique=False, nullable=True)
     sc1_sum = db.Column(db.Float, unique=False, nullable=True)
     sc3_ef = db.Column(db.Float, unique=False, nullable=True)
 
-    def __init__(self, id, sector, subsector, type, ratio, unit, sc1_co2, sc1_ch4, sc1_n20, sc1_sum, sc3_ef):
+    def __init__(self, id, sector, subsector, type, ratio, unit, sc1_co2, sc1_ch4, sc1_n2o, sc1_sum, sc3_ef):
         self.id = id
         self.sector = sector
         self.subsector = subsector
@@ -60,12 +60,12 @@ class Fuelsef(db.Model):
         self.unit = unit
         self.sc1_co2 = sc1_co2
         self.sc1_ch4 = sc1_ch4
-        self.sc1_n20 = sc1_n20
+        self.sc1_n2o = sc1_n2o
         self.sc1_sum = sc1_sum
         self.sc3_ef = sc3_ef
     
     def __repr__(self):
-        return '[ID:{}, Sector:{}, Subsector:{}, Type:{}, Ratio:{}, Unit:{}, SC1_CO2:{}, SC1_CH4:{}, SC1_N20:{}, SC1_SUM:{}, SC3_EF:{}]'.format(self.id, self.sector, self.subsector, self.type, self.ratio, self.unit, self.sc1_co2, self.sc1_ch4, self.sc1_n20, self.sc1_sum, self.sc3_ef)
+        return '[ID:{}, Sector:{}, Subsector:{}, Type:{}, Ratio:{}, Unit:{}, SC1_CO2:{}, SC1_CH4:{}, SC1_N20:{}, SC1_SUM:{}, SC3_EF:{}]'.format(self.id, self.sector, self.subsector, self.type, self.ratio, self.unit, self.sc1_co2, self.sc1_ch4, self.sc1_n2o, self.sc1_sum, self.sc3_ef)
 
 class Wasteef(db.Model):
     __tablename__ = "wastes_ef"
@@ -90,6 +90,35 @@ class Wasteef(db.Model):
     
     def __repr__(self):
         return '[ID:{}, Name:{}, Unit:{}, Type:{}, Value:{}, Scope:{}, Ratio:{}, Treatment:{}]'.format(self.id, self.name, self.unit, self.type, self.value, self.scope, self.ratio, self.treatment)
+    
+class Transef(db.Model):
+    __tablename__ = "transport_ef"
+    id = db.Column(db.String(200), primary_key=True)
+    transport_type = db.Column(db.String(200), unique=False, nullable=True)
+    fuel_type = db.Column(db.String(200), unique=False, nullable=True)
+    unit = db.Column(db.String(200), unique=False, nullable=True)
+    ratioGJperKL = db.Column(db.Float, unique=False, nullable=True)
+    sc1_co2 = db.Column(db.Float, unique=False, nullable=True)
+    sc1_ch4 = db.Column(db.Float, unique=False, nullable=True)
+    sc1_n2o = db.Column(db.Float, unique=False, nullable=True)
+    sc1_sum = db.Column(db.Float, unique=False, nullable=True)
+    sc3_ef = db.Column(db.Float, unique=False, nullable=True)
+
+    def __init__(self, id, transport_type, fuel_type, unit, ratioGJperKL, sc1_co2, sc1_ch4, sc1_n2o, sc1_sum, sc3_ef):
+        self.id = id
+        self.transport_type = transport_type
+        self.fuel_type = fuel_type
+        self.unit = unit
+        self.ratioGJperKL = ratioGJperKL
+        self.sc1_co2 = sc1_co2
+        self.sc1_ch4 = sc1_ch4
+        self.sc1_n2o = sc1_n2o
+        self.sc1_sum = sc1_sum
+        self.sc3_ef = sc3_ef
+
+    def __repr__(self):
+        return '[ID:{}, Transport_Type:{}, Fuel_Type:{}, Unit:{}, RatioGJperKL:{}, SC1_CO2:{}, SC1_CH4:{}, SC1_N2O:{}, SC1_SUM:{}, SC3_EF:{}]'.format(self.id, self.transport_type, self.fuel_type, self.unit, self.ratioGJperKL, self.sc1_co2, self.sc1_ch4, self.sc1_n2o, self.sc1_sum, self.sc3_ef)
+
 
 class ElecData(db.Model):
     __tablename__ = "elecdata"
@@ -113,27 +142,27 @@ class FuelData(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     fuel = db.Column(db.Float, unique=False, nullable=False)
-    fuelTpye = db.Column(db.String(80), unique=False, nullable=False)
-    fuelSubType = db.Column(db.String(80), unique=False, nullable=False)
+    fueltype = db.Column(db.String(80), unique=False, nullable=False)
+    fuelsubtype = db.Column(db.String(80), unique=False, nullable=False)
     unit = db.Column(db.String(80), unique=False, nullable=False)
     total = db.Column(db.Float, unique=False, nullable=False)
-    CO2 = db.Column(db.Float, unique=False, nullable=False)
-    CH4 = db.Column(db.Float, unique=False, nullable=False)
-    N2O = db.Column(db.Float, unique=False, nullable=False)
+    co2 = db.Column(db.Float, unique=False, nullable=False)
+    ch4 = db.Column(db.Float, unique=False, nullable=False)
+    n2o = db.Column(db.Float, unique=False, nullable=False)
 
-    def __init__(self, id, fuel, fuelTpye, fuelSubType, unit, total, CO2, CH4, N2O):
-        self.id = id
+    def __init__(self, fuel, fueltype, fuelsubtype, unit, total, co2, ch4, n2o):
         self.fuel = fuel
-        self.fuelTpye = fuelTpye
-        self.fuelSubType = fuelSubType
+        self.fueltype = fueltype
+        self.fuelsubtype = fuelsubtype
         self.unit = unit
         self.total = total
-        self.CO2 = CO2
-        self.CH4 = CH4
-        self.N2O = N2O
+        self.co2 = co2
+        self.ch4 = ch4
+        self.n2o = n2o
 
     def __repr__(self):
-        return '[Fuel:{}, FuelType:{}, FuelSubType:{}, Unit:{}, Total:{}, CO2:{}, CH4:{}, N2O:{}]'.format(self.fuel, self.fuelTpye, self.fuelSubType, self.unit, self.total, self.CO2, self.CH4, self.N2O)
+        return '[Fuel:{}, FuelType:{}, FuelSubType:{}, Unit:{}, Total:{}, CO2:{}, CH4:{}, N2O:{}]'.format(self.fuel, self.fueltpye, self.fuelsubtype, self.unit, self.total, self.co2, self.ch4, self.n2o)
+
 class WasteData(db.Model):
     __tablename__ = "wastedata"
     id = db.Column(db.Integer, primary_key=True)
@@ -148,6 +177,31 @@ class WasteData(db.Model):
 
     def __repr__(self):
         return '[ Waste:{}, Unit:{}, Result:{}]'.format( self.waste, self.unit, self.result)
+    
+class TransData(db.Model):
+    __tablename__ = "transdata"
+    id = db.Column(db.Integer, primary_key=True)
+    fueltype = db.Column(db.String(80), unique=False, nullable=False)
+    transtype = db.Column(db.String(80), unique=False, nullable=False)
+    transport = db.Column(db.Float, unique=False, nullable=False)
+    unit = db.Column(db.String(80), unique=False, nullable=False)
+    co2 = db.Column(db.Float, unique=False, nullable=False)
+    ch4 = db.Column(db.Float, unique=False, nullable=False)
+    n2o = db.Column(db.Float, unique=False, nullable=False)
+    total = db.Column(db.Float, unique=False, nullable=False)
+
+    def __init__(self, fueltype, transtype, transport, unit, co2, ch4, n2o, total):
+        self.fueltype = fueltype
+        self.transtype = transtype
+        self.transport = transport
+        self.unit = unit
+        self.co2 = co2
+        self.ch4 = ch4
+        self.n2o = n2o
+        self.total = total
+
+    def __repr__(self):
+        return '[FuelType:{}, TransType:{}, Transport:{}, Unit:{}, CO2:{}, CH4:{}, N2O:{}, Total:{}]'.format(self.fueltype, self.transtype, self.transport, self.unit, self.co2, self.ch4, self.n2o, self.total)
     
 class USElecData(db.Model):
     __tablename__ = "US_Emissions"

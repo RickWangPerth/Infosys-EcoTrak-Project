@@ -7,7 +7,8 @@ from electricity import elecal
 from waste import wastecal
 from fuel import fuelcal
 from US_electricity import uselecal
-from app.models import ElecData, FuelData, Electricityef, Fuelsef, Wasteef, WasteData, USElectricityef, USElecData
+from transport import transportcal
+from app.models import ElecData, FuelData, Electricityef, Fuelsef, Wasteef, WasteData, USElectricityef, USElecData, Transef, TransData
 import json
 
 ma = Marshmallow(app)  
@@ -18,7 +19,7 @@ elecdata_schema = ElecDataSchema()
 elecdata_schemas = ElecDataSchema(many=True)
 class FuelDataSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'fuel', 'fuelTpye', 'fuelSubType', 'unit', 'total', 'CO2', 'CH4', 'N2O')
+        fields = ('id', 'fuel', 'fueltype', 'fuelsubtype', 'unit', 'total', 'co2', 'ch4', 'n2o')
 fueldata_schema = FuelDataSchema()
 fueldata_schemas = FuelDataSchema(many=True)
 
@@ -28,6 +29,11 @@ class WasteDataSchema(ma.Schema):
 wastedata_schema = WasteDataSchema()
 wastedata_schemas = WasteDataSchema(many=True)
 
+class TransDataSchema(ma.Schema):
+    class Meta:
+        fields = ('id','transtype','fueltype','unit','co2','ch4','n2o','total','transport')
+transdata_schema = TransDataSchema()
+transdata_schemas = TransDataSchema(many=True)
 class USElecDataSchema(ma.Schema):
     class Meta:
         fields = ('id', 'eGRID_Subregion', 'sc_co2', 'sc_ch4', 'sc_n2o')
@@ -37,7 +43,7 @@ uselecdata_schemas = USElecDataSchema(many=True)
 
 class USElectricityefSchema(ma.Schema):
     class Meta:
-        fields = ('id','eGRID_Subregion', 'sc_co2', 'sc_ch4', 'sc_n20')
+        fields = ('id','eGRID_Subregion', 'sc_co2', 'sc_ch4', 'sc_n2o')
 USElectricityef_schema = USElectricityefSchema()
 USElectricityef_schemas = USElectricityefSchema(many=True)
 
@@ -49,7 +55,7 @@ Electricityef_schemas = ElectricityefSchema(many=True)
 
 class FuelsefSchema(ma.Schema):
     class Meta:
-        fields = ('id','sector', 'subsector', 'type', 'ratio', 'unit', 'sc1_co2', 'sc1_ch4', 'sc1_n20', 'sc1_sum', 'sc3_ef')
+        fields = ('id','sector', 'subsector', 'type', 'ratio', 'unit', 'sc1_co2', 'sc1_ch4', 'sc1_n2o', 'sc1_sum', 'sc3_ef')
 Fuelsef_schema = FuelsefSchema()
 Fuelsef_schemas = FuelsefSchema(many=True)
 
@@ -58,6 +64,12 @@ class WasteefSchema(ma.Schema):
         fields = ('id','name', 'unit', 'type', 'value','scope', 'ratio', 'treatment')
 Wasteef_schema = WasteefSchema()
 Wasteef_schemas = WasteefSchema(many=True)
+
+class TransefSchema(ma.Schema):
+    class Meta:
+        fields = ('id','transport_type','fuel_type','unit','ratioGJperKL','sc1_co2','sc1_ch4','sc1_n2o','sc1_sum','sc3_ef')
+Transef_schema = TransefSchema()
+Transef_schemas = TransefSchema(many=True)
 
 @app.route('/')
 
@@ -158,12 +170,13 @@ def send_gaseousfueltype():
 @app.route('/fueldata', methods=['POST'])
 def add_fueldata():
     fuel = request.json['fuel']
-    fuelType = request.json['fueltype']
-    fuelSubType = request.json['fuelsubtype']
+    fueltype = request.json['fueltype']
+    fuelsubtype = request.json['fuelsubtype']
     unit = request.json['unit']
-    print(fuel,fuelType,fuelSubType,unit)
-    total, CO2, CH4, N2O = fuelcal(fuel,fuelSubType,fuelType,unit)
-    fueldata = FuelData(id, fuel, fuelType, fuelSubType, unit, total, CO2, CH4, N2O)
+    # print(fuel,fuelsubtype,fueltype,unit)
+    # return 'success'
+    total, CO2, CH4, N2O = fuelcal(fuel,fueltype,fuelsubtype,unit)
+    fueldata = FuelData(fuel, fueltype, fuelsubtype, unit, total, CO2, CH4, N2O)
     
     db.session.add(fueldata)
     db.session.commit()
@@ -217,6 +230,39 @@ def send_wasteresult():
     return jsonify(result)
 
 # transport calculator
+@app.route('/transporttype', methods=['GET'])
+def send_transporttype():
+    data = Transef.query.with_entities(Transef.transport_type).distinct().all()
+    data_list = [item[0] for item in data]
+    json_data = json.dumps(data_list)
+    return  json_data
+
+@app.route('/transfueltype', methods=['GET'])
+def send_transfueltype():
+    data = Transef.query.with_entities(Transef.id,Transef.transport_type,Transef.fuel_type).all()
+    my_dict_list = [{'key': k, 'transporttype': t, 'fueltype': f} for k, t, f in data]
+    json_data = json.dumps(my_dict_list)
+    return  json_data
+
+@app.route('/transdata', methods=['POST'])
+def add_transdata():
+    trans = request.json['trans']
+    transtype = request.json['transtype']
+    fueltype = request.json['fueltype']
+    unit = request.json['unit']
+
+    total,CO2, CH4, N2O = transportcal(Q=trans,transport_type=transtype,fuel_type=fueltype,unit=unit)
+    transdata = TransData(fueltype,transtype,trans,unit,CO2,CH4,N2O,total)
+
+    db.session.add(transdata)
+    db.session.commit()
+    return wastedata_schema.jsonify(transdata)
+
+@app.route('/transresult', methods=['GET'])
+def send_transresult():
+    data = TransData.query.order_by(TransData.id.desc()).first()
+    result = transdata_schema.dump(data)
+    return jsonify(result)
 
 
 # US electricity calculator
@@ -231,7 +277,7 @@ def send_usregion():
 def add_uselecdata():
     region = request.json['region']
     elec = request.json['elec']
-    total, CO2, CH4, N2O = uselecal(elec,region)
+    CO2, CH4, N2O = uselecal(elec,region)
 
     uselecdata = USElecData(region, CO2, CH4, N2O)
     db.session.add(uselecdata)
@@ -243,5 +289,6 @@ def send_uselecresult():
     data = USElecData.query.order_by(USElecData.id.desc()).first()
     result = uselecdata_schema.dump(data)
     return jsonify(result)
+
 
 

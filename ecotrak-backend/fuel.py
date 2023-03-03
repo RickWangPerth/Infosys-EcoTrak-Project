@@ -121,7 +121,7 @@ def liquidfuelcal(Q, type, unit):
         CH4_e = float(Q) * EC * (sc1_ch4) / 1000
         N2O_e = float(Q) * EC * (sc1_n20) / 1000
         total_e = float(Q) * EC * (sc1_sum + sc3_ef) / 1000
-    print(total_e, CO2_e, CH4_e, N2O_e)
+    #print(total_e, CO2_e, CH4_e, N2O_e)
 
     return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)
 
@@ -154,12 +154,12 @@ def gaseousfuelcal(Q, type, unit):
     CH4_e = float(Q) * EC * (sc1_ch4) / 1000
     N2O_e = float(Q) * EC * (sc1_n20) / 1000
     total_e = float(Q) * EC * (sc1_sum) / 1000
-    print(total_e, CO2_e, CH4_e, N2O_e)
+    #print(total_e, CO2_e, CH4_e, N2O_e)
 
     return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)
 
 
-def fuelcal(Q, type, subsector, unit):
+def fuelcal(Q, subsector,type, unit):
     if subsector == 'Solid Fuel':
         total_e, CO2_e, CH4_e, N2O_e = solidfuelcal(Q, type)
     elif subsector == 'Liquid Fuel':

@@ -23,22 +23,23 @@ export default function AUTranscal(countryvalue,typevalue) {
 
     const portNum = 5000;
 
-    
+
     //trans type
     const [transtype, setTransType] = useState([]);
+    const [fueltype, setFuelType] = useState([]);
 
     // Trans value
     const [transtypevalue, setTransTypeValue] = useState([]);
     const [transvalue, setTransValue] = useState([]);
     const [transunitvalue, setTransUnitValue] = useState([]);
-    const [transsubtypevalue, setTransSubTypeValue] = useState([]);
+    const [fueltypevalue, setFuelTypeValue] = useState([]);
     const [transresult, setTransResult] = useState([]);
 
 
 
 
     useEffect(() => {
-    fetch(`http://127.0.0.1:${portNum}/transtype`,{        
+    fetch(`http://127.0.0.1:${portNum}/transporttype`,{        
         headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -52,8 +53,71 @@ export default function AUTranscal(countryvalue,typevalue) {
 
 
 
+
+    useEffect(() => {
+    fetch(`http://127.0.0.1:${portNum}/transfueltype`,{
+        headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Origin':'http://localhost:3000',
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+    },})
+        .then(response => response.json())
+        .then(data => setFuelType(data))
+        .catch(error => console.log(error));
+    }, []);
+    
+    let fueltypeList = []
+    let Aviation_fueltypeList = fueltype
+    .filter(function(d) {
+      return d.transporttype === 'Aviation';
+    })
+    .map(function(obj) {
+      return obj.fueltype;
+    });
+
+    let HDV_fueltypeList = fueltype
+    .filter(function(d) {
+      return d.transporttype === 'Heavy duty vehicles';
+    })
+    .map(function(obj) {
+      return obj.fueltype;
+    });
+
+    let CnLCV_fueltypeList = fueltype
+    .filter(function(d) {
+      return d.transporttype === 'Cars and light commercial vehicles';
+    })
+    .map(function(obj) {
+      return obj.fueltype;
+    });
+
+    let LDV_fueltypeList = fueltype
+    .filter(function(d) {
+      return d.transporttype === 'Light duty vehicles';
+    })
+    .map(function(obj) {
+      return obj.fueltype;
+    });
+
+    if (transtypevalue === 'Cars and light commercial vehicles') {
+      fueltypeList = CnLCV_fueltypeList;
+    } else if (transtypevalue === 'Light duty vehicles') {
+      fueltypeList = LDV_fueltypeList;
+    } else if (transtypevalue === 'Heavy duty vehicles') {
+      fueltypeList = HDV_fueltypeList;
+    } else if (transtypevalue === 'Aviation') {
+      fueltypeList = Aviation_fueltypeList;
+    }
+
+    async function handleClick() {
+      await handleTransSubmit(); // wait for handleElecSubmit to complete
+      setTimeout(() => {
+        GetResult(); // execute GetResult after 1 second
+      }, 500); // 1000 milliseconds = 1 second
+    }
     function handleTransSubmit() {
-        fetch(`http://localhost:${portNum}/fueldata`,{
+        fetch(`http://localhost:${portNum}/transdata`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -63,8 +127,8 @@ export default function AUTranscal(countryvalue,typevalue) {
         },
             body: JSON.stringify({
                 country: countryvalue,
-                fueltype:transtypevalue,
-                fuelsubtype: transsubtypevalue,
+                transtype:transtypevalue,
+                fueltype: fueltypevalue,
                 unit: transunitvalue,
                 trans: transvalue
 
@@ -72,8 +136,10 @@ export default function AUTranscal(countryvalue,typevalue) {
         }).then(resp => resp.json())
         .then(resp => console.log(resp))
         .catch(err => console.log(err)) 
+    };
+    function GetResult() {
 
-        fetch(`http://localhost:${portNum}/fuelresult`,{
+        fetch(`http://localhost:${portNum}/transresult`,{
             method: 'GET',
             headers: {
             'Content-Type': 'application/json',
@@ -92,7 +158,7 @@ export default function AUTranscal(countryvalue,typevalue) {
   return (
     <>
        <Grid item xs={12} md={12} mt={5}>
-      <img  src={Transicon} alt="fuel icon" width='80px'/>
+      <img  src={Transicon} alt="transport icon" width='80px'/>
     </Grid>
     <Grid item xs={12} md={6} padding={5}>
       <h2>Transportation</h2>
@@ -129,24 +195,26 @@ export default function AUTranscal(countryvalue,typevalue) {
       </p>
     </Grid>
     <Grid item xs={12} md={4}>
-        <Autocomplete
-        className={classes.text}
-        disablePortal
-        id="type"
-        options={transtype}
-        sx={{ width: 300, mt: 2 }}
-        renderInput={(params) => <TextField {...params} label="Type of Transport" />}
-        onChange={(event) => { setTransTypeValue(event.target.textContent); } } />
+      <Autocomplete
+      className={classes.text}
+      disablePortal
+      id="type"
+      options={transtype}
+      sx={{ width: 300, mt: 2 }}
+      renderInput={(params) => <TextField {...params} label="Type of Transport" />}
+      onChange={(event) => { setTransTypeValue(event.target.textContent); setFuelTypeValue("")} } 
+      />
     </Grid>
+    
     <Grid item xs={12} md={4}>
         <Autocomplete
         className={classes.text}
         disablePortal
         id="type"
-        options={transtype}
+        options={fueltypeList}
         sx={{ width: 300, mt: 2 }}
         renderInput={(params) => <TextField {...params} label="Type of Fuel" />}
-        onChange={(event) => { setTransTypeValue(event.target.textContent); } } />
+        onChange={(event) => { setFuelTypeValue(event.target.textContent); } } />
     </Grid>
     <Grid item xs={12} md={6}>
 
@@ -158,7 +226,6 @@ export default function AUTranscal(countryvalue,typevalue) {
         label="Amount of Fuel"
         defaultValue="0"
         onChange={(event) => { setTransValue(event.target.value); } } />
-
     </Grid>
 
     <Grid item xs={12} md={4}>
@@ -172,7 +239,7 @@ export default function AUTranscal(countryvalue,typevalue) {
             >
                 <FormControlLabel value="kL" control={<Radio />} label="kL" />
                 <FormControlLabel value="GJ" control={<Radio />} label="GJ" />
-                <FormControlLabel value="m3" control={<Radio />} label="m3" />
+                {/* <FormControlLabel value="m3" control={<Radio />} label="m3" /> */}
             </RadioGroup>
         </FormControl>
     </Grid>   
@@ -182,7 +249,7 @@ export default function AUTranscal(countryvalue,typevalue) {
             type='submit'
             sx={{ width: 300 , background:'#7ECA58'}}
             onClick={ () => {
-                //handleClick();
+                handleClick();
               } }
             >
             Calculate
@@ -193,10 +260,12 @@ export default function AUTranscal(countryvalue,typevalue) {
         className={classes.text}
         id='resultP' 
         style={{display:'none'}}>
-          {/* "Total Greenhouse Gas Emissions from electricity (t CO2e): " {elecresult.result} <br />
-           The scope 2 emission factor in {elecresult.state} is {s2} kg CO2-e/{elecresult.unit} <br />
-           The scope 3 emission factor in {elecresult.state} is {s3} kg CO2-e/{elecresult.unit} <br /> */}
+          Total Greenhouse Gas Emissions from fuel (t CO2e): {transresult.total} <br />
+          CO2 Emissions from fuel (t CO2e):  {transresult.co2} <br />
+          CH4 Emissions from fuel (t CO2e):  {transresult.ch4} <br />
+          N2O Emissions from fuel (t CO2e):  {transresult.n2o} <br />
         </p>
+        {console.log(transresult)}
     </Grid>      
     </>
   )

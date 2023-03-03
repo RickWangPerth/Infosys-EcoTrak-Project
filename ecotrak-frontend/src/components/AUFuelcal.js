@@ -297,11 +297,10 @@ export default function AUFuelcal(countryvalue,typevalue) {
       className={classes.text}
       id='resultP' 
       style={{display:'none'}}>
-        
-        "Total Greenhouse Gas Emissions from fuel (t CO2e): " {fuelresult.total} <br />
-        "CO2 Emissions from fuel (t CO2e): " {fuelresult.CO2} <br />
-        "CH4 Emissions from fuel (t CO2e): " {fuelresult.CH4} <br />
-        "N2O Emissions from fuel (t CO2e): " {fuelresult.N2O} <br />
+        Total Greenhouse Gas Emissions from fuel (t CO2e): "{fuelresult.total} <br />
+        CO2 Emissions from fuel (t CO2e):  {fuelresult.co2} <br />
+        CH4 Emissions from fuel (t CO2e):  {fuelresult.ch4} <br />
+        N2O Emissions from fuel (t CO2e):  {fuelresult.n2o} <br />
       </p>
     </Grid>
     </>

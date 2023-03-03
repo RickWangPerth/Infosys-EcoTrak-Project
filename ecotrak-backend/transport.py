@@ -166,7 +166,7 @@ def aviation(Q, fuel_type, unit):
     return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)
 
 
-def transportcal(transport_type, Q, fuel_type, unit):
+def transportcal(Q, transport_type, fuel_type, unit):
     if transport_type == 'Cars and light commercial vehicles':
         waste_e = cars(Q, fuel_type, unit)
     elif transport_type == 'Heavy duty vehicles':

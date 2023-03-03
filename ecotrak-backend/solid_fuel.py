@@ -18,7 +18,6 @@ param_dic = {
     "password": password
 }
 
-
 def connect(params_dic):
     """ Connect to the PostgreSQL database server """
     conn = None
