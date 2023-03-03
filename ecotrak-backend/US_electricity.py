@@ -71,4 +71,4 @@ def electricitycal(Q, subregion):
     N2O_e = float(Q) * (sc_n2o) / 1000
     total_e = float(Q) * (sc_co2 + sc_ch4 + sc_n2o) / 1000
 
-    return total_e, CO2_e, CH4_e, N2O_e
+    return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)

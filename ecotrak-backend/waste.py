@@ -69,7 +69,7 @@ def solid_kg(Q, name):
     EF = solid_df.loc[solid_df['name']
                       == name, 'value'].iloc[0]
     solid_e = float(Q) * EF
-    return solid_e
+    return round(solid_e, 2)
 
 
 # Solid Waste - weight unknown
@@ -83,7 +83,7 @@ def solid_m3(Q, name):
     EF = solid_df.loc[solid_df['name']
                       == name, 'value'].iloc[0]
     solid_e = float(Q) * CF * EF
-    return solid_e
+    return round(solid_e, 2)
 
 
 # Waste water treatment
@@ -101,10 +101,10 @@ def solid_m3(Q, name):
 
 def incineration(Q, name):
     EF = combined_df.loc[combined_df['name']
-                      == name, 'value'].iloc[0]
+                         == name, 'value'].iloc[0]
 
     waste_e = float(Q) * EF
-    return waste_e
+    return round(waste_e, 2)
 
 
 # def compost(Q, EF, R):
@@ -116,7 +116,7 @@ def incineration(Q, name):
 # print("Total Greenhouse Gas Emissions from Example 13    (t CO2e): ", ex_13)
 
 def wastecal(Q, unit, type, subtype):
-  
+
     if type == 'Solid Waste':
         if unit == 'kg':
             waste_e = solid_kg(Q, subtype)
@@ -124,6 +124,6 @@ def wastecal(Q, unit, type, subtype):
             waste_e = solid_m3(Q, subtype)
 
     elif type == 'Combined Waste':
-        
+
         waste_e = incineration(Q, subtype)
     return waste_e

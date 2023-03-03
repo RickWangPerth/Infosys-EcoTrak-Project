@@ -91,7 +91,7 @@ def cars(Q, fuel_type, unit):
     N2O_e = float(Q) * EC * (sc1_n20) / 1000
     total_e = float(Q) * EC * (sc1_sum) / 1000
 
-    return total_e, CO2_e, CH4_e, N2O_e
+    return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)
 
 
 def heavy(Q, fuel_type, unit):
@@ -115,7 +115,7 @@ def heavy(Q, fuel_type, unit):
     N2O_e = float(Q) * EC * (sc1_n20) / 1000
     total_e = float(Q) * EC * (sc1_sum) / 1000
 
-    return total_e, CO2_e, CH4_e,
+    return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)
 
 
 def light(Q, fuel_type, unit):
@@ -139,7 +139,7 @@ def light(Q, fuel_type, unit):
     N2O_e = float(Q) * EC * (sc1_n20) / 1000
     total_e = float(Q) * EC * (sc1_sum) / 1000
 
-    return total_e, CO2_e, CH4_e, N2O_e
+    return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)
 
 
 def aviation(Q, fuel_type, unit):
@@ -163,7 +163,7 @@ def aviation(Q, fuel_type, unit):
     N2O_e = float(Q) * EC * (sc1_n20) / 1000
     total_e = float(Q) * EC * (sc1_sum) / 1000
 
-    return total_e, CO2_e, CH4_e, N2O_e
+    return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)
 
 
 def transportcal(transport_type, Q, fuel_type, unit):

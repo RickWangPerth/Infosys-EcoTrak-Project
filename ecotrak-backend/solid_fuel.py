@@ -91,7 +91,7 @@ def solidfuelcal(Q, type):
 
     total_e = float(Q) * EC * (sc1_sum + sc3_ef) / 1000
 
-    return total_e, CO2_e, CH4_e, N2O_e
+    return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)
 
 
 total = solidfuelcal(Q, type)

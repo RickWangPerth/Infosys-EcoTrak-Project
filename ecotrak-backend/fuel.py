@@ -18,6 +18,7 @@ param_dic = {
     "password": password
 }
 
+
 def connect(params_dic):
     """ Connect to the PostgreSQL database server """
     conn = None
@@ -57,14 +58,16 @@ column_names = column_names
 df = postgresql_to_dataframe(
     conn, "select * from " + table_name, column_names)
 df.head()
-def fuelcal(Q,type, subsector, unit):
+
+
+def fuelcal(Q, type, subsector, unit):
     if subsector == 'Solid Fuel':
         solidfuelcal(Q, type)
     elif subsector == 'Liquid Fuel':
         liquidfuelcal(Q, type, unit)
     elif subsector == 'Gas Fuel':
         gaseousfuelcal(Q, type, unit)
-   
+
 
 # Solid Fuel Calculation
 solid_df = df.loc[df['subsector'] == 'Solid Fuel']
@@ -90,7 +93,7 @@ def solidfuelcal(Q, type):
 
     total_e = float(Q) * EC * (sc1_sum + sc3_ef) / 1000
 
-    return total_e, CO2_e, CH4_e, N2O_e
+    return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)
 
 
 # Liquid Fuel Calculation
@@ -118,9 +121,9 @@ def liquidfuelcal(Q, type, unit):
         CH4_e = float(Q) * EC * (sc1_ch4) / 1000
         N2O_e = float(Q) * EC * (sc1_n20) / 1000
         total_e = float(Q) * EC * (sc1_sum + sc3_ef) / 1000
-    print(total_e, CO2_e, CH4_e, N2O_e)    
+    print(total_e, CO2_e, CH4_e, N2O_e)
 
-    return total_e, CO2_e, CH4_e, N2O_e
+    return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)
 
 
 # Gaseous Fuel Calculation
@@ -129,6 +132,7 @@ gaseous_df = df.loc[df['subsector'] == 'Gaseous Fuel']
 Q = 1150
 type = 'Liquefied natural gas'
 unit = 'kL'
+
 
 def gaseousfuelcal(Q, type, unit):
     if unit == 'GJ':
@@ -152,7 +156,7 @@ def gaseousfuelcal(Q, type, unit):
     total_e = float(Q) * EC * (sc1_sum) / 1000
     print(total_e, CO2_e, CH4_e, N2O_e)
 
-    return total_e, CO2_e, CH4_e, N2O_e
+    return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)
 
 
 def fuelcal(Q, type, subsector, unit):
@@ -161,6 +165,6 @@ def fuelcal(Q, type, subsector, unit):
     elif subsector == 'Liquid Fuel':
         total_e, CO2_e, CH4_e, N2O_e = liquidfuelcal(Q, type, unit)
     elif subsector == 'Gaseous Fuel':
-       total_e, CO2_e, CH4_e, N2O_e = gaseousfuelcal(Q, type, unit)
+        total_e, CO2_e, CH4_e, N2O_e = gaseousfuelcal(Q, type, unit)
 
-    return total_e, CO2_e, CH4_e, N2O_e
+    return round(total_e, 2), round(CO2_e, 2), round(CH4_e, 2), round(N2O_e, 2)

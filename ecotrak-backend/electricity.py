@@ -78,7 +78,7 @@ def elecal(Q, state, unit):
     print(Q)
     elec_e = float(Q) * (sc2 + sc3) / 1000
 
-    return elec_e
+    return round(elec_e, 2)
 
 
 emissions = elecal(Q, state, unit)
