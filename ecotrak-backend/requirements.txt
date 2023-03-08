@@ -11,7 +11,7 @@ dominate==2.7.0
 email-validator==1.2.1
 et-xmlfile==1.1.0
 flasgger==0.9.5
-Flask==2.2.2
+Flask==2.2.3
 Flask-Admin==1.6.0
 Flask-Bootstrap==3.3.7.1
 Flask-Cors==3.0.10
@@ -21,6 +21,7 @@ flask-marshmallow==0.14.0
 Flask-Migrate==3.1.0
 Flask-Moment==1.0.4
 Flask-SQLAlchemy==2.5.1
+flask-swagger-ui==4.11.1
 Flask-WTF==1.0.1
 fonttools==4.37.1
 idna==3.3
@@ -41,7 +42,7 @@ panda==0.3.1
 pandas==1.4.3
 Pillow==9.2.0
 postgres==4.0
-protobuf==4.21.9
+protobuf==4.21.12
 psycopg2-binary==2.9.5
 psycopg2-pool==1.1
 pyparsing==3.0.9
