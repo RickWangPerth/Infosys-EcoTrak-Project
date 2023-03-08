@@ -5,7 +5,7 @@ import sys
 host = 'localhost'
 database = 'ecotrak'
 user = 'postgres'
-password = ''
+password = 'postgres'
 table_name = 'US_Emissions'
 column_names = ['id', 'eGRID Subregion', 'sc_co2', 'sc_ch4', 'sc_n2o']
 

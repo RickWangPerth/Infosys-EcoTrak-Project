@@ -1,0 +1,983 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Ecotrak API",
+    "description": "API for calculating GHG emissions",
+    "version": "1.0"
+  },
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/statedata": {
+      "get": {
+        "tags": [
+          "electrical"
+        ],
+        "summary": "Get a list of all states",
+        "responses": {
+          "200": {
+            "description": "A list of states",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/elecdata": {
+      "post": {
+        "tags": [
+          "electrical"
+        ],
+        "summary": "calculate and add electricity data",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "elec": {
+                  "type": "number"
+                },
+                "unit": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state",
+                "elec",
+                "unit"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The added electricity data",
+            "schema": {
+              "$ref": "#/definitions/ElecData"
+            }
+          }
+        }
+      }
+    },
+    "/sc2data/{state}/{unit}": {
+      "get": {
+        "tags": [
+          "electrical"
+        ],
+        "summary": "Get a list of scope 2 data for a particular state and unit",
+        "parameters": [
+          {
+            "name": "state",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "unit",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of scope 2 data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sc3data/{state}/{unit}": {
+      "get": {
+        "tags": [
+          "electrical"
+        ],
+        "summary": "Get a list of scope 3 data for a particular state and unit",
+        "parameters": [
+          {
+            "name": "state",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "unit",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of scope 3 data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/elecresult": {
+      "get": {
+        "tags": [
+          "electrical"
+        ],
+        "summary": "Get the electricity calculation result",
+        "responses": {
+          "200": {
+            "description": "Get the electricity calculation result",
+            "schema": {
+              "$ref": "#/definitions/ElecData"
+            }
+          }
+        }
+      }
+    },
+      "/fueltype": {
+        "get": {
+          "tags": [
+            "fuel"
+          ],
+          "summary": "Get list of fuel subsectors",
+          "description": "Returns a list of fuel subsectors",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "A list of fuel subsectors",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/solidfueltype": {
+        "get": {
+          "tags": [
+            "fuel"
+          ],
+          "summary": "Get list of solid fuel types",
+          "description": "Returns a list of solid fuel types",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "A list of solid fuel types",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/liquidfueltype": {
+        "get": {
+          "tags": [
+            "fuel"
+          ],
+          "summary": "Get list of liquid fuel types",
+          "description": "Returns a list of liquid fuel types",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "A list of liquid fuel types",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/gaseousfueltype": {
+        "get": {
+          "tags": [
+            "fuel"
+          ],
+          "summary": "Get list of gaseous fuel types",
+          "description": "Returns a list of gaseous fuel types",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "A list of gaseous fuel types",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/fueldata": {
+        "post": {
+          "tags": ["fuel"],
+          "summary": "Add fuel data to the database",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fuel": {
+                    "type": "number"
+                  },
+                  "fueltype": {
+                    "type": "string"
+                  },
+                  "fuelsubtype": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "fuel",
+                  "fueltype",
+                  "fuelsubtype",
+                  "unit"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fuel": {
+                    "type": "string"
+                  },
+                  "fueltype": {
+                    "type": "string"
+                  },
+                  "fuelsubtype": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "total": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "CO2": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "CH4": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "N2O": {
+                    "type": "number",
+                    "format": "float"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request"
+            }
+          }
+          }
+        },
+      "/fuelresult": {
+        "get": {
+          "tags": [
+            "fuel"
+          ],
+          "summary": "Get latest fuel data",
+          "description": "Retrieve the latest fuel data from the database",
+          "responses": {
+            "200": {
+              "description": "Fuel data retrieved successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FuelData"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/wastetype": {
+        "get": {
+          "tags": [
+            "waste"
+          ],
+          "summary": "Get the types of waste available.",
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/solidwastetype": {
+        "get": {
+          "tags": [
+            "waste"
+          ],
+          "summary": "Get the types of solid waste available.",
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/combinedwastetype": {
+        "get": {
+          "tags": [
+            "waste"
+          ],
+          "summary": "Get the types of combined waste available.",
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/wastedata": {
+        "post": {
+          "tags": [
+            "waste"
+          ],
+          "summary": "Add waste data to the database",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "waste": {
+                    "type": "number"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "subtype": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "waste",
+                  "type",
+                  "subtype",
+                  "unit"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "waste": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "result": {
+                    "type": "number",
+                    "format": "float"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request"
+            }
+          }
+        }
+      },
+      "/wasteresult": {
+        "get": {
+          "tags": [
+            "waste"
+          ],
+          "description": "Get the most recent waste data result",
+          "responses": {
+            "200": {
+              "description": "The most recent waste data result",
+              "schema": {
+                "$ref": "#/definitions/WasteData"
+              }
+            }
+          }
+        }
+      },
+      "/transporttype": {
+        "get": {
+          "tags": [
+            "transport"
+          ],
+          "summary": "Get a list of distinct transport types",
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/transfueltype": {
+        "get": {
+          "tags": [
+            "transport"
+          ],
+          "summary": "Get a list of transport types and fuel types",
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "integer"
+                    },
+                    "transporttype": {
+                      "type": "string"
+                    },
+                    "fueltype": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/transdata": {
+        "post": {
+          "tags": [
+            "transport"
+          ],
+          "summary": "calculate and add transportation data",
+          "parameters": [
+            {
+              "name": "data",
+              "in": "body",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "trans": {
+                    "type": "number"
+                  },
+                  "transtype": {
+                    "type": "string"
+                  },
+                  "fueltype": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "trans",
+                  "transtype",
+                  "fueltype",
+                  "unit"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successfully added transportation data",
+              "schema": {
+                "$ref": "#/definitions/TransData"
+              }
+            }
+          }
+        }
+      },
+      "/transresult": {
+        "get": {
+          "tags": [
+            "transport"
+          ],
+          "summary": "Get the latest transport data",
+          "responses": {
+            "200": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/TransData"
+              }
+            }
+          }
+        }
+      },
+      "/usregion": {
+        "get": {
+          "tags": [
+            "US electrical"
+          ],
+          "description": "Get a list of US regions",
+          "responses": {
+            "200": {
+              "description": "List of US regions",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/uselecdata": {
+        "post": {
+          "tags": [
+            "US electrical"
+          ],
+          "summary": "Calculate and add electricity usage data",
+          "parameters": [
+            {
+              "name": "data",
+              "in": "body",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "region": {
+                    "type": "string"
+                  },
+                  "elec": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "region",
+                  "elec"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Electricity usage data added successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "region": {
+                    "type": "string"
+                  },
+                  "CO2": {
+                    "type": "number"
+                  },
+                  "CH4": {
+                    "type": "number"
+                  },
+                  "N2O": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input parameters"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/uselecresult": {
+        "get": {
+          "tags": [
+            "US electrical"
+          ],
+          "description": "Get the latest calculation result for US electricity emissions",
+          "responses": {
+            "200": {
+              "description": "Result of the latest calculation",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "region": {
+                    "type": "string"
+                  },
+                  "CO2": {
+                    "type": "number"
+                  },
+                  "CH4": {
+                    "type": "number"
+                  },
+                  "N2O": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+    "USElectricityef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "US-NWPP-2019"
+        },
+        "eGRID_Subregion": {
+          "type": "string",
+          "example": "Northwestern U.S. / Pacific Northwest"
+        },
+        "sc_co2": {
+          "type": "number",
+          "example": 511.22
+        },
+        "sc_ch4": {
+          "type": "number",
+          "example": 0.017
+        },
+        "sc_n2o": {
+          "type": "number",
+          "example": 0.042
+        }
+      }
+    },
+    "Electricityef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "ELECTRICITY_SECTOR-CA-2019"
+        },
+        "sector": {
+          "type": "string",
+          "example": "Electricity Sector"
+        },
+        "state": {
+          "type": "string",
+          "example": "California"
+        },
+        "sc2": {
+          "type": "number",
+          "example": 299.26
+        },
+        "sc3": {
+          "type": "number",
+          "example": 0.007
+        },
+        "unit": {
+          "type": "string",
+          "example": "kg CO2eq/kWh"
+        }
+      }
+      },
+    "Fuelsef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "FUEL-TRANSPORT-2019"
+        },
+        "sector": {
+          "type": "string",
+          "example": "Transportation"
+        },
+        "subsector": {
+          "type": "string",
+          "example": "Petroleum Products Pipeline Transport"
+        },
+        "type": {
+          "type": "string",
+          "example": "Diesel Fuel"
+        },
+        "ratio": {
+          "type": "number",
+          "example": 1.0
+        },
+        "unit": {
+          "type": "string",
+          "example": "kg CO2eq/gal"
+        },
+        "sc1_co2": {
+          "type": "number",
+          "example": 10.180
+        },
+        "sc1_ch4": {
+          "type": "number",
+          "example": 0.002
+        },
+        "sc1_n2o": {
+          "type": "number",
+          "example": 0.001
+        },
+        "sc1_sum": {
+          "type": "number",
+          "example": 10.183
+        },
+        "sc3_ef": {
+          "type": "number",
+          "example": 2.656
+        }
+      }
+      },
+      "Wasteef": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "unit": {"type": "string"},
+          "type": {"type": "string"},
+          "value": {"type": "number"},
+          "scope": {"type": "number"},
+          "ratio": {"type": "number"},
+          "treatment": {"type": "string"}
+        }
+      },
+      "Transef": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string"},
+          "transport_type": {"type": "string"},
+          "fuel_type": {"type": "string"},
+          "unit": {"type": "string"},
+          "ratioGJperKL": {"type": "number"},
+          "sc1_co2": {"type": "number"},
+          "sc1_ch4": {"type": "number"},
+          "sc1_n2o": {"type": "number"},
+          "sc1_sum": {"type": "number"},
+          "sc3_ef": {"type": "number"}
+        }
+      },
+      "ElecData": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "integer"},
+          "state": {"type": "string"},
+          "elec": {"type": "number"},
+          "unit": {"type": "string"},
+          "result": {"type": "number"}
+        }
+      },
+      "WasteData": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "waste": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "result": {
+            "type": "number"
+          }
+        }
+      },
+      "TransData": {
+        "type": "object",
+        "properties": {
+          "fueltype": {
+            "type": "string"
+          },
+          "transtype": {
+            "type": "string"
+          },
+          "trans": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "CO2": {
+            "type": "number"
+          },
+          "CH4": {
+            "type": "number"
+          },
+          "N2O": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        }
+        },
+        "FuelData": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Unique identifier for the FuelData object"
+            },
+            "fuel": {
+              "type": "number",
+              "format": "float",
+              "description": "Amount of fuel used"
+            },
+            "fueltype": {
+              "type": "string",
+              "description": "Type of fuel"
+            },
+            "fuelsubtype": {
+              "type": "string",
+              "description": "Subtype of fuel"
+            },
+            "unit": {
+              "type": "string",
+              "description": "Unit of measurement for the fuel"
+            },
+            "total": {
+              "type": "number",
+              "format": "float",
+              "description": "Total amount of emissions"
+            },
+            "co2": {
+              "type": "number",
+              "format": "float",
+              "description": "Amount of CO2 emissions"
+            },
+            "ch4": {
+              "type": "number",
+              "format": "float",
+              "description": "Amount of CH4 emissions"
+            },
+            "n2o": {
+              "type": "number",
+              "format": "float",
+              "description": "Amount of N2O emissions"
+            }
+          }
+          },
+        "USElecData": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Unique identifier for the USElecData object"
+            },
+            "eGRID_Subregion": {
+              "type": "string",
+              "description": "eGRID subregion"
+            },
+            "sc_co2": {
+              "type": "number",
+              "format": "float",
+              "description": "Amount of CO2 emissions from the subregion's electricity generation"
+            },
+            "sc_ch4": {
+              "type": "number",
+              "format": "float",
+              "description": "Amount of CH4 emissions from the subregion's electricity generation"
+            },
+            "sc_n2o": {
+              "type": "number",
+              "format": "float",
+              "description": "Amount of N2O emissions from the subregion's electricity generation"
+            }
+          }
+        }
+      }
+  }
+         

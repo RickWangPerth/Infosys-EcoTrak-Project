@@ -277,7 +277,7 @@ def send_usregion():
 def add_uselecdata():
     region = request.json['region']
     elec = request.json['elec']
-    CO2, CH4, N2O = uselecal(elec,region)
+    total, CO2, CH4, N2O = uselecal(elec,region)
 
     uselecdata = USElecData(region, CO2, CH4, N2O)
     db.session.add(uselecdata)
