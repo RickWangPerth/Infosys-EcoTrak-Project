@@ -4,8 +4,15 @@ import Elecicon from "../img/electricity.png";
 import { Autocomplete } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useState, useEffect } from 'react';
-import { Grid, Button, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { Grid, Button, TextField, FormControl} from '@mui/material';
 
+
+import ch4 from '../img/ch4.png';
+import co2 from '../img/co2.png';
+import n2o from '../img/n2o.png';
+import electotal from '../img/electotal.png';
+
+import map from '../img/egrid2020_subregion_map.png';
 const calStyle = makeStyles({
 
      text:{
@@ -15,7 +22,30 @@ const calStyle = makeStyles({
      },
     p:{
       lineHeight: '1.5',
-    }
+    },
+    img:{
+      width: '40px',
+      verticalAlign: 'middle', 
+    },
+    map:{
+      position: 'relative',
+      width: '40%',
+      height: 'auto',
+      left: '0',
+      right: '0',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      minWidth: '300px',
+    },
+    box:{
+      display:'inline-block',
+      width: '100%',
+      height: 'auto',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      textAlign: 'center',
+      verticalAlign: 'middle',
+    },
   })
 
 export default function USElecal(countryvalue,typevalue) {
@@ -47,7 +77,7 @@ export default function USElecal(countryvalue,typevalue) {
         await handleElecSubmit(); // wait for handleElecSubmit to complete
         setTimeout(() => {
           GetResult(); // execute GetResult after 1 second
-        }, 500); // 1000 milliseconds = 1 second
+        }, 300); // 1000 milliseconds = 1 second
       }
       
       function handleElecSubmit() {
@@ -91,7 +121,7 @@ export default function USElecal(countryvalue,typevalue) {
       
   return (
     <>
-    <Grid item xs={12} md={2} mt={5}>
+      <Grid item xs={12} md={2} mt={5}>
 
       <img src={Elecicon} alt='elec icon' width='80px'/>
       </Grid>
@@ -135,14 +165,19 @@ export default function USElecal(countryvalue,typevalue) {
     justifyContent="center"
     alignItems="center"  
     >
-    <Grid item xs={12} md={12} className={classes.text} mt={5}>
+    <Grid item xs={12} md={12} className={classes.text} mt={1}>
     <p> You can the grid for your region in 
-      <a href='https://www.epa.gov/system/files/images/2022-01/egrid2020_subregion_map.png'>representational maps </a>
-      provided by <a href='https://www.epa.gov/egrid'>United State Enviornmental Protection Agency (EPA) </a>
+      <a href='https://www.epa.gov/system/files/images/2022-01/egrid2020_subregion_map.png' target='_blank' rel="noreferrer"> representational maps </a>
+      provided by<a href='https://www.epa.gov/egrid' target='_blank' rel="noreferrer"> United State Enviornmental Protection Agency (EPA) </a>
     </p>
+   
     </Grid>
     <Grid item xs={12} md={4} mt={1}>
-
+      <div className={classes.box}>
+        <img src={map} alt='map' className={classes.map}/>
+      </div>
+    </Grid>
+    <Grid item xs={12} md={4} mt={1}>
     <Autocomplete
         className={classes.text}
         disablePortal
@@ -180,14 +215,28 @@ export default function USElecal(countryvalue,typevalue) {
         </Button>
       </Grid>
       <Grid item xs={12} md={12} mt={5}>
-        <p 
+        <div 
         className={classes.text}
         id='resultP' 
         style={{display:'none'}}>
-          Carbon dioxide (CO2) Emissions from electricity (t CO2e):  {elecresult.sc_co2} <br />
-          Mrthane (CH4) Emissions from electricity (t CO2e):  {elecresult.sc_ch4} <br />
-          Nitrous oxide (N2O) Emissions from electricity (t CO2e):  {elecresult.sc_n2o} <br />
-        </p>
+        <h3 className={classes.h3}>Result</h3>
+        <div>
+          <img src={electotal} alt='total' className={classes.img} />
+          <span className={classes.p}>   Total Greenhouse Gas Emissions from electricity (t CO2e): {parseFloat(elecresult.sc_co2) + parseFloat(elecresult.sc_n2o) + parseFloat(elecresult.sc_ch4)}</span>
+        </div>
+        <div>
+          <img src={co2} alt='co2' className={classes.img} />
+          <span className={classes.p}>   Carbon dioxide (CO2) Emissions from electricity (t CO2e):  {elecresult.sc_co2}</span>
+        </div>
+        <div>
+          <img src={ch4} alt='ch4' className={classes.img} />
+          <span className={classes.p}>   Mrthane (CH4) Emissions from electricity (t CO2e):  {elecresult.sc_ch4}</span>
+        </div>
+        <div>
+          <img src={n2o} alt='n2o' className={classes.img} />
+          <span className={classes.p}>   Nitrous oxide (N2O) Emissions from electricity (t CO2e):  {elecresult.sc_n2o}</span>
+        </div>
+      </div>
     </Grid>
     </>
   )

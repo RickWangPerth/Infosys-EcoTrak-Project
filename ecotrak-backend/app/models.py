@@ -169,6 +169,7 @@ class WasteData(db.Model):
     waste = db.Column(db.Float, unique=False, nullable=False)
     unit = db.Column(db.String(80), unique=False, nullable=False)
     result = db.Column(db.Float, unique=False, nullable=False)
+    
     def __init__(self,waste,unit,result):
 
         self.waste = waste

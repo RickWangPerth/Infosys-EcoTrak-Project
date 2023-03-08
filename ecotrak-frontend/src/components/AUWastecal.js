@@ -8,6 +8,8 @@ import Wasteicon from '../img/waste.png';
 import WasteEq1 from '../img/equations/wasteEq1.png';
 import WasteEq2 from '../img/equations/wasteEq2.png';
 
+import wastetotal from '../img/wastetotal.png';
+
 const calStyle = makeStyles({
   text:{
     position: 'relative',
@@ -15,7 +17,11 @@ const calStyle = makeStyles({
   },
   p:{
     lineHeight: '1.5',
-  }
+  },
+  img:{
+    width: '40px',
+    verticalAlign: 'middle', 
+  },
 })
 
 export default function AUWasteCal(countryvalue,typevalue) {
@@ -252,13 +258,16 @@ export default function AUWasteCal(countryvalue,typevalue) {
         </Button>
       </Grid>
       <Grid item xs={12} md={12} mt={5}>
-        <p
+        <div
           className={classes.text}
           id='resultP'
           style={{ display: 'none' }}>
-          Total Greenhouse Gas Emissions from fuel (t CO2e): {wasteresult.result}
-        </p>
-        {console.log(wasteresult.result)}
+          <h3 className={classes.h3}>Result</h3>
+          <div>
+          <img src={wastetotal} alt='total' className={classes.img} />
+          <span className={classes.p}>   Total Greenhouse Gas Emissions from waste (t CO2e): {wasteresult.result}</span>
+        </div>
+        </div>
       </Grid>
     </>
   )

@@ -4,6 +4,11 @@ import { makeStyles } from '@mui/styles';
 import { useState, useEffect } from 'react';
 import { Grid, Button, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
+import ch4 from '../img/ch4.png';
+import co2 from '../img/co2.png';
+import n2o from '../img/n2o.png';
+import fueltotal from '../img/fueltotal.png';
+
 import Fuelicon from '../img/fuel.png';
 import FuelEq from '../img/equations/fuelEq.png';
 const calStyle = makeStyles({
@@ -13,7 +18,11 @@ const calStyle = makeStyles({
   },
   p:{
     lineHeight: '1.5',
-  }
+  },
+  img:{
+    width: '40px',
+    verticalAlign: 'middle', 
+  },
 })
 
 export default function AUFuelcal(countryvalue,typevalue) {
@@ -89,6 +98,12 @@ export default function AUFuelcal(countryvalue,typevalue) {
         .catch(error => console.log(error));
     }, []);
 
+    async function handleClick() {
+      await handleFuelSubmit(); // wait for handleWasteSubmit to complete
+      setTimeout(() => {
+        GetResult(); // execute GetResult after 1 second
+      }, 500); // 500 milliseconds = 1 second
+    }
 
     function handleFuelSubmit() {
         fetch(`http://localhost:${portNum}/fueldata`,{
@@ -111,7 +126,8 @@ export default function AUFuelcal(countryvalue,typevalue) {
         .then(resp => console.log(resp))
         .catch(err => console.log(err)) 
         console.log(fuelvalue, fuelsubtypevalue, fueltypevalue, fuelunitvalue);
-  
+      }
+      function GetResult(){
         fetch(`http://localhost:${portNum}/fuelresult`,{
             method: 'GET',
             headers: {
@@ -286,22 +302,35 @@ export default function AUFuelcal(countryvalue,typevalue) {
           type='submit'
           sx={{ width: 300 , background:'#7ECA58'}}
           onClick={ () => {
-              handleFuelSubmit();
+            handleClick();
             } }
           >
           Calculate
       </Button>
     </Grid>
     <Grid item xs={12} md={12}>
-      <p 
-      className={classes.text}
-      id='resultP' 
-      style={{display:'none'}}>
-        Total Greenhouse Gas Emissions from fuel (t CO2e): "{fuelresult.total} <br />
-        CO2 Emissions from fuel (t CO2e):  {fuelresult.co2} <br />
-        CH4 Emissions from fuel (t CO2e):  {fuelresult.ch4} <br />
-        N2O Emissions from fuel (t CO2e):  {fuelresult.n2o} <br />
-      </p>
+      <div 
+        className={classes.text}
+        id='resultP' 
+        style={{display:'none'}}>
+        <h3 className={classes.h3}>Result</h3>
+        <div>
+          <img src={fueltotal} alt='total' className={classes.img} />
+          <span className={classes.p}>   Total Greenhouse Gas Emissions from fuel (t CO2e): {fuelresult.total}</span>
+        </div>
+        <div>
+          <img src={co2} alt='co2' className={classes.img} />
+          <span className={classes.p}>   Carbon dioxide (CO2) Emissions from fuel (t CO2e):  {fuelresult.co2}</span>
+        </div>
+        <div>
+          <img src={ch4} alt='ch4' className={classes.img} />
+          <span className={classes.p}>   Mrthane (CH4) Emissions from fuel (t CO2e):  {fuelresult.ch4}</span>
+        </div>
+        <div>
+          <img src={n2o} alt='n2o' className={classes.img} />
+          <span className={classes.p}>   Nitrous oxide (N2O) Emissions from fuel (t CO2e):  {fuelresult.n2o}</span>
+        </div>
+      </div>
     </Grid>
     </>
   )

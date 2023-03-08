@@ -6,6 +6,9 @@ import { makeStyles } from '@mui/styles';
 import { useState, useEffect } from 'react';
 import { Grid, Button, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
+import electotal from '../img/electotal.png';
+
+
 const calStyle = makeStyles({
 
      text:{
@@ -15,13 +18,17 @@ const calStyle = makeStyles({
      },
     p:{
       lineHeight: '1.5',
-    }
+    },
+    img:{
+      width: '40px',
+      verticalAlign: 'middle', 
+    }, 
   })
 
 export default function AUElecal(countryvalue,typevalue) {
   const portNum = 5000;
   const classes = calStyle();
-  const resultDisplay = 'none';
+  // const resultDisplay = 'none';
 
   const [state, setState] = useState([])
     // Static data
@@ -215,14 +222,20 @@ export default function AUElecal(countryvalue,typevalue) {
         </Button>
       </Grid>
       <Grid item xs={12} md={12} mt={5}>
-        <p 
+        <div
         className={classes.text}
         id='resultP' 
         style={{display:'none'}}>
-          "Total Greenhouse Gas Emissions from electricity (t CO2e): " {elecresult.result} <br />
-           The scope 2 emission factor in {elecresult.state} is {s2} kg CO2-e/{elecresult.unit} <br />
-           The scope 3 emission factor in {elecresult.state} is {s3} kg CO2-e/{elecresult.unit} <br />
+        <h3 className={classes.h3}>Result</h3>
+        <div>
+          <img src={electotal} alt='total' className={classes.img} />
+          <span className={classes.p}>   Total Greenhouse Gas Emissions from electricity (t CO2e): "{elecresult.result}</span>
+        </div>
+        <p className={classes.p}>
+           The scope 2 emission factor in {elecresult.state} is {s2} kg CO2e/{elecresult.unit} <br />
+           The scope 3 emission factor in {elecresult.state} is {s3} kg CO2e/{elecresult.unit} <br />
         </p>
+      </div>
     </Grid>
     </>
   )

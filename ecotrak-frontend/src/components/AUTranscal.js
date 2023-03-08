@@ -7,6 +7,11 @@ import { Grid, Button, TextField, FormControl, FormLabel, RadioGroup, FormContro
 import Transicon from '../img/trans.png';
 import TransEq from '../img/equations/transEq.png';
 
+import ch4 from '../img/ch4.png';
+import co2 from '../img/co2.png';
+import n2o from '../img/n2o.png';
+import transporttotal from '../img/trasporttotal.png';
+
 const calStyle = makeStyles({
 
      text:{
@@ -15,7 +20,11 @@ const calStyle = makeStyles({
      },
      p:{
         lineHeight: '1.5',
-      }
+      },
+      img:{
+        width: '40px',
+        verticalAlign: 'middle', 
+      },
   })
 
 export default function AUTranscal(countryvalue,typevalue) {
@@ -50,7 +59,6 @@ export default function AUTranscal(countryvalue,typevalue) {
         .then(data => setTransType(data))
         .catch(error => console.log(error));
     }, []);
-
 
 
 
@@ -109,6 +117,7 @@ export default function AUTranscal(countryvalue,typevalue) {
     } else if (transtypevalue === 'Aviation') {
       fueltypeList = Aviation_fueltypeList;
     }
+
 
     async function handleClick() {
       await handleTransSubmit(); // wait for handleElecSubmit to complete
@@ -191,7 +200,7 @@ export default function AUTranscal(countryvalue,typevalue) {
 
         <strong>EF1</strong> is the scope 1 emission factor, in kilograms of CO2-e per gigajoule, for each transport type and for each fuel type. <br />
         
-        <strong>EF3</strong>is the scope 3 emission factor, in kilograms of CO2-e per gigajoule. <br />
+        <strong>EF3</strong> is the scope 3 emission factor, in kilograms of CO2-e per gigajoule. <br />
       </p>
     </Grid>
     <Grid item xs={12} md={4}>
@@ -202,15 +211,16 @@ export default function AUTranscal(countryvalue,typevalue) {
       options={transtype}
       sx={{ width: 300, mt: 2 }}
       renderInput={(params) => <TextField {...params} label="Type of Transport" />}
-      onChange={(event) => { setTransTypeValue(event.target.textContent); setFuelTypeValue("")} } 
+      onChange={(event) => { setTransTypeValue(event.target.textContent);} } 
       />
     </Grid>
     
     <Grid item xs={12} md={4}>
+      
         <Autocomplete
         className={classes.text}
         disablePortal
-        id="type"
+        id="fueltype"
         options={fueltypeList}
         sx={{ width: 300, mt: 2 }}
         renderInput={(params) => <TextField {...params} label="Type of Fuel" />}
@@ -256,16 +266,28 @@ export default function AUTranscal(countryvalue,typevalue) {
         </Button>
       </Grid>
       <Grid item xs={12} md={12} mt={5}>
-        <p 
+        <div 
         className={classes.text}
         id='resultP' 
         style={{display:'none'}}>
-          Total Greenhouse Gas Emissions from fuel (t CO2e): {transresult.total} <br />
-          CO2 Emissions from fuel (t CO2e):  {transresult.co2} <br />
-          CH4 Emissions from fuel (t CO2e):  {transresult.ch4} <br />
-          N2O Emissions from fuel (t CO2e):  {transresult.n2o} <br />
-        </p>
-        {console.log(transresult)}
+        <h3 className={classes.h3}>Result</h3>
+        <div>
+          <img src={transporttotal} alt='total' className={classes.img} />
+          <span className={classes.p}>   Total Greenhouse Gas Emissions from fuel (t CO2e): "{transresult.total}</span>
+        </div>
+        <div>
+          <img src={co2} alt='co2' className={classes.img} />
+          <span className={classes.p}>   CO2 Emissions from fuel (t CO2e):  {transresult.co2}</span>
+        </div>
+        <div>
+          <img src={ch4} alt='ch4' className={classes.img} />
+          <span className={classes.p}>   CH4 Emissions from fuel (t CO2e):  {transresult.ch4}</span>
+        </div>
+        <div>
+          <img src={n2o} alt='n2o' className={classes.img} />
+          <span className={classes.p}>   N2O Emissions from fuel (t CO2e):  {transresult.n2o}</span>
+        </div>
+      </div>
     </Grid>      
     </>
   )
