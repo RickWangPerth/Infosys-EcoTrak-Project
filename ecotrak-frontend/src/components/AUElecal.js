@@ -229,7 +229,7 @@ export default function AUElecal(countryvalue,typevalue) {
         <h3 className={classes.h3}>Result</h3>
         <div>
           <img src={electotal} alt='total' className={classes.img} />
-          <span className={classes.p}>   Total Greenhouse Gas Emissions from electricity (t CO2e): "{elecresult.result}</span>
+          <span className={classes.p}>   Total Greenhouse Gas Emissions from electricity (t CO2e): {elecresult.result}</span>
         </div>
         <p className={classes.p}>
            The scope 2 emission factor in {elecresult.state} is {s2} kg CO2e/{elecresult.unit} <br />
