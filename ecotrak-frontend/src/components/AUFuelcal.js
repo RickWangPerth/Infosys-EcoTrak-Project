@@ -26,7 +26,7 @@ const calStyle = makeStyles({
 })
 
 export default function AUFuelcal(countryvalue,typevalue) {
-    const portNum = 5000;
+    // const portNum = 5001;
     const classes = calStyle();
 
     //fuel type
@@ -44,7 +44,7 @@ export default function AUFuelcal(countryvalue,typevalue) {
     const [fueltypevalue, setFuelTypeValue] = useState([]);
 
     useEffect(() => {
-      fetch(`http://127.0.0.1:${portNum}/solidfueltype`,{        
+      fetch(`http://127.0.0.1:5001/solidfueltype`,{        
         headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -57,7 +57,7 @@ export default function AUFuelcal(countryvalue,typevalue) {
     }, []);
 
     useEffect(() => {
-      fetch(`http://127.0.0.1:${portNum}/liquidfueltype`,{
+      fetch(`http://127.0.0.1:5001/liquidfueltype`,{
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -71,7 +71,7 @@ export default function AUFuelcal(countryvalue,typevalue) {
     }, []);    
     
     useEffect(() => {
-      fetch(`http://127.0.0.1:${portNum}/gaseousfueltype`,{
+      fetch(`http://127.0.0.1:5001/gaseousfueltype`,{
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -85,7 +85,7 @@ export default function AUFuelcal(countryvalue,typevalue) {
     }, []);
 
     useEffect(() => {
-      fetch(`http://127.0.0.1:${portNum}/fueltype`,{
+      fetch(`http://127.0.0.1:5001/fueltype`,{
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -106,7 +106,7 @@ export default function AUFuelcal(countryvalue,typevalue) {
     }
 
     function handleFuelSubmit() {
-        fetch(`http://localhost:${portNum}/fueldata`,{
+        fetch(`http://127.0.0.1:5001/fueldata`,{
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ export default function AUFuelcal(countryvalue,typevalue) {
         console.log(fuelvalue, fuelsubtypevalue, fueltypevalue, fuelunitvalue);
       }
       function GetResult(){
-        fetch(`http://localhost:${portNum}/fuelresult`,{
+        fetch(`http://127.0.0.1:5001/fuelresult`,{
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

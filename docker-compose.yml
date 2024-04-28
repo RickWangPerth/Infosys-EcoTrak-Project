@@ -1,29 +1,85 @@
-version: '2.15.1'
+version: '3.9'
+
+
+
 services:
+
   postgresdb:
-    image: postgres
+    image: postgres:16-alpine
+
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: ecotrak
       POSTGRES_HOST_AUTH_METHOD: trust
+
     ports:
       - '5432:5432'
+
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
       - ./ecotrackdatabase.sql:/docker-entrypoint-initdb.d/ecotrackdatabase.sql
+    
+    networks:
+      ecotrak:
+        aliases:
+          - ecotrak-db.local
 
-  ecotrak-backend:
-    image: ecotrak-backend
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "root"
+    ports:
+      - "5050:80"
     depends_on:
       - postgresdb
+
+    networks:
+      ecotrak:
+        aliases:
+          - ecotrak-pgadmin.local
+
+  ecotrak-backend:
+    build: 
+      context: ./ecotrak-backend
+      dockerfile: Dockerfile
+
+    depends_on:
+      - postgresdb
+
     ports:
-      - '9888:5000'
+      - '5001:5001'
+
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgresdb:5432/ecotrak
+
+    networks:
+      ecotrak:
+        aliases:
+          - ecotrak-backend.local
 
   ecotrak-frontend:
-    build: ./ecotrak-frontend
-    container_name: ecotrak-frontend
+    build:
+      context: ./ecotrak-frontend
+      dockerfile: Dockerfile
+
     ports:
       - "3000:3000"
-    stdin_open: true
-    tty: true
+
+    depends_on:
+      - ecotrak-backend
+
+    volumes:
+      - ./ecotrak-frontend:/ecotrak-frontend
+      - /ecotrak-frontend/node_modules
+
+    networks:
+      ecotrak:
+        aliases:
+          - ecotrak-frontend.local
+
+
+  
+networks:
+  ecotrak:

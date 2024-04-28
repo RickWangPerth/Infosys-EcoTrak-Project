@@ -1,7 +1,7 @@
 import psycopg2
 import pandas as pd
 
-host = 'localhost'
+host = 'postgresdb'
 database = 'ecotrak'
 user = 'postgres'
 password = 'postgres'

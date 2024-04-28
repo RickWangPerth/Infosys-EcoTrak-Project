@@ -26,14 +26,16 @@ const calStyle = makeStyles({
   })
 
 export default function AUElecal(countryvalue,typevalue) {
-  const portNum = 5000;
+  // const portNum = 5001;
+  // const hostname = 'ecotrak-backend'; 
+
   const classes = calStyle();
   // const resultDisplay = 'none';
 
   const [state, setState] = useState([])
     // Static data
     useEffect(() => {
-    fetch(`http://127.0.0.1:${portNum}/statedata`,{        
+    fetch(`http://127.0.0.1:5001/statedata`,{        
       headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -62,7 +64,7 @@ export default function AUElecal(countryvalue,typevalue) {
       }
       
       function handleElecSubmit() {
-        return fetch(`http://localhost:${portNum}/elecdata`, {
+        return fetch(`http://127.0.0.1:5001/elecdata`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -84,7 +86,7 @@ export default function AUElecal(countryvalue,typevalue) {
       }
       
       function GetResult() {
-        fetch(`http://localhost:${portNum}/elecresult`, {
+        fetch(`http://127.0.0.1:5001/elecresult`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -100,7 +102,7 @@ export default function AUElecal(countryvalue,typevalue) {
         var result = document.getElementById('resultP');
         result.style.display = 'block';
       
-        fetch(`http://127.0.0.1:${portNum}/sc2data/${statevalue}/${unitvalue}`, {
+        fetch(`http://127.0.0.1:5001/sc2data/${statevalue}/${unitvalue}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -113,7 +115,7 @@ export default function AUElecal(countryvalue,typevalue) {
           .then((resp) => setS2(resp))
           .catch((err) => console.log(err));
       
-        fetch(`http://127.0.0.1:${portNum}/sc3data/${statevalue}/${unitvalue}`, {
+        fetch(`http://127.0.0.1:5001/sc3data/${statevalue}/${unitvalue}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

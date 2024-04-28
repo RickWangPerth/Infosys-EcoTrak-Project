@@ -1,7 +1,7 @@
 import React from 'react';
 import ISLogo from "../img/infosyslogo.png";
 import { makeStyles } from '@mui/styles';
-import { Link, Box, Typography } from '@mui/material';
+import { Link, Typography } from '@mui/material';
 
 
 

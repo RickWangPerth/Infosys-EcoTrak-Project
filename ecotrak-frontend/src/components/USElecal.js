@@ -50,13 +50,13 @@ const calStyle = makeStyles({
 
 export default function USElecal(countryvalue,typevalue) {
     const classes = calStyle();
-    const portNum = 5000;
+    // const portNum = 5001;
 
     const [region, setRegion] = useState([]);
     const [regionvalue, setRegionValue] = useState([]);
     // Static data
     useEffect(() => {
-    fetch(`http://127.0.0.1:${portNum}/usregion`,{        
+    fetch(`http://127.0.0.1:5001/usregion`,{        
       headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -81,7 +81,7 @@ export default function USElecal(countryvalue,typevalue) {
       }
       
       function handleElecSubmit() {
-        return fetch(`http://localhost:${portNum}/uselecdata`, {
+        return fetch(`http://127.0.0.1:5001/uselecdata`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ export default function USElecal(countryvalue,typevalue) {
       }
       
       function GetResult() {
-        fetch(`http://localhost:${portNum}/uselecresult`, {
+        fetch(`http://localhost/uselecresult`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

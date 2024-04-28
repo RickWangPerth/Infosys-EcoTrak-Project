@@ -30,7 +30,7 @@ const calStyle = makeStyles({
 export default function AUTranscal(countryvalue,typevalue) {
     const classes = calStyle();
 
-    const portNum = 5000;
+    // const portNum = 5001;
 
 
     //trans type
@@ -48,7 +48,7 @@ export default function AUTranscal(countryvalue,typevalue) {
 
 
     useEffect(() => {
-    fetch(`http://127.0.0.1:${portNum}/transporttype`,{        
+    fetch(`http://127.0.0.1:5001/transporttype`,{        
         headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -63,7 +63,7 @@ export default function AUTranscal(countryvalue,typevalue) {
 
 
     useEffect(() => {
-    fetch(`http://127.0.0.1:${portNum}/transfueltype`,{
+    fetch(`http://127.0.0.1:5001/transfueltype`,{
         headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -126,7 +126,7 @@ export default function AUTranscal(countryvalue,typevalue) {
       }, 500); // 1000 milliseconds = 1 second
     }
     function handleTransSubmit() {
-        fetch(`http://localhost:${portNum}/transdata`,{
+        fetch(`http://127.0.0.1:5001/transdata`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ export default function AUTranscal(countryvalue,typevalue) {
     };
     function GetResult() {
 
-        fetch(`http://localhost:${portNum}/transresult`,{
+        fetch(`http://127.0.0.1:5001/transresult`,{
             method: 'GET',
             headers: {
             'Content-Type': 'application/json',

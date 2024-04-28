@@ -26,7 +26,7 @@ const calStyle = makeStyles({
 
 export default function AUWasteCal(countryvalue,typevalue) {
   const classes = calStyle();
-  const portNum = 5000;
+  // const portNum = 5001;
 
   // Waste type
   const [wastetype, setWastetype] = useState([]);
@@ -34,7 +34,7 @@ export default function AUWasteCal(countryvalue,typevalue) {
   const [combinedwastetype, setCombinedwastetype] = useState([]);
     
   useEffect(() => {
-    fetch(`http://127.0.0.1:${portNum}/wastetype`,{
+    fetch(`http://127.0.0.1:5001/wastetype`,{
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -48,7 +48,7 @@ export default function AUWasteCal(countryvalue,typevalue) {
   }, []);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:${portNum}/solidwastetype`,{
+    fetch(`http://127.0.0.1:5001/solidwastetype`,{
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -62,7 +62,7 @@ export default function AUWasteCal(countryvalue,typevalue) {
   }, []);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:${portNum}/combinedwastetype`,{
+    fetch(`http://127.0.0.1:5001/combinedwastetype`,{
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -90,7 +90,7 @@ export default function AUWasteCal(countryvalue,typevalue) {
     }
 
     function handleWasteSubmit() {
-      fetch(`http://localhost:${portNum}/wastedata`,{
+      fetch(`http://127.0.0.1:5001/wastedata`,{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ export default function AUWasteCal(countryvalue,typevalue) {
     };
 
     function GetResult() {
-      fetch(`http://localhost:${portNum}/wasteresult`,{
+      fetch(`http://127.0.0.1:5001/wasteresult`,{
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
